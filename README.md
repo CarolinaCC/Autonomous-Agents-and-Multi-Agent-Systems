@@ -1,4 +1,4 @@
-# Nome Projecto
+# AASMA Project
 
 Autonomous Agents and Multi-Agent Systems Course
 
