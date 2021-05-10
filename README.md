@@ -1,4 +1,4 @@
-# AASMA Project
+# AASMA Project: Monetary Simulation
 
 Autonomous Agents and Multi-Agent Systems Course
 
