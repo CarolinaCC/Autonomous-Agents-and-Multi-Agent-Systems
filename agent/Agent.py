@@ -37,5 +37,5 @@ class Random(Agent):
     type = "Random"
 
     def decide(self):
-        print(type + " decided!")
+        print(self.type + " decided!")
         return 0

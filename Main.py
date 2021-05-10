@@ -1,5 +1,5 @@
 from CentralBank import CentralBank
-import Agent
+from agent.Agent import *
 
 agents = []
 runs = 40
@@ -16,7 +16,7 @@ def setup():
 
 
 def run():
-    for _ in xrange(runs):
+    for _ in range(runs):
         step()
 
 
