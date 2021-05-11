@@ -1,8 +1,9 @@
 import pygame
 from menu import *
+from game_manager import *
 
 
-class Game():
+class Game:
     def __init__(self):
         pygame.init()
         self.running, self.playing = True, False
@@ -17,18 +18,28 @@ class Game():
         self.options = OptionsMenu(self)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
+        self.setup = True
 
     def game_loop(self):
         while self.playing:
+            if(self.setup):
+                self.game_manager = GameManager(self.options.agentsnum,self.options.agentsnum,self.options.stepsnum)
+                self.setup = False
             self.check_events()
             if self.ESCAPE_KEY:
                 self.playing = False
                 pygame.quit()
                 exit()
+
             self.display.fill(self.BLACK)
             self.draw_text('Thanks for Playing', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)
             self.draw_text('Number of Agents - ' + str(self.options.agentsnum), 20, 120, 20)
             self.draw_text('Number of Steps - ' + str(self.options.stepsnum), 20, 120, 40)
+
+            self.draw_text(' - ' + str(self.options.stepsnum), 20, 120, 40)
+
+
+
             self.window.blit(self.display, (0,0))
             pygame.display.update()
             self.reset_keys()
