@@ -23,8 +23,11 @@ class Agent:
 
     def buy(self, id, qtd):
         cost = CentralBank.value(id, qtd)
-        if can_buy(cost):
-            CentralBank.buy(id, qtd)
+        if not can_buy(cost):
+            return
+        if not CentralBank.buy(id, qtd):
+            return
+        #TODO adicionar a stock
         self.cash -= cost
 
     def sell(self, id, qtd):
