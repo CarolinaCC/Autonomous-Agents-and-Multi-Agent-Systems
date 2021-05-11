@@ -4,9 +4,10 @@ from Stock import Stock
 class CentralBank:
     stocks = []
 
-    def __init__(self):
-        for i in range(0, 10):
-            self.stocks.append(Stock("", i, i * 2, i * 5))
+    def __init__(self, nstock = None):
+        if nstock is None:
+            for i in range(0, 10):
+                self.stocks.append(Stock("", i, i * 2, i * 5, 1.1))
 
     def all_stock(self):
         return stocks
@@ -25,5 +26,5 @@ class CentralBank:
     def decide(self):
         return 0
 
-    def recalculate(self):
+    def __recalculate(self):
         return 0

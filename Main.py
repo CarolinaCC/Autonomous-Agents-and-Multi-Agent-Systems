@@ -11,14 +11,16 @@ agents_type = {
 
 
 def setup():
+    # TODO receive info about runs... agents
     # for type in agents_type:
     agents.append(Random())
 
 
 def run():
+    # receive info about run from optionMenu
     for _ in range(runs):
         step()
-
+    # TODO call a aos eventos
 
 def step():
     for a in agents:

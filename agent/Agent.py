@@ -1,5 +1,5 @@
 from CentralBank import CentralBank
-from Main import central_bank
+from Main import *
 
 
 class Agent:
