@@ -42,9 +42,9 @@ class GameManager:
     def print_results(self):
         i = 0
         # FIXME
-        while os.path.exists("stock_history" + str(i) + ".json"):
+        while os.path.exists("outputs/stock_history" + str(i) + ".json"):
             i += 1
-        with open("stock_history" + str(i) + ".txt", 'w', encoding='utf-8') as f:
+        with open("outputs/stock_history" + str(i) + ".txt", 'w', encoding='utf-8') as f:
             for stock in self.central_bank.stocks:
                 f.write(repr(stock))
             #     json.dump(stock.toJSON(), f, ensure_ascii=False, indent=4)
