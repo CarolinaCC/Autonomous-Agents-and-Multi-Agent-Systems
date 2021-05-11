@@ -9,9 +9,9 @@ class Game:
         self.running, self.playing = True, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY, self.RIGHT_KEY, self.LEFT_KEY = False, False, False, False, False, False, False
         self.DISPLAY_W, self.DISPLAY_H = 800, 600
-        self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
-        self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)))
-        #self.font_name = '8-BIT WONDER.TTF'
+        self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
+        self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H)))
+        # self.font_name = '8-BIT WONDER.TTF'
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.main_menu = MainMenu(self)
@@ -22,29 +22,30 @@ class Game:
 
     def game_loop(self):
         while self.playing:
-            if(self.setup):
-                self.game_manager = GameManager(self.options.agentsnum,self.options.agentsnum,self.options.stepsnum)
+            if self.setup:
+                self.game_manager = GameManager(self.options.agentsnum, self.options.agentsnum, self.options.agentsnum, self.options.stepsnum)
                 self.setup = False
+                self.game_manager.step(self.options.stepsnum)
             self.check_events()
+
             if self.ESCAPE_KEY:
                 self.playing = False
                 pygame.quit()
                 exit()
 
             self.display.fill(self.BLACK)
-            self.draw_text('Thanks for Playing', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)
+            self.draw_text('Thanks for Playing', 20, self.DISPLAY_W / 2, self.DISPLAY_H / 2)
             self.draw_text('Number of Agents - ' + str(self.options.agentsnum), 20, 120, 20)
             self.draw_text('Number of Steps - ' + str(self.options.stepsnum), 20, 120, 40)
 
             self.draw_text(' - ' + str(self.options.stepsnum), 20, 120, 40)
 
-
-
-            self.window.blit(self.display, (0,0))
+            self.window.blit(self.display, (0, 0))
             pygame.display.update()
             self.reset_keys()
 
-
+        # print results to file for analysis
+        self.game_manager.print_results()
 
     def check_events(self):
         for event in pygame.event.get():
@@ -70,11 +71,9 @@ class Game:
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY, self.RIGHT_KEY, self.LEFT_KEY = False, False, False, False, False, False, False
 
-    def draw_text(self, text, size, x, y ):
-        font = pygame.font.Font(self.font_name,size)
+    def draw_text(self, text, size, x, y):
+        font = pygame.font.Font(self.font_name, size)
         text_surface = font.render(text, True, self.WHITE)
         text_rect = text_surface.get_rect()
-        text_rect.center = (x,y)
-        self.display.blit(text_surface,text_rect)
-
-
+        text_rect.center = (x, y)
+        self.display.blit(text_surface, text_rect)
