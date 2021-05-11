@@ -1,31 +1,36 @@
 from CentralBank import CentralBank
 
-class GameManager:
 
-    def __init__(self, random_agents_num, reactive_agents_num, steps_num):
+class GameManager:
+    event = False
+
+    def __init__(self, random_agents_num, simple_react_agents_num, careful_react_agents_num, steps_num):
         self.random_agents_num = random_agents_num
-        self.reactive_agents_num = reactive_agents_num
+        self.simple_react_agents_num = simple_react_agents_num
+        self.careful_react_agents_num = careful_react_agents_num
         self.steps_num = steps_num
         self.central_bank = CentralBank()
-        # self.agents_array = AGENTS ARRAY (SETUP)
+        self.setup_agents()
 
-        #
-        #
-        # array {nome : random_agents_1, saldo : 10000, }
+    def setup_agents(self):
+        for _ in range(self.random_agents_num):
+            self.agents_array.append(Random())
+        # FIXME adicionar novos agents
+        for _ in range(self.simple_react_agents_num):
+            self.agents_array.append(Random())
+        for _ in range(self.careful_react_agents_num):
+            self.agents_array.append(Random())
 
-    def setup():
-        # TODO receive info about runs... agents
-        # for type in agents_type:
-        agents.append(Random())
+    def step(self, num_steps):
+        for _ in range(num_steps):
+            self.decideEvent()
+            for a in self.agents_array:
+                a.decide()
+            central_bank.decide()
 
-    def run():
-        # receive info about run from optionMenu
-        for _ in range(runs):
-            step()
-        # TODO call a aos eventos
+    def enable_event(self):
+        self.event = True
 
-    #recebe num de steps
-    def step():
-        for a in agents:
-            a.decide()
-        central_bank.decide()
+    def decide_event(self):
+        # TODO
+        return
