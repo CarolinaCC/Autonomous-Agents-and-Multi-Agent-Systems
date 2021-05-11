@@ -21,4 +21,6 @@ Group number
 - Python 3.8
 - PyGame 2.0.1 
 
+Install python3 -m pip install pygame 
+
 [PEP 8 -- Style](https://www.python.org/dev/peps/pep-0008/)
