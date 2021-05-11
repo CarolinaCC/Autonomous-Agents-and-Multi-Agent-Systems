@@ -1,4 +1,5 @@
 from CentralBank import CentralBank
+from Main import central_bank
 
 
 class Agent:
@@ -22,18 +23,19 @@ class Agent:
         return self.cash >= c
 
     def buy(self, id, qtd):
-        cost = CentralBank.value(id, qtd)
+        cost = central_bank.value(id, qtd)
         if not can_buy(cost):
             return
-        if not CentralBank.buy(id, qtd):
+        if not central_bank.buy(id, qtd):
             return
-        #TODO adicionar a stock
+        # TODO adicionar a stock
         self.cash -= cost
 
     def sell(self, id, qtd):
-        if can_sell(cost):
-            value = CentralBank.sell(id, qtd)
-            self.cash += value
+        if not can_sell(cost):
+            return
+        value = central_bank.sell(id, qtd)
+        self.cash += value
 
 
 class Random(Agent):
