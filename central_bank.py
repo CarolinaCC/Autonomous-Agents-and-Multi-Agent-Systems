@@ -36,11 +36,11 @@ class CentralBank:
         return 0
 
     def get_stock(self, id):
-        return self.stocks[i]
+        return self.stocks[id]
 
     def get_dividends(self, id):
         # https://corporatefinanceinstitute.com/resources/knowledge/trading-investing/stock-price/
-        return self.stocks[i]
+        return self.stocks[id]
 
     def __recalculate(self, stock):
         # TODO
