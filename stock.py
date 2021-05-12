@@ -10,7 +10,7 @@ class Stock:
         self.modifier = modifier
         self.history = [price]
         self.current_step = 0
-        self.change = 0.0
+        self.price_change = 0.0
 
     def buy(self, qtd):
         self.av_qtd -= qtd
@@ -29,6 +29,6 @@ class Stock:
         self.current_step += 1
         self.price = price
         self.history.append(price)
-        self.change = price / self.history[self.current_step-1]
+        self.price_change = price / self.history[self.current_step-1]
 
 

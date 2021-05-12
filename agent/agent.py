@@ -48,6 +48,7 @@ class Agent:
         value = self.central_bank.sell(id, qtd)
         self.cash += value
 
+
     def __how_many_can_i_buy(self, id):
         cost = self.central_bank.stock_price(id, 1)
         return self.cash % cost
@@ -81,15 +82,21 @@ class GoldStandard(Agent):
 
 class SimpleReactive(Agent):
     type = "SimpleReactive"
+    # FIXME this number can be super diferent
+    buy_qtd = 5
 
     def decide(self):
         print(self.type + " decided!")
 
+        # sell stock that has gone down
+        for s in self.stocks_owned:
+            if s.price_change < 1:
+                self.sell(s.id, self.stocks_owned[s.id])
+
+        # sell stock that has gone down
         all_stock = self.central_bank.get_all_stock()
         for s in all_stock:
-            if s.is
-        # buy as much as possible
-        cost = self.central_bank.stock_price(max_value_stock.id, 1)
-        number_to_buy = self.cash // cost
-        self.buy(max_value_stock.id, number_to_buy)
+            if s.price_change > 1:
+                self.buy(s.id, self.buy_qtd)
+
         return
