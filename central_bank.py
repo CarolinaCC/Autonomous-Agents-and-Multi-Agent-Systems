@@ -37,5 +37,10 @@ class CentralBank:
 
     def __recalculate(self, stock):
         # TODO
-        stock.update_price(stock.price)
+        # The stock prices can be affected by:
+        # 1 - stock.modifier
+        # 2 - lei procura e oferta
+        # 3 - global news events
+
+        stock.update_price(stock.price*stock.modifier)
         return 0
