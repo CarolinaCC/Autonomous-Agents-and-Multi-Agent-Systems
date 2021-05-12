@@ -15,7 +15,7 @@ class CentralBank:
         i += 1
         self.stocks.append(Stock("Woodcutter", i, i * 2, i * 5, 1.5))
 
-    def all_stock(self):
+    def get_all_stock(self):
         return self.stocks
 
     def buy_stock(self, id: int, qtd: int):
@@ -35,12 +35,21 @@ class CentralBank:
             self.__recalculate(stock)
         return 0
 
+    def get_stock(self, id):
+        return self.stocks[i]
+
+    def get_dividends(self, id):
+        # https://corporatefinanceinstitute.com/resources/knowledge/trading-investing/stock-price/
+        return self.stocks[i]
+
     def __recalculate(self, stock):
         # TODO
         # The stock prices can be affected by:
         # 1 - stock.modifier
-        # 2 - lei procura e oferta
+        # 2 - law of supply and demand
         # 3 - global news events
+        # 4 - complementary industries
+        # 5 - competitor industries
 
         stock.update_price(stock.price*stock.modifier)
         return 0

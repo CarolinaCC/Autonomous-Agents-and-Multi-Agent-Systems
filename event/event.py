@@ -1,0 +1,1 @@
+# ideias https://corporatefinanceinstitute.com/resources/knowledge/trading-investing/stock-price/

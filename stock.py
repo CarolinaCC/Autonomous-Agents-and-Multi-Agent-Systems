@@ -10,7 +10,7 @@ class Stock:
         self.modifier = modifier
         self.history = [price]
         self.current_step = 0
-        self.is_up = False
+        self.change = 0.0
 
     def buy(self, qtd):
         self.av_qtd -= qtd
@@ -29,8 +29,6 @@ class Stock:
         self.current_step += 1
         self.price = price
         self.history.append(price)
-        self.is_up = price > self.history[self.current_step-1]
+        self.change = price / self.history[self.current_step-1]
 
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+
