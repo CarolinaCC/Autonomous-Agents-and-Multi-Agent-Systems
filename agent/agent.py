@@ -30,28 +30,28 @@ class Agent:
         self.__decide()
         self.__update_history()
 
-    def buy(self, id, qtd):
-        cost = self.central_bank.stock_price(id, qtd)
+    def buy(self, stock_id, qtd):
+        cost = self.central_bank.stock_price(stock_id, qtd)
         if not self.__can_buy(cost):
             return
-        if not self.central_bank.buy(id, qtd):
+        if not self.central_bank.buy(stock_id, qtd):
             sys.stdout.write("failed to buy")
             sys.stdout.flush()
             return
-        self.stocks_owned[id] += qtd
+        self.stocks_owned[stock_id] += qtd
         self.cash -= cost
 
-    def sell(self, id, qtd):
-        if not self.__can_sell(id, qtd):
+    def sell(self, stock_id, qtd):
+        if not self.__can_sell(stock_id, qtd):
             return
-        value = self.central_bank.sell(id, qtd)
+        value = self.central_bank.sell(stock_id, qtd)
         self.cash += value
 
-    def __how_many_can_i_buy(self, id):
-        cost = self.central_bank.stock_price(id, 1)
+    def __how_many_can_i_buy(self, stock_id):
+        cost = self.central_bank.stock_price(stock_id, 1)
         return self.cash // cost
 
-    def buy_random_stock(self):  # should be part of random agent no?
+    def __buy_random_stock(self):  # should be part of random agent no?
         # TODO
         return 0
 
@@ -77,7 +77,7 @@ class Random(Agent):
 
     def __decide(self):
         print(self.type + " decided!")
-        self.buy_random_stock()
+        self.__buy_random_stock()
 
     def __update_history(self):
         return
@@ -100,7 +100,6 @@ class GoldStandard(Agent):
         # buy as much as possible
         self.buy(max_value_stock.id, self.__how_many_can_i_buy(max_value_stock.id))
 
-        self.update_history()
         return
 
 

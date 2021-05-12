@@ -29,20 +29,19 @@ class CentralBank:
     def stock_price(self, id, qtd):
         return self.stocks[id].price * qtd
 
-    def decide(self):
-        self.current_step += 1
+    def decide(self, current_step):
         for stock in self.stocks:
-            self.__recalculate(stock)
+            self.__recalculate(stock, current_step)
         return 0
 
-    def get_stock(self, id):
-        return self.stocks[id]
+    def get_stock(self, stock_id):
+        return self.stocks[stock_id]
 
     def get_dividends(self, id):
         # https://corporatefinanceinstitute.com/resources/knowledge/trading-investing/stock-price/
         return self.stocks[id]
 
-    def __recalculate(self, stock):
+    def __recalculate(self, stock, current_step):
         # TODO
         # The stock prices can be affected by:
         # 1 - stock.modifier
@@ -51,5 +50,5 @@ class CentralBank:
         # 4 - complementary industries
         # 5 - competitor industries
 
-        stock.update_price(stock.price*stock.modifier)
+        stock.update_price(stock.price*stock.modifier, current_step)
         return 0

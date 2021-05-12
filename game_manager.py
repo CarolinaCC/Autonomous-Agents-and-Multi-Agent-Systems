@@ -15,6 +15,7 @@ class GameManager:
         self.central_bank = CentralBank()
         self.agents_array = []
         self.setup_agents()
+        self.current_step = 0
 
     def setup_agents(self):
         for _ in range(self.random_agents_num):
@@ -30,7 +31,8 @@ class GameManager:
             self.decide_event()
             for a in self.agents_array:
                 a.decide()
-            self.central_bank.decide()
+            self.central_bank.decide(self.current_step)
+            self.current_step += 1
 
     def enable_event(self):
         self.event = True
