@@ -1,4 +1,5 @@
 import sys
+from collections import defaultdict
 
 
 class Agent:
@@ -8,7 +9,7 @@ class Agent:
         self.stock_history = [0]
         self.central_bank = central_bank
         # id stock : qtd owned
-        self.stocks_owned = dict()
+        self.stocks_owned = defaultdict(lambda: 0)  # when accessing a key not present adds that key with value 0
 
     def __repr__(self):
         return "Agent"
@@ -31,29 +32,26 @@ class Agent:
 
     def buy(self, id, qtd):
         cost = self.central_bank.stock_price(id, qtd)
-        if not __can_buy(cost):
+        if not self.__can_buy(cost):
             return
         if not self.central_bank.buy(id, qtd):
             sys.stdout.write("failed to buy")
             sys.stdout.flush()
             return
-        if id in self.stocks_owned:
-            self.stocks_owned[id] += qtd
-        else:
-            self.stocks_owned[id] = qtd
+        self.stocks_owned[id] += qtd
         self.cash -= cost
 
     def sell(self, id, qtd):
-        if not __can_sell(cost):
+        if not self.__can_sell(id, qtd):
             return
         value = self.central_bank.sell(id, qtd)
         self.cash += value
 
     def __how_many_can_i_buy(self, id):
         cost = self.central_bank.stock_price(id, 1)
-        return self.cash % cost
+        return self.cash // cost
 
-    def buy_random_stock(self):
+    def buy_random_stock(self):  # should be part of random agent no?
         # TODO
         return 0
 
@@ -61,49 +59,52 @@ class Agent:
         return self.cash >= c
 
     def __can_sell(self, id, qtd):
-        if id not in self.stocks_owned:
-            return False
-        return self.stocks_owned[id] >= qtd
+        return self.stocks_owned[id] >= qtd #if not present will be 0 >= qtd
+
+    def __get_owned_stocks_value(self):
+        stock_value = 0
+        for stock_id in self.stocks_owned:
+            stock_value += self.central_bank.get_stock(stock_id).price * self.stocks_owned[stock_id]
+        return stock_value
 
     def __update_history(self):
-
-        # update stock history
-        stock_value = 0
-        for id in self.stocks_owned:
-            stock_value += self.central_bank.get_stock(id).price * self.stocks_owned[id]
-        self.stock_history.append(stock_value)
-
-        # update cash history
+        self.stock_history.append(self.__get_owned_stocks_value())
         self.cash_history.append(self.cash)
-        return
 
 
 class Random(Agent):
     type = "Random"
 
-    def decide(self):
+    def __decide(self):
         print(self.type + " decided!")
         self.buy_random_stock()
-        return 0
+
+    def __update_history(self):
+        return
 
 
 class GoldStandard(Agent):
     type = "GoldStandard"
 
+    def __init__(self, central_bank, initialcash=1000):
+        super().__init__(central_bank)
+        self.current_step = 0
+
     def __decide(self):
         print(self.type + " decided!")
         if self.current_step != 0:
             return
-        else:
-            stocks = self.central_bank.get_all_stock()
-            max_value_stock = stocks[0]
-            for s in stocks:
-                max_value_stock = s if s.price > max_value_stock.price else max_value_stock
+        stocks = self.central_bank.get_all_stock()
+        max_value_stock = max(stocks, key=lambda stock: stock.price)
 
         # buy as much as possible
         self.buy(max_value_stock.id, self.__how_many_can_i_buy(max_value_stock.id))
 
         self.update_history()
+        return
+
+    def update_history(self):
+        # TODO
         return
 
 

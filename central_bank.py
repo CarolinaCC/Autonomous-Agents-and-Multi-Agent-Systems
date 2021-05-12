@@ -19,11 +19,11 @@ class CentralBank:
         return self.stocks
 
     def buy_stock(self, id: int, qtd: int):
-        self.stocks[i].buy(qtd)
+        self.stocks[id].buy(qtd)
         return 0
 
     def sell_stock(self, id: int, qtd: int):
-        self.stocks[i].sell(qtd)
+        self.stocks[id].sell(qtd)
         return 0
 
     def stock_price(self, id, qtd):

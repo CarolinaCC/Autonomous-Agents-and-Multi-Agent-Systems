@@ -48,9 +48,7 @@ class GameManager:
             for stock in self.central_bank.stocks:
                 f.write(repr(stock))
             #     json.dump(stock.toJSON(), f, ensure_ascii=False, indent=4)
-        f.close()
 
         # with open("agent_history" + str(i) + ".txt", 'w', encoding='utf-8') as f:
         #     for a in self.agents_array:
         #         json.dump(a, f, ensure_ascii=False, indent=4)
-        f.close()
