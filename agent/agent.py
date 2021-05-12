@@ -59,7 +59,7 @@ class Agent:
         return self.cash >= c
 
     def __can_sell(self, id, qtd):
-        return self.stocks_owned[id] >= qtd #if not present will be 0 >= qtd
+        return self.stocks_owned[id] >= qtd #if not present will be 0 >= qtd, and false, what we want
 
     def __get_owned_stocks_value(self):
         stock_value = 0
@@ -103,10 +103,6 @@ class GoldStandard(Agent):
         self.update_history()
         return
 
-    def update_history(self):
-        # TODO
-        return
-
 
 class SimpleReactive(Agent):
     type = "SimpleReactive"
@@ -121,7 +117,7 @@ class SimpleReactive(Agent):
             if s.price_change < 1:
                 self.sell(s.id, self.stocks_owned[s.id])
 
-        # sell stock that has gone down
+        # buy stock that has gone up
         all_stock = self.central_bank.get_all_stock()
         for s in all_stock:
             if s.price_change > 1:

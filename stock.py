@@ -5,7 +5,7 @@ class Stock:
         self.name = name
         self.id = id
         self.total_qtd = total_qtd
-        self.av_qtd = total_qtd #nome nao claro. Estás a tentar poupar chars? qual é o problema de escrever avaliable_quantity?
+        self.available_quantity = total_qtd
         self.price = price
         self.modifier = modifier
         self.history = [price]
@@ -13,7 +13,8 @@ class Stock:
         self.price_change = 0.0
 
     def buy(self, qtd):
-        self.av_qtd -= qtd #quantidades negativas ?
+        if self.available_quantity >= qtd:
+            self.available_quantity -= qtd
 
     def sell(self, qtd):
         self.av_qtd += qtd
