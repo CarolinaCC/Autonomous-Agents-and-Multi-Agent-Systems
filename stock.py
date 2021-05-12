@@ -29,6 +29,7 @@ class Stock:
         self.current_step += 1
         self.price = price
         self.history.append(price)
-        self.price_change = price / self.history[self.current_step-1]
+        if self.history[self.current_step-1] != 0:
+            self.price_change = price / self.history[self.current_step-1]
 
 

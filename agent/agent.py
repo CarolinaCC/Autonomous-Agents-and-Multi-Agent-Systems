@@ -1,9 +1,13 @@
 import sys
 
+
 class Agent:
     def __init__(self, central_bank, initialcash=1000):
         self.cash = initialcash
+        self.cash_history = [initialcash]
+        self.stock_history = [0]
         self.central_bank = central_bank
+        # id stock : qtd owned
         self.stocks_owned = dict()
 
     def __repr__(self):
@@ -15,22 +19,19 @@ class Agent:
     # 1 - global news events
     # 2 - if share price is up or down
     # 3 - share price evolution throughout n rounds
+    # 4 - dividends if we see it fit
     # Evaluate current portfolio
     #  - evaluate each share owned
-    def decide(self):
+    def __decide(self):
         pass
 
-    def can_buy(self, c):
-        return self.cash >= c
-
-    def can_sell(self, id, qtd):
-        if id not in self.stocks_owned:
-            return False
-        return self.stocks_owned[id] >= qtd
+    def decide(self):
+        self.__decide()
+        self.__update_history()
 
     def buy(self, id, qtd):
         cost = self.central_bank.stock_price(id, qtd)
-        if not can_buy(cost):
+        if not __can_buy(cost):
             return
         if not self.central_bank.buy(id, qtd):
             sys.stdout.write("failed to buy")
@@ -43,15 +44,38 @@ class Agent:
         self.cash -= cost
 
     def sell(self, id, qtd):
-        if not can_sell(cost):
+        if not __can_sell(cost):
             return
         value = self.central_bank.sell(id, qtd)
         self.cash += value
 
-
     def __how_many_can_i_buy(self, id):
         cost = self.central_bank.stock_price(id, 1)
         return self.cash % cost
+
+    def buy_random_stock(self):
+        # TODO
+        return 0
+
+    def __can_buy(self, c):
+        return self.cash >= c
+
+    def __can_sell(self, id, qtd):
+        if id not in self.stocks_owned:
+            return False
+        return self.stocks_owned[id] >= qtd
+
+    def __update_history(self):
+
+        # update stock history
+        stock_value = 0
+        for id in self.stocks_owned:
+            stock_value += self.central_bank.get_stock(id).price * self.stocks_owned[id]
+        self.stock_history.append(stock_value)
+
+        # update cash history
+        self.cash_history.append(self.cash)
+        return
 
 
 class Random(Agent):
@@ -59,13 +83,14 @@ class Random(Agent):
 
     def decide(self):
         print(self.type + " decided!")
+        self.buy_random_stock()
         return 0
 
 
 class GoldStandard(Agent):
     type = "GoldStandard"
 
-    def decide(self):
+    def __decide(self):
         print(self.type + " decided!")
         if self.current_step != 0:
             return
@@ -77,15 +102,17 @@ class GoldStandard(Agent):
 
         # buy as much as possible
         self.buy(max_value_stock.id, self.__how_many_can_i_buy(max_value_stock.id))
+
+        self.update_history()
         return
 
 
 class SimpleReactive(Agent):
     type = "SimpleReactive"
-    # FIXME this number can be super diferent
+    # FIXME this number can be super different
     buy_qtd = 5
 
-    def decide(self):
+    def __decide(self):
         print(self.type + " decided!")
 
         # sell stock that has gone down
@@ -98,5 +125,16 @@ class SimpleReactive(Agent):
         for s in all_stock:
             if s.price_change > 1:
                 self.buy(s.id, self.buy_qtd)
+
+        return
+
+
+class Careful(Agent):
+    type = "Careful"
+    # FIXME this number can be super different
+    buy_qtd = 5
+
+    def __decide(self):
+        print(self.type + " decided!")
 
         return
