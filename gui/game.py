@@ -1,5 +1,4 @@
-import pygame
-from menu import *
+from gui.menu import *
 from game_manager import *
 
 
