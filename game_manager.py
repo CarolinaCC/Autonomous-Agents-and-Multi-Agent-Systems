@@ -15,7 +15,7 @@ class GameManager:
         self.central_bank = CentralBank()
         self.agents_array = []
         self.setup_agents()
-        print(self.agents_array)
+
         self.current_step = 0
 
     def get_random_agents(self):

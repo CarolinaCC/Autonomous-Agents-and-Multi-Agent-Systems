@@ -72,7 +72,7 @@ class MainMenu(Menu):
             elif self.state == 'Credits':
                 self.game.curr_menu = self.game.credits
             self.run_display = False
-
+#ARRAY STATES => AGENTES (NOME, NUMERO, COORDENADAS NO MENU X, COORDENADAS MENU Y) + STEP (NOME,NOME, NUMERO, COORDENADAS NO MENU X, COORDENADAS MENU Y)
 
 class OptionsMenu(Menu):
 
@@ -100,12 +100,10 @@ class OptionsMenu(Menu):
             self.game.draw_text('Options', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 30)
             for x in self.states:
                 self.game.draw_text(str(x[0]) + " - " + str(x[1]), 15, x[2], x[3])
-            #self.game.draw_text("Number of Steps - " + str(self.steps), 15, self.stepx, self.stepy)
             self.draw_cursor()
             self.blit_screen()
 
     def check_input(self):
-
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.main_menu
             self.run_display = False

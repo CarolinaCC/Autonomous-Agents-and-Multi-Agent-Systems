@@ -1,3 +1,4 @@
+from gui.agent_gui import *
 from gui.menu import *
 from game_manager import *
 
@@ -15,20 +16,26 @@ class Game:
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.main_menu = MainMenu(self)
 
-        self.agents = [['random_agents', 2],['simple_react_agents', 2], ['random_agents_num', 2], ['careful_react_agents', 2]]
+        self.agents = [['random_agents', 2],['simple_react_agents', 2], ['careful_react_agents', 2]]
         self.steps = 40
         self.options = OptionsMenu(self, self.agents, self.steps)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
         self.setup = True
+        self.array_agents_gui = []
 
     def game_loop(self):
         while self.playing:
             if self.setup:
-                self.game_manager = GameManager(self.options.agentsnum, self.options.agentsnum, self.options.agentsnum, self.options.stepsnum)
-                self.game_manager.agents_array
+                self.game_manager = GameManager(self.options.states[0][1], self.options.states[1][1], self.options.states[2][1], self.options.states[-1][1])
                 self.setup = False
-                self.game_manager.step(self.options.stepsnum)
+                self.game_manager.step(self.options.states[-1][1])
+
+                c = 0
+                for x in self.game_manager.agents_array:
+                    self.array_agents_gui.append(Agent_gui("Agent", (600, 200 + (c * 30)), self.display, pygame.font.Font(self.font_name, 20)))
+                    c += 1
+
             self.check_events()
 
             if self.ESCAPE_KEY:
@@ -36,13 +43,27 @@ class Game:
                 pygame.quit()
                 exit()
 
+            if self.RIGHT_KEY:
+                self.game_manager.step(1)
+
+            if self.UP_KEY:
+                self.game_manager.step(10)
+
             self.display.fill(self.BLACK)
-            self.draw_text('Thanks for Playing', 20, self.DISPLAY_W / 2, self.DISPLAY_H / 2)
-            self.draw_text('Number of Agents - ' + str(self.options.agentsnum), 20, 120, 20)
-            self.draw_text('Number of Steps - ' + str(self.options.stepsnum), 20, 120, 40)
 
-            self.draw_text(' - ' + str(self.options.stepsnum), 20, 120, 40)
+            for x in self.array_agents_gui:
+                if x.rect.collidepoint(pygame.mouse.get_pos()):
+                    x.hovered = True
+                    self.draw_text('SALDO - X', 15, 700, 80)
+                    self.draw_text('PATRIMONIO - Y', 15, 700, 100)
+                    self.draw_text('Empresa A - Z', 10, 700, 120)
+                    self.draw_text('Empresa B - ZZ', 10, 700, 140)
+                    self.draw_text('Empresa C - ZZ', 10, 700, 160)
+                else:
+                    x.hovered = False
+                x.draw()
 
+            self.draw_text('Current Steps - ' + str(self.game_manager.current_step), 20, 120, 80)
             self.window.blit(self.display, (0, 0))
             pygame.display.update()
             self.reset_keys()
