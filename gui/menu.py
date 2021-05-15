@@ -75,14 +75,21 @@ class MainMenu(Menu):
 
 
 class OptionsMenu(Menu):
-    def __init__(self, game):
+
+    def __init__(self, game, agents, steps):
         Menu.__init__(self, game)
-        self.state = 'Agents'
-        self.agentsx, self.agentsy = self.mid_w, self.mid_h + 20
-        self.stepx, self.stepy = self.mid_w, self.mid_h + 40
-        self.cursor_rect.midtop = (self.agentsx + self.offset, self.agentsy)
-        self.agentsnum = 6
-        self.stepsnum = 40
+        self.state = 0
+
+        mid_h_offset = 20
+        for x in agents:
+            x.append(self.mid_w)
+            x.append(self.mid_h + mid_h_offset)
+            mid_h_offset+=20
+
+        self.stepx, self.stepy = self.mid_w, self.mid_h + mid_h_offset
+        self.states = agents
+        self.states.append(['steps',steps, self.stepx, self.stepy])
+        self.cursor_rect.midtop = (self.states[0][2] + self.offset, self.states[0][3])
 
     def display_menu(self):
         self.run_display = True
@@ -91,34 +98,38 @@ class OptionsMenu(Menu):
             self.check_input()
             self.game.display.fill((0, 0, 0))
             self.game.draw_text('Options', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 30)
-            self.game.draw_text("Number of Agents - " + str(self.agentsnum), 15, self.agentsx, self.agentsy)
-            self.game.draw_text("Number of Steps - " + str(self.stepsnum), 15, self.stepx, self.stepy)
+            for x in self.states:
+                self.game.draw_text(str(x[0]) + " - " + str(x[1]), 15, x[2], x[3])
+            #self.game.draw_text("Number of Steps - " + str(self.steps), 15, self.stepx, self.stepy)
             self.draw_cursor()
             self.blit_screen()
 
     def check_input(self):
+
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
+
         elif self.game.UP_KEY or self.game.DOWN_KEY:
-            if self.state == 'Agents':
-                self.state = 'Step'
-                self.cursor_rect.midtop = (self.stepx + self.offset, self.stepy)
-            elif self.state == 'Step':
-                self.state = 'Agents'
-                self.cursor_rect.midtop = (self.agentsx + self.offset, self.agentsy)
+            if self.game.UP_KEY:
+                if self.state > 0:
+                    self.state -=1
+                else:
+                    self.state = len(self.states) - 1
+            elif self.game.DOWN_KEY:
+                if self.state < len(self.states) - 1:
+                    self.state +=1
+                else:
+                    self.state = 0
+
+            self.cursor_rect.midtop = (self.states[self.state][2] + self.offset, self.states[self.state][3])
+
+
         elif self.game.RIGHT_KEY:
-            if self.state == 'Agents':
-                self.agentsnum += 1
-            if self.state == 'Step':
-                self.stepsnum += 1
+           self.states[self.state][1] +=1
         elif self.game.LEFT_KEY:
-            if self.state == 'Agents':
-                if self.agentsnum > 0:
-                    self.agentsnum -= 1
-            if self.state == 'Step':
-                if self.stepsnum > 0:
-                    self.stepsnum -= 1
+            if self.states[self.state][1] > 0:
+                self.states[self.state][1] -= 1
 
 
 class CreditsMenu(Menu):

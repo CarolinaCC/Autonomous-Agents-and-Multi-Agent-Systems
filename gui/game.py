@@ -14,7 +14,10 @@ class Game:
         self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.main_menu = MainMenu(self)
-        self.options = OptionsMenu(self)
+
+        self.agents = [['random_agents', 2],['simple_react_agents', 2], ['random_agents_num', 2], ['careful_react_agents', 2]]
+        self.steps = 40
+        self.options = OptionsMenu(self, self.agents, self.steps)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
         self.setup = True
@@ -23,6 +26,7 @@ class Game:
         while self.playing:
             if self.setup:
                 self.game_manager = GameManager(self.options.agentsnum, self.options.agentsnum, self.options.agentsnum, self.options.stepsnum)
+                self.game_manager.agents_array
                 self.setup = False
                 self.game_manager.step(self.options.stepsnum)
             self.check_events()
@@ -44,7 +48,7 @@ class Game:
             self.reset_keys()
 
         # print results to file for analysis
-        self.game_manager.print_results()
+        #self.game_manager.print_results()
 
     def check_events(self):
         for event in pygame.event.get():
