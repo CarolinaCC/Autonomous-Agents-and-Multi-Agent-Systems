@@ -38,6 +38,9 @@ class Agent:
         # TODO
         return 1
 
+    def get_stocks_owned(self):
+        return self.stocks_owned
+
     def decide(self):
         self.__decide()
         self.__update_history()
