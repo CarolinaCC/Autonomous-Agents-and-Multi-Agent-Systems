@@ -27,12 +27,15 @@ class Agent:
         pass
 
     def get_value(self):
+        # TODO
         return 1
 
     def get_stock_value(self):
+        # TODO
         return 1
 
     def get_cash_value(self):
+        # TODO
         return 1
 
     def decide(self):
