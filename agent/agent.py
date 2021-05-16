@@ -26,6 +26,15 @@ class Agent:
     def __decide(self):
         pass
 
+    def get_value(self):
+        return 1
+
+    def get_stock_value(self):
+        return 1
+
+    def get_cash_value(self):
+        return 1
+
     def decide(self):
         self.__decide()
         self.__update_history()
