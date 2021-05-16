@@ -29,7 +29,6 @@ class Game:
             if self.setup:
                 self.game_manager = GameManager(self.options.states[0][1], self.options.states[1][1], self.options.states[2][1], self.options.states[-1][1])
                 self.setup = False
-                self.game_manager.step(self.options.states[-1][1])
 
                 c = 0
                 for x in self.game_manager.agents_array:

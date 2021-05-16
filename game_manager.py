@@ -1,6 +1,8 @@
 from central_bank import CentralBank
 from agent.agent import *
 import os
+import sys
+
 import json
 
 
@@ -32,7 +34,10 @@ class GameManager:
             self.agents_array.append(Random(self.central_bank))
 
     def step(self, num_steps):
+
         for _ in range(num_steps):
+            sys.stdout.write(str(self.current_step))
+            sys.stdout.flush()
             self.decide_event()
             for a in self.agents_array:
                 a.decide()
