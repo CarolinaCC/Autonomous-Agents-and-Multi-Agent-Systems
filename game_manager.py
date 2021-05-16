@@ -35,6 +35,7 @@ class GameManager:
     def step(self, num_steps):
 
         for _ in range(num_steps):
+            # TODO verificar has_ended and if num_steps is too much
             sys.stdout.write(str(self.current_step))
             sys.stdout.flush()
             self.decide_event()
@@ -49,6 +50,10 @@ class GameManager:
     def decide_event(self):
         # TODO
         return
+
+    def has_ended(self):
+        # TODO
+        return False
 
     def print_results(self):
         i = 0

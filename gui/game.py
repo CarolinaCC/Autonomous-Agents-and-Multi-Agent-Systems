@@ -23,6 +23,7 @@ class Game:
         self.curr_menu = self.main_menu
         self.setup = True
         self.array_agents_gui = []
+        self.game_manager = 0
 
     def game_loop(self):
         while self.playing:
@@ -37,6 +38,10 @@ class Game:
 
             self.check_events()
 
+            if self.game_manager.has_ended():
+                #TODO
+                self.draw_text('Game is Over', 15, 700, 500)
+
             if self.ESCAPE_KEY:
                 self.playing = False
                 pygame.quit()
@@ -48,11 +53,14 @@ class Game:
             if self.UP_KEY:
                 self.game_manager.step(10)
 
+
+
             self.display.fill(self.BLACK)
 
             for x in self.array_agents_gui:
                 if x.rect.collidepoint(pygame.mouse.get_pos()):
                     x.hovered = True
+                    #self.game_manager.agents_array[x]
                     self.draw_text('SALDO - X', 15, 700, 80)
                     self.draw_text('PATRIMONIO - Y', 15, 700, 100)
                     self.draw_text('Empresa A - Z', 10, 700, 120)
