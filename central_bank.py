@@ -7,13 +7,13 @@ class CentralBank:
         self.current_step = 0
         self.stocks = []
         i = 0
-        #self.stocks.append(Stock("Enron", i, i * 2, i * 5, 1.5))
+        self.stocks.append(Stock("Enron", i, i * 2, i * 5, 1.5))
         i += 1
-        #self.stocks.append(Stock("Galp", i, i * 2, i * 5, 1.5))
+        self.stocks.append(Stock("Galp", i, i * 2, i * 5, 1.5))
         i += 1
-        #self.stocks.append(Stock("PencilFactory", i, i * 2, i * 5, 1.5))
+        self.stocks.append(Stock("PencilFactory", i, i * 2, i * 5, 1.5))
         i += 1
-        #self.stocks.append(Stock("Woodcutter", i, i * 2, i * 5, 1.5))
+        self.stocks.append(Stock("Woodcutter", i, i * 2, i * 5, 1.5))
 
     def get_all_stock(self):
         return self.stocks

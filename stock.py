@@ -3,7 +3,7 @@ from collections import defaultdict
 
 
 class Stock:
-    def __init__(self, name, stock_id, price, modifier):
+    def __init__(self, name, stock_id, price, modifier, i_dont_know):
         self.name = name
         self.id = stock_id
         self.price = price

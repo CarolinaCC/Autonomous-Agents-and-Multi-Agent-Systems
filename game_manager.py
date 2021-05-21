@@ -18,6 +18,7 @@ class GameManager:
         self.agents_array = []
         self.setup_agents()
         self.current_step = 0
+        self.game_mode = 'GAME_MODE_TO_DO'
 
     def get_random_agents(self):
         return self.random_agents_num
@@ -28,9 +29,9 @@ class GameManager:
             self.agents_array.append(Random(self.central_bank))
         # FIXME adicionar novos agents
         for _ in range(self.simple_react_agents_num):
-            self.agents_array.append(Random(self.central_bank))
+            self.agents_array.append(SimpleReactive(self.central_bank))
         for _ in range(self.careful_react_agents_num):
-            self.agents_array.append(Random(self.central_bank))
+            self.agents_array.append(Careful(self.central_bank))
 
     def step(self, num_steps):
 
@@ -50,6 +51,10 @@ class GameManager:
     def decide_event(self):
         # TODO
         return
+
+    def get_current_event(self):
+        #TODO
+        return 'CURRENT_EVENT'
 
     def has_ended(self):
         # TODO
