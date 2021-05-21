@@ -19,7 +19,7 @@ class GameManager:
         self.setup_agents()
         self.current_step = 0
         self.game_mode = 'GAME_MODE_TO_DO'
-        self.has_ended = False
+        self.end_flag = False
 
     def get_random_agents(self):
         return self.random_agents_num
@@ -38,7 +38,7 @@ class GameManager:
             return
         for _ in range(num_steps):
             if self.current_step > self.steps_num:
-                self.has_ended = True
+                self.end_flag = True
                 return
             sys.stdout.write(str(self.current_step))
             sys.stdout.flush()
@@ -60,7 +60,7 @@ class GameManager:
         return 'CURRENT_EVENT'
 
     def has_ended(self):
-        return self.has_ended
+        return self.end_flag
 
     def print_results(self):
         i = 0
