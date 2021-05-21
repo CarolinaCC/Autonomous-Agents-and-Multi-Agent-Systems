@@ -1,4 +1,5 @@
 import sys
+import random
 from collections import defaultdict
 
 
@@ -23,8 +24,6 @@ class Agent:
     # 4 - dividends if we see it fit
     # Evaluate current portfolio
     #  - evaluate each share owned
-    def __decide(self):
-        pass
 
     # value is cash value + each stock owned value
     def get_value(self):
@@ -45,14 +44,14 @@ class Agent:
         return self.stocks_owned
 
     def decide(self):
-        self.__decide()
+        self._decide()
         self.__update_history()
 
     def buy(self, stock_id, qtd):
         cost = self.central_bank.stock_price(stock_id, qtd)
         if not self.__can_buy(cost):
             return
-        if not self.central_bank.buy(stock_id, qtd):
+        if not self.central_bank.buy_stock(stock_id, qtd):
             sys.stdout.write("failed to buy")
             sys.stdout.flush()
             return
@@ -62,37 +61,51 @@ class Agent:
     def sell(self, stock_id, qtd):
         if not self.__can_sell(stock_id, qtd):
             return
-        value = self.central_bank.sell(stock_id, qtd)
+        value = self.central_bank.sell_stock(stock_id, qtd)
         self.cash += value
 
     def __how_many_can_i_buy(self, stock_id):
         cost = self.central_bank.stock_price(stock_id, 1)
+        if cost <= 0:
+            return 0
         return self.cash // cost
 
-    def __buy_random_stock(self):  # should be part of random agent no?
-        # TODO
+    def __buy_random_stock(self):
+        all_stock = self.central_bank.get_all_stock()
+
+        # get random stock
+        s = random.choice(all_stock)
+
+        # compute random amount to buy
+        amount_to_buy = self.__how_many_can_i_buy(s.id) - 1
+        if amount_to_buy <= 0:
+            return
+        amount_to_buy = random.randrange(amount_to_buy)
+        sys.stdout.write("bought" + str(s.name) + " amount: " + str(amount_to_buy))
+        sys.stdout.flush()
+        self.buy(s.id, amount_to_buy)
+        sys.stdout.write("done")
+        sys.stdout.flush()
         return 0
 
     def __can_buy(self, c):
         return self.cash >= c
 
     def __can_sell(self, id, qtd):
-        return self.stocks_owned[id] >= qtd #if not present will be 0 >= qtd, and false, what we want
-
+        return self.stocks_owned[id] >= qtd  # if not present will be 0 >= qtd, and false, what we want
 
     def __update_history(self):
         self.stock_history.append(self.get_stock_value())
         self.cash_history.append(self.cash)
 
 
-class Random(Agent):
+class RandomAgent(Agent):
     type = "Random"
 
-    def __decide(self):
-        print(self.type + " decided!")
-        self.__buy_random_stock()
+    def _decide(self):
+        self._Agent__buy_random_stock()
 
-    def __update_history(self):
+    def _update_history(self):
         return
 
 
@@ -103,7 +116,7 @@ class GoldStandard(Agent):
         super().__init__(central_bank)
         self.current_step = 0
 
-    def __decide(self):
+    def _decide(self):
         print(self.type + " decided!")
         if self.current_step != 0:
             return
@@ -111,7 +124,7 @@ class GoldStandard(Agent):
         max_value_stock = max(stocks, key=lambda stock: stock.price)
 
         # buy as much as possible
-        self.buy(max_value_stock.id, self.__how_many_can_i_buy(max_value_stock.id))
+        self.buy(max_value_stock.id, self._Agent__how_many_can_i_buy(max_value_stock.id))
 
         return
 
@@ -121,7 +134,7 @@ class SimpleReactive(Agent):
     # FIXME this number can be super different
     buy_qtd = 5
 
-    def __decide(self):
+    def _decide(self):
         print(self.type + " decided!")
 
         # sell stock that has gone down
@@ -143,7 +156,7 @@ class Careful(Agent):
     # FIXME this number can be super different
     buy_qtd = 5
 
-    def __decide(self):
+    def _decide(self):
         print(self.type + " decided!")
 
         return

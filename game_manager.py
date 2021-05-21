@@ -26,7 +26,7 @@ class GameManager:
 
     def setup_agents(self):
         for _ in range(self.random_agents_num):
-            self.agents_array.append(Random(self.central_bank))
+            self.agents_array.append(RandomAgent(self.central_bank))
         for _ in range(self.simple_react_agents_num):
             self.agents_array.append(SimpleReactive(self.central_bank))
         for _ in range(self.careful_react_agents_num):
