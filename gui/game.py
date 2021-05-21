@@ -72,8 +72,9 @@ class Game:
                     self.draw_text('Stock 3 test', 12, 600, 105, self.WHITE)
 
                     c = 20
+
                     for y in self.game_manager.agents_array[x].get_stocks_owned():
-                        self.draw_text(y.name, 10, 600, 220 + c, self.WHITE)
+                        self.draw_text(self.game_manager.central_bank.get_stock(y).name, 10, 600, 220 + c, self.WHITE)
                         c += 20
 
 

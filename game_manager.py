@@ -42,13 +42,12 @@ class GameManager:
             if self.current_step >= self.steps_num:
                 self.end_flag = True
                 return
-            sys.stdout.write(str(self.current_step))
-            sys.stdout.flush()
             self.decide_event()
             # TODO criar os eventos e passa-los para o decide para se poder usar no reecalculate
             for a in self.agents_array:
                 a.decide()
             self.central_bank.decide()
+            self.current_step += 1
 
     def enable_event(self):
         self.event = True
