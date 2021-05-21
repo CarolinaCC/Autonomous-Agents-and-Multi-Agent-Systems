@@ -35,6 +35,9 @@ class Stock:
     def apply_price_modifier(self, modifier):
         self.price *= modifier
 
+    def apply_price_add(self, value):
+        self.price += value
+
     def get_current_step_supply_change(self):
         return self.supply_change_history[-1]
 
@@ -50,7 +53,8 @@ class Stock:
         self.apply_price_modifier(self.normal_modifier)
 
         # 2 - law of supply and demand
-        self.apply_price_modifier(self.get_current_step_supply_change() * self.supply_modifier)
+
+        self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
 
         #TODO complementary and competitor industries
 
