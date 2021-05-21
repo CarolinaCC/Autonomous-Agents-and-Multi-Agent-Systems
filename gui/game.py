@@ -40,7 +40,7 @@ class Game:
 
             if self.game_manager.has_ended():
                 #TODO
-                self.draw_text('Game is Over', 15, 700, 500)
+                self.draw_text('Game is Over', 15, 700, 500, self.WHITE)
 
             if self.ESCAPE_KEY:
                 self.playing = False
@@ -61,17 +61,17 @@ class Game:
                 if self.array_agents_gui[x].rect.collidepoint(pygame.mouse.get_pos()):
                     self.array_agents_gui[x].hovered = True
 
-                    self.draw_text('CASH AVAILABLE - ' + str(self.game_manager.agents_array[x].get_cash_value()), 15, 600, 5)
-                    self.draw_text('EQUITY - ' + str(self.game_manager.agents_array[x].get_value()), 15, 600, 25)
-                    self.draw_text('STOCKS VALUE - ' + str(self.game_manager.agents_array[x].get_stock_value()), 15, 600, 45)
-                    self.draw_text('Stock 1 test', 12, 600, 65)
-                    self.draw_text('Stock 2 test', 12, 600, 85)
-                    self.draw_text('Stock 3 test', 12, 600, 105)
+                    self.draw_text('CASH AVAILABLE - ' + str(self.game_manager.agents_array[x].get_cash_value()), 15, 600, 5, self.WHITE)
+                    self.draw_text('EQUITY - ' + str(self.game_manager.agents_array[x].get_value()), 15, 600, 25, self.WHITE)
+                    self.draw_text('STOCKS VALUE - ' + str(self.game_manager.agents_array[x].get_stock_value()), 15, 600, 45, self.WHITE)
+                    self.draw_text('Stock 1 test', 12, 600, 65, self.WHITE)
+                    self.draw_text('Stock 2 test', 12, 600, 85, self.WHITE)
+                    self.draw_text('Stock 3 test', 12, 600, 105, self.WHITE)
 
 
                     c = 20
                     for y in self.game_manager.agents_array[x].get_stocks_owned():
-                        self.draw_text(y.name, 10, 600, 220 + c)
+                        self.draw_text(y.name, 10, 600, 220 + c, self.WHITE)
                         c += 20
 
 
@@ -79,16 +79,16 @@ class Game:
                     self.array_agents_gui[x].hovered = False
                 self.array_agents_gui[x].draw()
 
-            self.draw_text('Current Step - ' + str(self.game_manager.current_step) + '/' + str(self.game_manager.steps_num) , 20, 5, 20)
-            self.draw_text('Available Stocks', 15, 7,50)
+            self.draw_text('Current Step - ' + str(self.game_manager.current_step) + '/' + str(self.game_manager.steps_num) , 20, 5, 20, self.WHITE)
+            self.draw_text('Available Stocks', 15, 7,50, self.WHITE)
 
             c = 70
             for stock in self.game_manager.central_bank.stocks:
-                self.draw_text(stock.name + ' - ' + str(stock.price) + '€', 12, 8, c)
+                self.draw_text(stock.name + ' - ' + str(stock.price) + '€', 12, 8, c, self.WHITE)
                 c +=20
 
-            self.draw_text('Mode - ' + self.game_manager.game_mode, 15, 7, c + 20)
-            self.draw_text('Breaking News - ' + self.game_manager.get_current_event(), 15, 7, c+40)
+            self.draw_text('Mode - ' + self.game_manager.game_mode, 15, 7, c + 20, self.WHITE)
+            self.draw_text('Breaking News - ' + self.game_manager.get_current_event(), 15, 7, c+40, self.WHITE)
 
 
             self.window.blit(self.display, (0, 0))
@@ -123,9 +123,9 @@ class Game:
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY, self.RIGHT_KEY, self.LEFT_KEY = False, False, False, False, False, False, False
 
-    def draw_text(self, text, size, x, y):
+    def draw_text(self, text, size, x, y, color):
         font = pygame.font.Font(self.font_name, size)
-        text_surface = font.render(text, True, self.WHITE)
+        text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.topleft = (x, y)
         self.display.blit(text_surface, text_rect)

@@ -4,13 +4,14 @@ import pygame
 class Menu():
     def __init__(self, game):
         self.game = game
-        self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
+        self.mid_w, self.mid_h = self.game.DISPLAY_W / 2 + 60, self.game.DISPLAY_H / 2 - 50
         self.run_display = True
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
-        self.offset = - 100
+        self.offset = - 10
+        self.bg = pygame.image.load("gui/assets/background_menu.jpg")
 
     def draw_cursor(self):
-        self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y)
+        self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y, self.game.WHITE)
 
     def blit_screen(self):
         self.game.window.blit(self.game.display, (0, 0))
@@ -32,11 +33,11 @@ class MainMenu(Menu):
         while self.run_display:
             self.game.check_events()
             self.check_input()
-            self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Wall Street Bets', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
-            self.game.draw_text("Start Game", 20, self.startx, self.starty)
-            self.game.draw_text("Options", 20, self.optionsx, self.optionsy)
-            self.game.draw_text("Credits", 20, self.creditsx, self.creditsy)
+
+            self.game.display.blit(self.bg, (0, 0))
+            self.game.draw_text("Start Game", 20, self.startx, self.starty, self.game.WHITE)
+            self.game.draw_text("Options", 20, self.optionsx, self.optionsy, self.game.WHITE)
+            self.game.draw_text("Credits", 20, self.creditsx, self.creditsy, self.game.WHITE)
             self.draw_cursor()
             self.blit_screen()
 
@@ -96,10 +97,10 @@ class OptionsMenu(Menu):
         while self.run_display:
             self.game.check_events()
             self.check_input()
-            self.game.display.fill((0, 0, 0))
-            self.game.draw_text('Options', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 30)
+            self.game.display.blit(self.bg, (0, 0))
+            self.game.draw_text('Options', 20, self.game.DISPLAY_W / 2 + 55, self.game.DISPLAY_H / 2 - 60, self.game.WHITE)
             for x in self.states:
-                self.game.draw_text(str(x[0]) + " - " + str(x[1]), 15, x[2], x[3])
+                self.game.draw_text(str(x[0]) + " - " + str(x[1]), 15, x[2], x[3], self.game.WHITE)
             self.draw_cursor()
             self.blit_screen()
 
@@ -141,8 +142,8 @@ class CreditsMenu(Menu):
             if self.game.START_KEY or self.game.BACK_KEY:
                 self.game.curr_menu = self.game.main_menu
                 self.run_display = False
-            self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Credits', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
+            self.game.display.blit(self.bg, (0, 0))
+            self.game.draw_text('Credits', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20, self.game.WHITE)
             self.game.draw_text('Made by Carolina, João, Sebastião', 15, self.game.DISPLAY_W / 2,
-                                self.game.DISPLAY_H / 2 + 10)
+                                self.game.DISPLAY_H / 2 + 10, self.game.WHITE)
             self.blit_screen()
