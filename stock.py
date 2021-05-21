@@ -34,3 +34,33 @@ class Stock:
         self.history_price.append(price)
         if self.history_price[current_step + 1] != 0:
             self.price_change = price / self.history_price[current_step + 1]
+
+    def was_demand_greater_than_supply(self, current_step):
+        return self.history_quantity[current_step + 1] > 0
+
+    def has_value_risen_in_step(self, current_step):
+        return self.history_price[current_step + 1] > self.history_price[current_step]
+
+
+# Defines a relation between two stocks.
+# If the value of source_stock increases in a step
+# then the value of destination stock should be multiplied by the modifier and vice versa.
+# If the value of source_stock decreases in a step
+# then the value of destination stock should be divided by the modifier and vice versa.
+# Que achas desta classe?
+class StockRelation:
+    def __init__(self, source_stock, destination_stock, modifier):
+        self.source_stock = source_stock
+        self.destination_stock = destination_stock
+        self.modifier = modifier
+
+    def apply(self, current_step):
+        if (self.source_stock.has_value_risen_in_step(current_step)):
+            self.destination_stock.update_price(self.modifier * self.destination_stock.price)
+        else:
+            self.destination_stock.update_price(self.modifier / self.destination_stock.price)
+        if (self.destination_stock.has_value_risen_in_step(current_step)):
+            self.source_stock.update_price(self.modifier * self.source_stock.price)
+        else:
+            self.source_stock.update_price(self.modifier / self.source_stock.price)
+
