@@ -2,7 +2,6 @@ from stock import Stock, StockRelation
 
 
 class CentralBank:
-
     def __init__(self):
         self.current_step = 0
         self.stocks = []
@@ -24,16 +23,17 @@ class CentralBank:
         self.stock_relations.append(StockRelation(enron, galp, -0.001))
         self.stock_relations.append(StockRelation(pencil_factory, woodcutter, 0.001))
 
+
     def get_all_stock(self):
         return self.stocks
 
     def buy_stock(self, id: int, qtd: int):
         self.stocks[id].buy(qtd)
-        return 0
+        return True
 
     def sell_stock(self, id: int, qtd: int):
         self.stocks[id].sell(qtd)
-        return 0
+        return True
 
     def stock_price(self, id, qtd):
         return self.stocks[id].price * qtd

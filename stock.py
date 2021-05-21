@@ -40,6 +40,13 @@ class Stock:
     def get_current_step_price_change(self, current_step):
         return self.supply_change_history[-1] - self.supply_change_history[-2]
 
+    def get_latest_price_modifier(self):
+        l = len(self.price_history)
+        if self.price_history[l - 2] <= 0:
+            return 0
+        res = self.price_history[l-1]/self.price_history[l-2]
+        return res
+
     def recalculate_price(self): #should receive Event if one exists and apply event
         # 3 - global news events
         # 4 - complementary industries

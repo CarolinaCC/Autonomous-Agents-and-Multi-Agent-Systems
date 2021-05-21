@@ -1,5 +1,7 @@
 from central_bank import CentralBank
 from agent.agent import *
+from agent.gold_standard import *
+from agent.simple_reactive import *
 import os
 import sys
 
@@ -36,17 +38,16 @@ class GameManager:
     def step(self, num_steps):
         if self.has_ended():
             return
-        for current_step in range(num_steps):
+        for _ in range(num_steps):
             if self.current_step >= self.steps_num:
                 self.end_flag = True
                 return
-            sys.stdout.write(str(self.current_step))
-            sys.stdout.flush()
             self.decide_event()
             # TODO criar os eventos e passa-los para o decide para se poder usar no reecalculate
             for a in self.agents_array:
                 a.decide()
             self.central_bank.decide()
+            self.current_step += 1
 
     def enable_event(self):
         self.event = True

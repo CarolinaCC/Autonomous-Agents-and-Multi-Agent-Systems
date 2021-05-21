@@ -1,5 +1,6 @@
 # ideias https://corporatefinanceinstitute.com/resources/knowledge/trading-investing/stock-price/
 
+
 class Event:
     def __init__(self, name, modifier):
         self.name = name
@@ -11,8 +12,9 @@ class Event:
 
     # updates the value of the stock passed relating to the event.
     def update_stock(self, stock, current_step):
-        if (self.applies_to_stock(stock)):
+        if self.applies_to_stock(stock):
             stock.update_price(self.modifier * stock.price, current_step)
+
 
 class NoneEvent:
     def applies_to_stock(self):
