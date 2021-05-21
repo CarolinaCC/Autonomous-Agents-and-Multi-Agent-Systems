@@ -4,9 +4,9 @@ from collections import defaultdict
 
 
 class Agent:
-    def __init__(self, central_bank, initialcash=1000):
-        self.cash = initialcash
-        self.cash_history = [initialcash]
+    def __init__(self, central_bank, initial_cash=1000):
+        self.cash = initial_cash
+        self.cash_history = [initial_cash]
         self.stock_history = [0]
         self.central_bank = central_bank
         # id stock : qtd owned
@@ -14,16 +14,6 @@ class Agent:
 
     def __repr__(self):
         return "Agent"
-
-    # abstract method
-    # agents will be able to use the following to make decisions
-    # TO BUY
-    # 1 - global news events
-    # 2 - if share price is up or down
-    # 3 - share price evolution throughout n rounds
-    # 4 - dividends if we see it fit
-    # Evaluate current portfolio
-    #  - evaluate each share owned
 
     # value is cash value + each stock owned value
     def get_value(self):
@@ -43,6 +33,14 @@ class Agent:
     def get_stocks_owned(self):
         return self.stocks_owned
 
+    # agents will be able to use the following to make decisions
+    # TO BUY
+    # 1 - global news events
+    # 2 - if share price is up or down
+    # 3 - share price evolution throughout n rounds
+    # 4 - dividends if we see it fit
+    # Evaluate current portfolio
+    #  - evaluate each share owned
     def decide(self):
         self._decide()
         self.__update_history()
@@ -98,7 +96,6 @@ class Agent:
         self.stock_history.append(self.get_stock_value())
         self.cash_history.append(self.cash)
 
-
 class RandomAgent(Agent):
     type = "Random"
 
@@ -108,53 +105,12 @@ class RandomAgent(Agent):
     def _update_history(self):
         return
 
-
-class GoldStandard(Agent):
-    type = "GoldStandard"
-
-    def __init__(self, central_bank, initialcash=1000):
-        super().__init__(central_bank)
-        self.current_step = 0
-
-    def _decide(self):
-        print(self.type + " decided!")
-        if self.current_step != 0:
-            return
-        stocks = self.central_bank.get_all_stock()
-        max_value_stock = max(stocks, key=lambda stock: stock.price)
-
-        # buy as much as possible
-        self.buy(max_value_stock.id, self._Agent__how_many_can_i_buy(max_value_stock.id))
-
-        return
-
-
-class SimpleReactive(Agent):
-    type = "SimpleReactive"
-    # FIXME this number can be super different
-    buy_qtd = 5
-
-    def _decide(self):
-        print(self.type + " decided!")
-
-        # sell stock that has gone down
-        for s in self.stocks_owned:
-            if s.price_change < 1:
-                self.sell(s.id, self.stocks_owned[s.id])
-
-        # buy stock that has gone up
-        all_stock = self.central_bank.get_all_stock()
-        for s in all_stock:
-            if s.price_change > 1:
-                self.buy(s.id, self.buy_qtd)
-
-        return
-
-
 class Careful(Agent):
     type = "Careful"
     # FIXME this number can be super different
     buy_qtd = 5
+    # number of round it sees an increase in order for it qualify as a trend
+    rounds_before_trend = 4
 
     def _decide(self):
         print(self.type + " decided!")

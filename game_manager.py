@@ -1,5 +1,7 @@
 from central_bank import CentralBank
 from agent.agent import *
+from agent.gold_standard import *
+from agent.simple_reactive import *
 import os
 import sys
 

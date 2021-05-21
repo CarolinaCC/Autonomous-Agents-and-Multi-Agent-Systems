@@ -11,5 +11,5 @@ class Event:
 
     # updates the value of the stock passed relating to the event.
     def update_stock(self, stock, current_step):
-        if (self.applies_to_stock(stock)):
+        if self.applies_to_stock(stock):
             stock.update_price(self.modifier * stock.price, current_step)
