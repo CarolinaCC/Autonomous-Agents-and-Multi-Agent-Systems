@@ -47,11 +47,7 @@ class Stock:
         res = self.price_history[l-1]/self.price_history[l-2]
         return res
 
-    def recalculate_price(self): #should receive Event if one exists and apply event
-        # 3 - global news events
-        # 4 - complementary industries
-        # 5 - competitor industries
-
+    def recalculate_price(self):
         # 1 - stock.modifier
         self.apply_price_modifier(self.normal_modifier)
 

@@ -7,6 +7,8 @@ import sys
 
 import json
 
+from event.event import EventIterator
+
 
 class GameManager:
     event = False
@@ -22,6 +24,7 @@ class GameManager:
         self.current_step = 0
         self.game_mode = 'GAME_MODE_TO_DO'
         self.end_flag = False
+        self.events = EventIterator([])  # iterator of events, returns current event when calling next
 
     def get_random_agents(self):
         return self.random_agents_num
@@ -46,7 +49,7 @@ class GameManager:
             # TODO criar os eventos e passa-los para o decide para se poder usar no reecalculate
             for a in self.agents_array:
                 a.decide()
-            self.central_bank.decide()
+            self.central_bank.decide(self.events.next())
             self.current_step += 1
 
     def enable_event(self):

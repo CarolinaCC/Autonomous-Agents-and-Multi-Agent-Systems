@@ -38,13 +38,15 @@ class CentralBank:
     def stock_price(self, id, qtd):
         return self.stocks[id].price * qtd
 
-    def decide(self):
+    def decide(self, current_event):
         for stock in self.stocks:
             stock.recalculate_price()
         for stock in self.stocks:
             stock.update_history()
         for relation in self.stock_relations:
             relation.update()
+
+        current_event.update(self.stocks)
 
         return 0
 
