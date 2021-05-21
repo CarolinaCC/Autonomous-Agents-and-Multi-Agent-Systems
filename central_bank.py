@@ -6,6 +6,7 @@ class CentralBank:
     STOCK_COMPLEMENTARY_FACTOR = 1.03
     STOCK_COMPETITIVE_FACTOR = 1.03
 
+
     def __init__(self):
         self.current_step = 0
         self.stocks = []
@@ -27,19 +28,22 @@ class CentralBank:
         return self.stocks
 
     def buy_stock(self, id: int, qtd: int):
-        self.stocks[id].buy(qtd, self.current_step)
-        return 0
+        self.stocks[id].buy(qtd)
+        return True
 
     def sell_stock(self, id: int, qtd: int):
-        self.stocks[id].sell(qtd, self.current_step)
-        return 0
+        self.stocks[id].sell(qtd)
+        return True
 
     def stock_price(self, id, qtd):
         return self.stocks[id].price * qtd
 
-    def decide(self, current_step):
+    def decide(self):
         for stock in self.stocks:
-            self.__recalculate(stock, current_step)
+            stock.recalculate_price()
+        for stock in self.stocks:
+            stock.update_history()
+
         return 0
 
     def get_stock(self, stock_id):
@@ -88,3 +92,6 @@ class CentralBank:
             else:
                 competitive_modifier *= CentralBank.STOCK_COMPETITIVE_FACTOR
         stock.update_price(stock.price * competitive_modifier, current_step)
+
+        return self.stocks[id]
+

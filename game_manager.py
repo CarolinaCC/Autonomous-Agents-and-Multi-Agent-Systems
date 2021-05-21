@@ -38,7 +38,7 @@ class GameManager:
     def step(self, num_steps):
         if self.has_ended():
             return
-        for _ in range(num_steps):
+        for current_step in range(num_steps):
             if self.current_step >= self.steps_num:
                 self.end_flag = True
                 return
@@ -48,8 +48,7 @@ class GameManager:
             # TODO criar os eventos e passa-los para o decide para se poder usar no reecalculate
             for a in self.agents_array:
                 a.decide()
-            self.central_bank.decide(self.current_step)
-            self.current_step += 1
+            self.central_bank.decide()
 
     def enable_event(self):
         self.event = True

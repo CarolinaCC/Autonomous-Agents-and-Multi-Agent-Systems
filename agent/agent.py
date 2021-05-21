@@ -79,7 +79,7 @@ class Agent:
         if amount_to_buy <= 0:
             return
         amount_to_buy = random.randrange(amount_to_buy)
-        sys.stdout.write("bought" + str(s.name) + " amount: " + str(amount_to_buy))
+        sys.stdout.write("\nbought " + str(s.name) + " amount: " + str(amount_to_buy))
         sys.stdout.flush()
         self.buy(s.id, amount_to_buy)
         sys.stdout.write("done")
@@ -96,6 +96,7 @@ class Agent:
         self.stock_history.append(self.get_stock_value())
         self.cash_history.append(self.cash)
 
+
 class RandomAgent(Agent):
     type = "Random"
 
@@ -104,6 +105,7 @@ class RandomAgent(Agent):
 
     def _update_history(self):
         return
+
 
 class Careful(Agent):
     type = "Careful"

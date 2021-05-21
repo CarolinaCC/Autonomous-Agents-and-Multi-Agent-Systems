@@ -3,64 +3,68 @@ from collections import defaultdict
 
 
 class Stock:
-    def __init__(self, name, stock_id, price, modifier, i_dont_know):
+    def __init__(self, name, stock_id, price, normal_modifier=0.1, supply_modifier=0.1):
         self.name = name
         self.id = stock_id
         self.price = price
-        self.modifier = modifier
-        self.history_price = [price]
-        self.history_quantity = defaultdict(lambda: 0)  # when accessing a key not present adds that key with value 0
-        self.current_step = 0
-        self.price_change = 0.0
+        self.price_history = [price, price] #start with two entries so that get_current_step_value_change always works
+        self.supply_change_history = [0]
+        self.supply_change = 0
+        self.normal_modifier = normal_modifier
+        self.supply_modifier = supply_modifier
 
-    def buy(self, qtd, current_step):
-        # TODO fazer uma ronda 0 inicial para não ter estes -1 :(
-        self.history_quantity[current_step + 1] += qtd
+    def buy(self, quantity):
+        self.supply_change += quantity
         return
 
-    def sell(self, qtd, current_step):
-        self.history_quantity[current_step + 1] -= qtd
+    def sell(self, quantity):
+        self.supply_change -= quantity
         return
+
+    def update_history(self):
+        self.price_history.append(self.price)
+        self.supply_change_history.append(self.supply_change)
+        self.supply_change = 0
 
     def __repr__(self):
-        out = str(self.id) + " " + self.name
-        for s in self.history_price:
-            out += " " + str(s)
-        out += "\n"
-        return out
+        return " ".join([str(self.id), self.name, *(str(price) for price in self.price_history)])
 
-    def update_price(self, price, current_step):
+    def update_price(self, price):
         self.price = price
-        self.history_price.append(price)
-        if self.history_price[current_step + 1] != 0:
-            self.price_change = price / self.history_price[current_step + 1]
 
-    def was_demand_greater_than_supply(self, current_step):
-        return self.history_quantity[current_step + 1] > 0
+    def apply_price_modifier(self, modifier):
+        self.price *= modifier
 
-    def has_value_risen_in_step(self, current_step):
-        return self.history_price[current_step + 1] > self.history_price[current_step]
+    def apply_price_add(self, value):
+        self.price += value
+
+    def get_current_step_supply_change(self):
+        return self.supply_change_history[-1]
+
+    def get_current_step_price_change(self, current_step):
+        return self.supply_change_history[-1] - self.supply_change_history[-2]
+
+    def get_latest_price_modifier(self):
+        l = len(self.price_history)
+        if self.price_history[l - 2] <= 0:
+            return 0
+        res = self.price_history[l-1]/self.price_history[l-2]
+        return res
+
+    def recalculate_price(self): #should receive Event if one exists and apply event
+        # 3 - global news events
+        # 4 - complementary industries
+        # 5 - competitor industries
+
+        # 1 - stock.modifier
+        self.apply_price_modifier(self.normal_modifier)
+
+        # 2 - law of supply and demand
+
+        self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
+
+        #TODO complementary and competitor industries
 
 
-# Defines a relation between two stocks.
-# If the value of source_stock increases in a step
-# then the value of destination stock should be multiplied by the modifier and vice versa.
-# If the value of source_stock decreases in a step
-# then the value of destination stock should be divided by the modifier and vice versa.
-# Que achas desta classe?
-class StockRelation:
-    def __init__(self, source_stock, destination_stock, modifier):
-        self.source_stock = source_stock
-        self.destination_stock = destination_stock
-        self.modifier = modifier
 
-    def apply(self, current_step):
-        if (self.source_stock.has_value_risen_in_step(current_step)):
-            self.destination_stock.update_price(self.modifier * self.destination_stock.price)
-        else:
-            self.destination_stock.update_price(self.modifier / self.destination_stock.price)
-        if (self.destination_stock.has_value_risen_in_step(current_step)):
-            self.source_stock.update_price(self.modifier * self.source_stock.price)
-        else:
-            self.source_stock.update_price(self.modifier / self.source_stock.price)
 
