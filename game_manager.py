@@ -37,7 +37,7 @@ class GameManager:
         if self.has_ended():
             return
         for _ in range(num_steps):
-            if self.current_step > self.steps_num:
+            if self.current_step >= self.steps_num:
                 self.end_flag = True
                 return
             sys.stdout.write(str(self.current_step))

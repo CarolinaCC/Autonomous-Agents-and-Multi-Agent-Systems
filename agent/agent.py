@@ -26,17 +26,20 @@ class Agent:
     def __decide(self):
         pass
 
+    # value is cash value + each stock owned value
     def get_value(self):
-        # TODO
-        return 1
+        value = self.cash
+        value += self.get_stock_value()
+        return value
 
     def get_stock_value(self):
-        # TODO
-        return 1
+        stock_value = 0
+        for stock_id in self.stocks_owned:
+            stock_value += self.central_bank.get_stock(stock_id).price * self.stocks_owned[stock_id]
+        return stock_value
 
     def get_cash_value(self):
-        # TODO
-        return 1
+        return self.cash
 
     def get_stocks_owned(self):
         return self.stocks_owned
@@ -76,14 +79,9 @@ class Agent:
     def __can_sell(self, id, qtd):
         return self.stocks_owned[id] >= qtd #if not present will be 0 >= qtd, and false, what we want
 
-    def __get_owned_stocks_value(self):
-        stock_value = 0
-        for stock_id in self.stocks_owned:
-            stock_value += self.central_bank.get_stock(stock_id).price * self.stocks_owned[stock_id]
-        return stock_value
 
     def __update_history(self):
-        self.stock_history.append(self.__get_owned_stocks_value())
+        self.stock_history.append(self.get_stock_value())
         self.cash_history.append(self.cash)
 
 
