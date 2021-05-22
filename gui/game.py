@@ -70,15 +70,15 @@ class Game:
                 if self.array_agents_gui[x].rect.collidepoint(pygame.mouse.get_pos()):
                     self.array_agents_gui[x].hovered = True
 
-                    self.draw_text('CASH AVAILABLE - ' + str(self.game_manager.agents_array[x].get_cash_value()), 15,
-                                   600, 5, self.WHITE)
-                    self.draw_text('EQUITY - ' + str(self.game_manager.agents_array[x].get_value()), 15, 600, 25,
-                                   self.WHITE)
-                    self.draw_text('STOCKS VALUE - ' + str(self.game_manager.agents_array[x].get_stock_value()), 15,
-                                   600, 45, self.WHITE)
-                    self.draw_text('Stock 1 test', 12, 600, 65, self.WHITE)
-                    self.draw_text('Stock 2 test', 12, 600, 85, self.WHITE)
-                    self.draw_text('Stock 3 test', 12, 600, 105, self.WHITE)
+                    self.draw_text('CASH AVAILABLE - ' + str(self.game_manager.agents_array[x].get_cash_value()), 15, 55, 70, self.WHITE)
+                    self.draw_text('EQUITY - ' + str(self.game_manager.agents_array[x].get_value()), 15, 55, 90, self.WHITE)
+                    self.draw_text('STOCKS VALUE - ' + str(self.game_manager.agents_array[x].get_stock_value()), 15, 55, 110, self.WHITE)
+                    self.draw_text('Stock 1 test', 12, 55, 130, self.WHITE)
+                    self.draw_text('Stock 2 test', 12, 55, 150, self.WHITE)
+                    self.draw_text('Stock 3 test', 12, 55, 170, self.WHITE)
+
+                    self.display.blit(self.array_agents_gui[x].player_avatar, (290,50))
+                    self.draw_text(self.game_manager.agents_array[x].type, 15, 290, 115, self.WHITE)
 
                     c = 20
 
@@ -92,8 +92,8 @@ class Game:
                 self.array_agents_gui[x].draw()
 
             self.draw_text(
-                'Current Step - ' + str(self.game_manager.current_step) + '/' + str(self.game_manager.steps_num), 20, 5,
-                20, self.WHITE)
+                'Current Step - ' + str(self.game_manager.current_step) + '/' + str(self.game_manager.steps_num), 20, 55,
+                35, self.BLACK)
             self.draw_text('Stocks', 15, 470, 6, self.WHITE)
             self.draw_text('Price', 15, 547, 6, self.WHITE)
             self.draw_text('Variation', 15, 608, 6, self.WHITE)
@@ -111,7 +111,7 @@ class Game:
             self.x_breaking +=2
             if self.x_breaking > self.DISPLAY_W:
                 self.x_breaking = - 200
-            self.draw_text('Mode - ' + self.game_manager.game_mode, 15, 300, 440, self.WHITE)
+            self.draw_text('Mode - ' + self.game_manager.game_mode, 15, 320, 440, self.WHITE)
 
             self.window.blit(self.display, (0, 0))
             pygame.display.update()
