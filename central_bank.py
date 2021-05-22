@@ -14,10 +14,10 @@ class CentralBank:
         galp = Stock("Galp", i, i * 2, i * 5, 1.5)
         self.stocks.append(galp)
         i += 1
-        pencil_factory = Stock("PencilFactory", i, i * 2, i * 5, 1.5)
+        pencil_factory = Stock("PencilFac", i, i * 2, i * 5, 1.5)
         self.stocks.append(pencil_factory)
         i += 1
-        woodcutter = Stock("Woodcutter", i, i * 2, i * 5, 1.5)
+        woodcutter = Stock("Woodcut", i, i * 2, i * 5, 1.5)
         self.stocks.append(woodcutter)
 
         self.stock_relations.append(StockRelation(enron, galp, -0.001))

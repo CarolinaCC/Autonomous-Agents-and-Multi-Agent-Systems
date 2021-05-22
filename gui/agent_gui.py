@@ -4,17 +4,22 @@ import pygame
 class Agent_gui:
     hovered = False
 
-    def __init__(self, text, pos, display, font):
+    def __init__(self, text, pos, display, font, number):
         self.text = text
         self.pos = pos
         self.display = display
         self.font = font
+        self.number = number
+        self.player_avatar = pygame.image.load("gui/assets/players/" + str(self.number) + ".png")
         self.set_rect()
         self.draw()
 
+
     def draw(self):
         self.set_rend()
+        self.display.blit(self.player_avatar, self.pos)
         self.display.blit(self.rend, self.rect)
+
 
     def set_rend(self):
         self.rend = self.font.render(self.text, True, self.get_color())
