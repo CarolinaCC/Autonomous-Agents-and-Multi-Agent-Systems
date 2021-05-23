@@ -1,5 +1,6 @@
 from agent.agent import Agent
 
+
 class GoldStandard(Agent):
     type = "GoldStandard"
 

@@ -3,7 +3,7 @@ class Stock:
         self.name = name
         self.id = stock_id
         self.price = price
-        self.price_history = [price, price] #start with two entries so that get_current_step_value_change always works
+        self.price_history = [price, price]  # start with two entries so that get_current_step_value_change always works
         self.supply_change_history = [0]
         self.supply_change = 0
         self.normal_modifier = normal_modifier
@@ -44,7 +44,16 @@ class Stock:
         l = len(self.price_history)
         if self.price_history[l - 2] <= 0:
             return 0
-        res = self.price_history[l-1]/self.price_history[l-2]
+        res = self.price_history[l - 1] / self.price_history[l - 2]
+        return res
+
+    def get_price_chance_in_rounds(self, rounds):
+        l = len(self.price_history)
+        if l < rounds:
+            return 0
+        if self.price_history[l - 1 - rounds] <= 0:
+            return 0
+        res = self.price_history[l - rounds] / self.price_history[l - 1 - rounds]
         return res
 
     def recalculate_price(self):
@@ -63,6 +72,8 @@ every step and vice versa
 Modifier should be negative for competitive stocks
 and positive for complementary stocks
 '''
+
+
 class StockRelation:
     def __init__(self, source_stock, destination_stock, modifier):
         self.source_stock = source_stock
@@ -72,5 +83,3 @@ class StockRelation:
     def update(self):
         self.source_stock.apply_price_add(self.destination_stock.get_current_step_supply_change() * self.modifier)
         self.destination_stock.apply_price_add(self.source_stock.get_current_step_supply_change() * self.modifier)
-
-

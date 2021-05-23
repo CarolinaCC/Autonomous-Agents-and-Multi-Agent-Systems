@@ -122,5 +122,15 @@ class Careful(Agent):
     rounds_before_trend = 4
 
     def _decide(self):
+        # sell stock that has gone down
+        all_stock = self.central_bank.get_all_stock()
+        for id, s in self.stocks_owned.items():
+            if all_stock[id].get_latest_price_modifier() < 1.0:
+                self.sell(id, self.stocks_owned[id])
 
+        # buy stock that has gone up across rounds
+        all_stock = self.central_bank.get_all_stock()
+        for s in all_stock:
+            if s.get_price_chance_in_rounds(self.rounds_before_trend) > 1.0:
+                self.buy(s.id, self.buy_qtd)
         return
