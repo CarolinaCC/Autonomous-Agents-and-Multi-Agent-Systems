@@ -20,9 +20,21 @@ class CentralBank:
         woodcutter = Stock("Woodcut", i, (i * 2) + 1, 1.05, 0.001)
         self.stocks.append(woodcutter)
 
+        i += 1
+        company_a = Stock("companyA", i, (i * 2) + 1, 1.01, 0.002)
+        self.stocks.append(company_a)
+        i += 1
+        company_b = Stock("companyB", i, (i * 2) + 1, 1.02, 0.003)
+        self.stocks.append(company_b)
+        i += 1
+        company_c = Stock("companyC", i, (i * 2) + 1, 1.025, 0.006)
+        self.stocks.append(company_c)
+        i += 1
+        company_d = Stock("companyD", i, (i * 2) + 1, 1.05, 0.001)
+        self.stocks.append(company_d)
+
         self.stock_relations.append(StockRelation(enron, galp, -0.00009))
         self.stock_relations.append(StockRelation(pencil_factory, woodcutter, 0.00003))
-
 
     def get_all_stock(self):
         return self.stocks
