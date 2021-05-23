@@ -29,7 +29,11 @@ class Stock:
         self.price = price
 
     def apply_price_modifier(self, modifier):
-        self.price *= modifier
+        if (self.price >= 0):
+            self.price *= modifier
+        else:
+            # prevent snowball effect
+            self.price /= modifier
 
     def apply_price_add(self, value):
         self.price += value
