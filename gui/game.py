@@ -70,9 +70,9 @@ class Game:
                 if self.array_agents_gui[x].rect.collidepoint(pygame.mouse.get_pos()):
                     self.array_agents_gui[x].hovered = True
 
-                    self.draw_text('CASH AVAILABLE - ' + str(self.game_manager.agents_array[x].get_cash_value()), 15, 55, 70, self.WHITE)
-                    self.draw_text('EQUITY - ' + str(self.game_manager.agents_array[x].get_value()), 15, 55, 90, self.WHITE)
-                    self.draw_text('STOCKS VALUE - ' + str(self.game_manager.agents_array[x].get_stock_value()), 15, 55, 110, self.WHITE)
+                    self.draw_text('CASH AVAILABLE - ' + f'{self.game_manager.agents_array[x].get_cash_value():.2f}', 15, 55, 70, self.WHITE)
+                    self.draw_text('EQUITY - ' + f'{self.game_manager.agents_array[x].get_value():.2f}', 15, 55, 90, self.WHITE)
+                    self.draw_text('STOCKS VALUE - ' + f'{self.game_manager.agents_array[x].get_stock_value():2f}', 15, 55, 110, self.WHITE)
                     self.draw_text('Stock 1 test', 12, 55, 130, self.WHITE)
                     self.draw_text('Stock 2 test', 12, 55, 150, self.WHITE)
                     self.draw_text('Stock 3 test', 12, 55, 170, self.WHITE)
@@ -102,8 +102,8 @@ class Game:
 
             for stock in self.game_manager.central_bank.stocks:
                 self.draw_text(stock.name, 12, 470, c, self.WHITE)
-                self.draw_text(str(stock.price) + ' €', 12, 553, c, self.WHITE)
-                self.draw_text(str(stock.price) + ' %', 12, 620, c, self.GREEN)
+                self.draw_text(f'{stock.price:.2f}' + ' €', 12, 553, c, self.WHITE)
+                self.draw_text(f'{stock.price:.2f}' + ' %', 12, 620, c, self.GREEN)
                 c += 25
 
 

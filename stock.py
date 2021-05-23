@@ -55,7 +55,6 @@ class Stock:
         self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
 
 
-
 '''
 Represents a relation between stocks.
 The value of the source_stock increased by 
