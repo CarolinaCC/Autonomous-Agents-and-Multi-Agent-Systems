@@ -16,7 +16,6 @@ class Agent_gui:
         self.set_rect()
         self.draw()
 
-
     def draw(self):
         self.set_rend()
         self.display.blit(self.player_avatar, self.pos)

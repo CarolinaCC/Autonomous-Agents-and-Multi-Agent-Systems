@@ -23,7 +23,7 @@ class Agent:
 
     def get_stock_value(self):
         stock_value = 0
-        for stock_id in self.stocks_owned:
+        for stock_id in self.stocks_owned.keys():
             stock_value += self.central_bank.get_stock(stock_id).price * self.stocks_owned[stock_id]
         return stock_value
 
@@ -82,6 +82,20 @@ class Agent:
         sys.stdout.write("\nbought " + str(s.name) + " amount: " + str(amount_to_buy))
         sys.stdout.flush()
         self.buy(s.id, amount_to_buy)
+        return 0
+
+    def __sell_random_stock(self):
+        # get random stock
+        s_id = random.choice(list(self.stocks_owned.keys()))
+
+        # compute random amount to buy
+        amount_to_sell = self.stocks_owned[s_id]
+        if amount_to_sell <= 0:
+            return
+        amount_to_sell = random.randrange(amount_to_sell)
+        sys.stdout.write("\nsold " + str(self.central_bank.get_stock(s_id).name) + " amount: " + str(amount_to_sell))
+        sys.stdout.flush()
+        self.sell(s_id, amount_to_sell)
         sys.stdout.write("done")
         sys.stdout.flush()
         return 0
@@ -102,6 +116,7 @@ class RandomAgent(Agent):
 
     def _decide(self):
         self._Agent__buy_random_stock()
+        self._Agent__sell_random_stock()
 
     def _update_history(self):
         return
@@ -115,6 +130,5 @@ class Careful(Agent):
     rounds_before_trend = 4
 
     def _decide(self):
-        print(self.type + " decided!")
 
         return

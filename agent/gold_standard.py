@@ -8,7 +8,6 @@ class GoldStandard(Agent):
         self.current_step = 0
 
     def _decide(self):
-        print(self.type + " decided!")
         if self.current_step != 0:
             return
         stocks = self.central_bank.get_all_stock()
