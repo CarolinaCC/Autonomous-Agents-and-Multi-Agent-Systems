@@ -27,8 +27,8 @@ class GameManager:
         self.end_flag = False
 
     def setup_world(self):
-        enron = Stock("Enron", 0, 1.6, 1.01, 0.002)
-        galp = Stock("Galp", 1, 2.9, 1.02, 0.003)
+        enron = Stock("Enron", 0, 2.6, 1.03, 0.005)
+        galp = Stock("Galp", 1, 2.9, 1.03, 0.004)
         primark = Stock("Primark", 2, 2.2, 1.025, 0.006)
         tesla = Stock("Tesla", 3, 3.1, 1.05, 0.001)
         modena = Stock("Modena", 4, 3.3, 1.01, 0.002)
@@ -37,8 +37,8 @@ class GameManager:
         intel = Stock("Intel", 7, 3.1, 1.05, 0.001)
         stocks = [enron, galp, primark, tesla, modena, microsoft, aldi, intel]
 
-        stock_relations = [StockRelation(enron, galp, -0.00009),
-                           StockRelation(primark, aldi, -0.00007),
+        stock_relations = [StockRelation(enron, galp, -0.00003),
+                           StockRelation(primark, aldi, -0.00002),
                            StockRelation(tesla, intel, 0.00005),
                            StockRelation(microsoft, intel, 0.00003)
                            ]
