@@ -85,7 +85,7 @@ class GameManager:
 
     def get_current_event(self):
         # TODO
-        return 'CURRENT_EVENT'
+        return self.events.next().name
 
     def has_ended(self):
         return self.end_flag
