@@ -2,36 +2,34 @@
 
 
 class Event:
-    def __init__(self, name, modifier, num_steps):
+    def __init__(self, name, modifier, num_steps, stocks=None):
+        if stocks is None:
+            stocks = []
         self.name = name
         self.modifier = modifier
         self.num_steps = num_steps
-
-    # returns True if the event applies to the stock, False otherwise
-    def applies_to_stock(self, stock):
-        pass
+        self.stocks = stocks
 
     # updates the value of the stock passed relating to the event.
     def update_stock(self, stock):
-        if self.applies_to_stock(stock):
-            stock.update_price(self.modifier * stock.price)
+        stock.update_price(self.modifier * stock.price)
 
-    def update(self, stocks):
-        for stock in stocks:
+    def update(self):
+        for stock in self.stocks:
             self.update_stock(stock)
         self.num_steps -= 1
 
 
 class NoneEvent(Event):
-    def applies_to_stock(self, stock):
-        return False
+    def __init__(self):
+        super().__init__("None", 0, 0, [])
 
 
 class EventIterator:
     def __init__(self, events):
         self.events = events
         self.i = 0
-        self.none = NoneEvent("none", 0, 0)
+        self.none = NoneEvent()
 
     def __iter__(self):
         return self

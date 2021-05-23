@@ -46,10 +46,10 @@ class GameManager:
                 self.end_flag = True
                 return
             self.decide_event()
-            # TODO criar os eventos e passa-los para o decide para se poder usar no reecalculate
             for a in self.agents_array:
                 a.decide()
-            self.central_bank.decide(self.events.next())
+            self.central_bank.decide()
+            self.events.next().update()
             self.current_step += 1
 
     def enable_event(self):
