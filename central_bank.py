@@ -7,34 +7,27 @@ class CentralBank:
         self.stocks = []
         self.stock_relations = []
 
-        i = 0
-        enron = Stock("Enron", i, (i * 2) + 1, 1.01, 0.002)
+        enron = Stock("Enron", 0, 1.6, 1.01, 0.002)
         self.stocks.append(enron)
-        i += 1
-        galp = Stock("Galp", i, (i * 2) + 1, 1.02, 0.003)
+        galp = Stock("Galp", 1, 2.9, 1.02, 0.003)
         self.stocks.append(galp)
-        i += 1
-        pencil_factory = Stock("PencilFac", i, (i * 2) + 1, 1.025, 0.006)
-        self.stocks.append(pencil_factory)
-        i += 1
-        woodcutter = Stock("Woodcut", i, (i * 2) + 1, 1.05, 0.001)
-        self.stocks.append(woodcutter)
-
-        i += 1
-        company_a = Stock("companyA", i, (i * 2) + 1, 1.01, 0.002)
-        self.stocks.append(company_a)
-        i += 1
-        company_b = Stock("companyB", i, (i * 2) + 1, 1.02, 0.003)
-        self.stocks.append(company_b)
-        i += 1
-        company_c = Stock("companyC", i, (i * 2) + 1, 1.025, 0.006)
-        self.stocks.append(company_c)
-        i += 1
-        company_d = Stock("companyD", i, (i * 2) + 1, 1.05, 0.001)
-        self.stocks.append(company_d)
+        primark = Stock("Primark", 2, 2.2, 1.025, 0.006)
+        self.stocks.append(primark)
+        tesla = Stock("Tesla", 3, 3.1, 1.05, 0.001)
+        self.stocks.append(tesla)
+        apple = Stock("Apple", 4, 3.3, 1.01, 0.002)
+        self.stocks.append(apple)
+        microsoft = Stock("Microsoft", 5, 2.2, 1.02, 0.003)
+        self.stocks.append(microsoft)
+        aldi = Stock("Aldi", 6, 4.1, 1.025, 0.006)
+        self.stocks.append(aldi)
+        intel = Stock("Intel", 7, 3.1, 1.05, 0.001)
+        self.stocks.append(intel)
 
         self.stock_relations.append(StockRelation(enron, galp, -0.00009))
-        self.stock_relations.append(StockRelation(pencil_factory, woodcutter, 0.00003))
+        self.stock_relations.append(StockRelation(primark, aldi, -0.00007))
+        self.stock_relations.append(StockRelation(tesla, intel, 0.00005))
+        self.stock_relations.append(StockRelation(microsoft, intel, 0.00003))
 
     def get_all_stock(self):
         return self.stocks
