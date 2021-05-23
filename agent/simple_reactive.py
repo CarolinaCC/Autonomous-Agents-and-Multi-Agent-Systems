@@ -7,7 +7,6 @@ class SimpleReactive(Agent):
     buy_qtd = 5
 
     def _decide(self):
-        print(self.type + " decided!")
 
         # react to global event TODO
 
