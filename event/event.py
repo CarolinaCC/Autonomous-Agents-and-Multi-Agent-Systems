@@ -21,15 +21,17 @@ class Event:
             self.update_stock(stock)
         self.num_steps -= 1
 
-class NoneEvent:
-    def applies_to_stock(self):
+
+class NoneEvent(Event):
+    def applies_to_stock(self, stock):
         return False
+
 
 class EventIterator:
     def __init__(self, events):
         self.events = events
         self.i = 0
-        self.none = NoneEvent()
+        self.none = NoneEvent("none", 0, 0)
 
     def __iter__(self):
         return self
@@ -44,4 +46,3 @@ class EventIterator:
             self.i += 1
             return self.next()
         return self.events[self.i]
-
