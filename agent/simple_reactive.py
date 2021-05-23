@@ -13,9 +13,9 @@ class SimpleReactive(Agent):
 
         # sell stock that has gone down
         all_stock = self.central_bank.get_all_stock()
-        for s in self.stocks_owned:
-            if all_stock[s].get_latest_price_modifier() < 1.0:
-                self.sell(s.id, self.stocks_owned[s.id])
+        for id, s in self.stocks_owned.items():
+            if all_stock[id].get_latest_price_modifier() < 1.0:
+                self.sell(id, self.stocks_owned[id])
 
         # buy stock that has gone up
         all_stock = self.central_bank.get_all_stock()

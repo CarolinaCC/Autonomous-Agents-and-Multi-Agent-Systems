@@ -8,20 +8,20 @@ class CentralBank:
         self.stock_relations = []
 
         i = 0
-        enron = Stock("Enron", i, i * 2, i * 5, 1.5)
+        enron = Stock("Enron", i, (i * 2) + 1, 1.01, 0.002)
         self.stocks.append(enron)
         i += 1
-        galp = Stock("Galp", i, i * 2, i * 5, 1.5)
+        galp = Stock("Galp", i, (i * 2) + 1, 1.02, 0.003)
         self.stocks.append(galp)
         i += 1
-        pencil_factory = Stock("PencilFac", i, i * 2, i * 5, 1.5)
+        pencil_factory = Stock("PencilFac", i, (i * 2) + 1, 1.025, 0.006)
         self.stocks.append(pencil_factory)
         i += 1
-        woodcutter = Stock("Woodcut", i, i * 2, i * 5, 1.5)
+        woodcutter = Stock("Woodcut", i, (i * 2) + 1, 1.05, 0.001)
         self.stocks.append(woodcutter)
 
-        self.stock_relations.append(StockRelation(enron, galp, -0.001))
-        self.stock_relations.append(StockRelation(pencil_factory, woodcutter, 0.001))
+        self.stock_relations.append(StockRelation(enron, galp, -0.00009))
+        self.stock_relations.append(StockRelation(pencil_factory, woodcutter, 0.00003))
 
 
     def get_all_stock(self):
