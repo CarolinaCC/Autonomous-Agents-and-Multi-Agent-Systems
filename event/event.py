@@ -21,9 +21,9 @@ class Event:
 
 
 class NoneEvent(Event):
-    def __init__(self):
-        super().__init__("None", 0, 0, [])
 
+    def __init__(self, num_steps=0):
+        super().__init__("None", 0, num_steps, [])
 
 class EventIterator:
     def __init__(self, events):
