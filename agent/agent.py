@@ -50,8 +50,6 @@ class Agent:
         if not self.__can_buy(cost):
             return
         if not self.central_bank.buy_stock(stock_id, qtd):
-            sys.stdout.write("failed to buy")
-            sys.stdout.flush()
             return
         self.stocks_owned[stock_id] += qtd
         self.cash -= cost
@@ -79,8 +77,6 @@ class Agent:
         if amount_to_buy <= 0:
             return
         amount_to_buy = random.randrange(amount_to_buy)
-        sys.stdout.write("\nbought " + str(s.name) + " amount: " + str(amount_to_buy))
-        sys.stdout.flush()
         self.buy(s.id, amount_to_buy)
         return 0
 
@@ -93,11 +89,7 @@ class Agent:
         if amount_to_sell <= 0:
             return
         amount_to_sell = random.randrange(amount_to_sell)
-        sys.stdout.write("\nsold " + str(self.central_bank.get_stock(s_id).name) + " amount: " + str(amount_to_sell))
-        sys.stdout.flush()
         self.sell(s_id, amount_to_sell)
-        sys.stdout.write("done")
-        sys.stdout.flush()
         return 0
 
     def __can_buy(self, c):
