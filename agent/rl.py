@@ -90,10 +90,15 @@ class ReinforcementLearning(Agent):
     def e_greedy(self):
         valid_actions = self.avaliable_action()
         if random.uniform(0, 1) < self.rand_factor:
-            return self.random_choice(valid_actions)
+            return self.random_action(valid_actions)
         state = 0 # todo
         return self.get_max_action_q(state, valid_actions)
 
+    def get_random_available_action(self):
+        valid_actions = self.avaliable_action()
+        action = valid_actions[random.randint(0, len(valid_actions) - 1)]
+        return action
+    
     def random_action(self, valid_actions):
 
         action = valid_actions[random.randint(0, len(valid_actions)-1)]
