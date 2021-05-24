@@ -4,6 +4,7 @@ from agent.agent import Agent
 class ReinforcementLearning(Agent):
     type = "RL"
     discount = 0.9
+    total = 1000000
     learningRate = 0.8
     epsilon = 0.9
     rand_factor = 0.05
@@ -24,6 +25,7 @@ class ReinforcementLearning(Agent):
     def __init__(self, central_bank, initial_cash=1000):
         super().__init__(central_bank, initial_cash)
         self.current_step = 0
+        self.dec = (self.epsilon - 0.1) / self.total
 
     def get_state(self):
         l = len(self.central_bank.get_all_stock())
@@ -34,18 +36,37 @@ class ReinforcementLearning(Agent):
             s = s[:stock] + '1' + s[stock + 1:]
         return int(s, 2)
 
+    def _decide(self):
+        original_state = 0
+        original_action = 0
+        u = self.reward(original_state, original_action)
+
+        prevq = self.get_q(original_state, original_action)
+
+        pred_error = 0
+
+        epsilon = max(self.epsilon - self.dec, 0.05)
+        # ahead = aheadPosition(); // percept
+
+        pred_error = u + self.discount * self.get_max_q(self.get_state()) - prevq;
+
+
+        return
+
+    def reward(self, original_state, original_action):
+        return 0
+
+    def get_q(self, original_state, original_action):
+        return 0
+
+
+
         '''
         ABC
         000   - 0
         001   - 1  
         010   - 2
-        011
-        100
-        101
-        110
-        111
-        
         '''
-        # A B _ F _
-        # 1 0 0
-        # 1 0 1
+
+    def get_max_q(self, param):
+        return 0
