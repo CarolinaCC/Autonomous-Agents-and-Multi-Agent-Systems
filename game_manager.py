@@ -1,3 +1,4 @@
+from agent.rl import ReinforcementLearning
 from central_bank import CentralBank
 from agent.agent import *
 from agent.gold_standard import *
@@ -78,6 +79,9 @@ class GameManager:
             self.central_bank.decide()
             self.events.next().update()
             self.current_step += 1
+            for agent in self.agents_array:
+                if isinstance(agent, ReinforcementLearning):
+                    agent.learn()
 
     def enable_event(self):
         self.event = True

@@ -53,7 +53,7 @@ class ReinforcementLearning(Agent):
         s = "".join(["0" if i in owned_stocks else "1" for i in range(l)])
         return int(s, 2)
 
-    def _decide(self):
+    def learn(self):
         original_state = 0
         original_action = 0
         u = self.reward(original_state, original_action)
@@ -62,15 +62,16 @@ class ReinforcementLearning(Agent):
 
         pred_error = 0
 
-        epsilon = max(self.epsilon - self.dec, 0.05)
+        self.epsilon = max(self.epsilon - self.dec, 0.05)
         # ahead = aheadPosition(); // percept
 
         pred_error = u + self.discount * self.get_max_q(self.get_state()) - prev_q
 
-        # self.set_q(originalState, originalAction, prevq + (learningRate * predError));
+        new_q = (original_state, original_action, prev_q + (self.learningRate * pred_error))
+        self.q[original_state][original_action] = new_q
         return
 
-    def action(self):
+    def _decide(self):
         self.epsilon -= self.dec
         if random.uniform(0, 1) < self.rand_factor:
             self.random_action()
@@ -81,8 +82,8 @@ class ReinforcementLearning(Agent):
         owned_stocks = set(self.stocks_owned.keys())
         l = len(self.central_bank.get_all_stock())
 
-        buy_actions = [2 ** i for i in range(l)]
-        sell_actions = [2 ** i + 1 for i in range(l) if i in owned_stocks]
+        buy_actions = [2**i for i in range(l) if self.central_bank.stocks[i].price <= self.cash]
+        sell_actions = [2**i+1 for i in range(l) if i in owned_stocks]
 
         return [*buy_actions, *sell_actions]
 
@@ -120,10 +121,10 @@ class ReinforcementLearning(Agent):
         return 0
 
     def get_q(self, original_state, original_action):
-        return 0
+        return self.q[original_state][original_action]
 
-    def get_max_q(self, param):
-        return 0
+    def get_max_q(self, state):
+        return max(self.q[state])
 
     def random_action(self):
         return self.random_action(self.avaliable_action())
@@ -138,3 +139,4 @@ class ReinforcementLearning(Agent):
                 max = q_action
                 max_i = i
         return max_i
+
