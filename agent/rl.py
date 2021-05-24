@@ -78,6 +78,7 @@ class ReinforcementLearning(Agent):
             act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
 
 
+
     def avaliable_action(self):
         owned_stocks = set(self.stocks_owned.keys())
         l = len(self.central_bank.get_all_stock())
@@ -117,7 +118,6 @@ class ReinforcementLearning(Agent):
             to_buy = random.randint(0, max_buy)
             self.buy(stock_id, to_buy)
 
-
     def reward(self, original_state, original_action):
         return 0
 
@@ -139,9 +139,11 @@ class ReinforcementLearning(Agent):
 
     def get_max_action_q(self, state, valid_actions):
         max = - float("inf")
+        max_i = -1
         line = self.q[state]
-        for action in valid_actions:
-            print()
-            # max = line[action] if line[action] > max
-        return max(line)
-
+        for i in range(len(valid_actions)):
+            q_action = line[i]
+            if q_action > max:
+                max = q_action
+                max_i = i
+        return max_i
