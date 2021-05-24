@@ -24,9 +24,6 @@ class ReinforcementLearning(Agent):
         s3  0  0  0  0  0  0  0  0 
     '''
 
-    ## state action
-    ## we can
-
     def __init__(self, central_bank, initial_cash=1000):
         super().__init__(central_bank, initial_cash)
         self.current_step = 0
@@ -57,9 +54,7 @@ class ReinforcementLearning(Agent):
         original_state = 0
         original_action = 0
         u = self.reward(original_state, original_action)
-
         prev_q = self.get_q(original_state, original_action)
-
         pred_error = 0
 
         self.epsilon = max(self.epsilon - self.dec, 0.05)
@@ -74,33 +69,32 @@ class ReinforcementLearning(Agent):
     def _decide(self):
         self.epsilon -= self.dec
         if random.uniform(0, 1) < self.rand_factor:
-            self.random_action()
+            self.do_random_action(self.get_available_actions())
         else:
             act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
 
-    def avaliable_action(self):
+    def get_available_actions(self):
         owned_stocks = set(self.stocks_owned.keys())
         l = len(self.central_bank.get_all_stock())
 
-        buy_actions = [2**i for i in range(l) if self.central_bank.stocks[i].price <= self.cash]
-        sell_actions = [2**i+1 for i in range(l) if i in owned_stocks]
+        buy_actions = [2 ** i for i in range(l) if self.central_bank.stocks[i].price <= self.cash]
+        sell_actions = [2 ** i + 1 for i in range(l) if i in owned_stocks]
 
         return [*buy_actions, *sell_actions]
 
-    def e_greedy(self):
-        valid_actions = self.avaliable_action()
+    def do_e_greedy(self):
+        valid_actions = self.get_available_actions()
         if random.uniform(0, 1) < self.rand_factor:
-            return self.random_action(valid_actions)
-        state = 0  # todo
-        return self.get_max_action_q(state, valid_actions)
+            return self.do_random_action(valid_actions)
+        state = self.get_state()
+        return self.do_action(self.get_max_action_q(state, valid_actions))
 
     def get_random_available_action(self):
-        valid_actions = self.avaliable_action()
+        valid_actions = self.get_available_actions()
         action = valid_actions[random.randint(0, len(valid_actions) - 1)]
         return action
 
-    def random_action(self, valid_actions):
-
+    def do_random_action(self, valid_actions):
         action = valid_actions[random.randint(0, len(valid_actions) - 1)]
         self.do_action(action)
 
@@ -126,9 +120,6 @@ class ReinforcementLearning(Agent):
     def get_max_q(self, state):
         return max(self.q[state])
 
-    def random_action(self):
-        return self.random_action(self.avaliable_action())
-
     def get_max_action_q(self, state, valid_actions):
         max = - float("inf")
         max_i = -1
@@ -139,4 +130,3 @@ class ReinforcementLearning(Agent):
                 max = q_action
                 max_i = i
         return max_i
-
