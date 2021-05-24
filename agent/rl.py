@@ -77,14 +77,12 @@ class ReinforcementLearning(Agent):
         else:
             act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
 
-
-
     def avaliable_action(self):
         owned_stocks = set(self.stocks_owned.keys())
         l = len(self.central_bank.get_all_stock())
 
-        buy_actions = [2**i for i in range(l)]
-        sell_actions = [2**i+1 for i in range(l) if i in owned_stocks]
+        buy_actions = [2 ** i for i in range(l)]
+        sell_actions = [2 ** i + 1 for i in range(l) if i in owned_stocks]
 
         return [*buy_actions, *sell_actions]
 
@@ -92,17 +90,17 @@ class ReinforcementLearning(Agent):
         valid_actions = self.avaliable_action()
         if random.uniform(0, 1) < self.rand_factor:
             return self.random_action(valid_actions)
-        state = 0 # todo
+        state = 0  # todo
         return self.get_max_action_q(state, valid_actions)
 
     def get_random_available_action(self):
         valid_actions = self.avaliable_action()
         action = valid_actions[random.randint(0, len(valid_actions) - 1)]
         return action
-    
+
     def random_action(self, valid_actions):
 
-        action = valid_actions[random.randint(0, len(valid_actions)-1)]
+        action = valid_actions[random.randint(0, len(valid_actions) - 1)]
         self.do_action(action)
 
     def do_action(self, action):
