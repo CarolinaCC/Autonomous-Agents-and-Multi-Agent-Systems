@@ -72,19 +72,20 @@ class Game:
 
                     self.draw_text('CASH AVAILABLE - ' + f'{self.game_manager.agents_array[x].get_cash_value():.2f}', 15, 55, 70, self.WHITE)
                     self.draw_text('EQUITY - ' + f'{self.game_manager.agents_array[x].get_value():.2f}', 15, 55, 90, self.WHITE)
-                    self.draw_text('STOCKS VALUE - ' + f'{self.game_manager.agents_array[x].get_stock_value():2f}', 15, 55, 110, self.WHITE)
-                    self.draw_text('Stock 1 test', 12, 55, 130, self.WHITE)
-                    self.draw_text('Stock 2 test', 12, 55, 150, self.WHITE)
-                    self.draw_text('Stock 3 test', 12, 55, 170, self.WHITE)
+                    self.draw_text('STOCKS VALUE - ' + f'{self.game_manager.agents_array[x].get_stock_value():.2f}', 15, 55, 110, self.WHITE)
 
                     self.display.blit(self.array_agents_gui[x].player_avatar, (290,50))
                     self.draw_text(self.game_manager.agents_array[x].type, 15, 290, 115, self.WHITE)
 
-                    c = 20
-
+                    cx = 0
+                    cy = 0
                     for y in self.game_manager.agents_array[x].get_stocks_owned():
-                        self.draw_text(self.game_manager.central_bank.get_stock(y).name, 10, 600, 220 + c, self.WHITE)
-                        c += 20
+                        self.draw_text(self.game_manager.central_bank.get_stock(y).name + ' - ' +
+                                       f'{self.game_manager.agents_array[x].get_stocks_owned_by_id_price(y):.2f}' + '€', 12, 55 + cx, 130 + cy, self.WHITE)
+                        cy += 20
+                        if cy > 100:
+                            cy = 0
+                            cx += 120
 
 
                 else:
@@ -103,7 +104,11 @@ class Game:
             for stock in self.game_manager.central_bank.stocks:
                 self.draw_text(stock.name, 12, 470, c, self.WHITE)
                 self.draw_text(f'{stock.price:.2f}' + ' €', 12, 553, c, self.WHITE)
-                self.draw_text(f'{stock.price:.2f}' + ' %', 12, 620, c, self.GREEN)
+                if stock.get_latest_price_modifier() >= 0:
+                    color_chart = self.GREEN
+                else:
+                    color_chart = self.RED
+                self.draw_text(f'{stock.get_latest_price_modifier():.2f}' + ' %', 12, 620, c, color_chart)
                 c += 25
 
 
