@@ -83,7 +83,7 @@ class ReinforcementLearning(Agent):
         owned_stocks = set(self.stocks_owned.keys())
         l = len(self.central_bank.get_all_stock())
 
-        buy_actions = [2**i for i in range(l)]
+        buy_actions = [2**i for i in range(l) if self.central_bank.stocks[i].price <= self.cash]
         sell_actions = [2**i+1 for i in range(l) if i in owned_stocks]
 
         return [*buy_actions, *sell_actions]
