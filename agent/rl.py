@@ -27,11 +27,10 @@ class ReinforcementLearning(Agent):
 
     def get_state(self):
         l = len(self.central_bank.get_all_stock())
+        
+        owned_stocks = set(self.stocks_owned.keys())
+        s = "".join(["0" if i in owned_stocks else "1" for i in range(l)])
 
-        s = "".join(("0" for i in range(l)))
-
-        for stock in self.stocks_owned.keys():
-            s = s[:stock] + '1' + s[stock + 1:]
         return int(s, 2)
 
         '''
@@ -39,11 +38,11 @@ class ReinforcementLearning(Agent):
         000   - 0
         001   - 1  
         010   - 2
-        011
-        100
-        101
-        110
-        111
+        011   - 3
+        100   - 4
+        101   - 5
+        110   - 6
+        111   - 7
         
         '''
         # A B _ F _
