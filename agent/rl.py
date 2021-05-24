@@ -29,10 +29,8 @@ class ReinforcementLearning(Agent):
 
     def get_state(self):
         l = len(self.central_bank.get_all_stock())
-        
         owned_stocks = set(self.stocks_owned.keys())
         s = "".join(["0" if i in owned_stocks else "1" for i in range(l)])
-
         return int(s, 2)
 
     def _decide(self):
