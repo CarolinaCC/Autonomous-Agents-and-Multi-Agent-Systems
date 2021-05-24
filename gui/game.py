@@ -104,11 +104,11 @@ class Game:
             for stock in self.game_manager.central_bank.stocks:
                 self.draw_text(stock.name, 12, 470, c, self.WHITE)
                 self.draw_text(f'{stock.price:.2f}' + ' €', 12, 553, c, self.WHITE)
-                if stock.get_latest_price_modifier() >= 0:
+                if stock.get_percentage_variation() >= 0:
                     color_chart = self.GREEN
                 else:
                     color_chart = self.RED
-                self.draw_text(f'{stock.get_latest_price_modifier():.2f}' + ' %', 12, 620, c, color_chart)
+                self.draw_text(f'{stock.get_percentage_variation():.2f}' + ' %', 12, 620, c, color_chart)
                 c += 25
 
 

@@ -55,6 +55,13 @@ class Stock:
         res = self.price_history[l - 1] / self.price_history[l - 2]
         return res
 
+    def get_percentage_variation(self):
+        l = len(self.price_history)
+        if self.price_history[l - 2] == 0:
+            return 0
+        res = (self.price_history[l - 1] - self.price_history[l - 2]) / abs(self.price_history[l - 2]) * 100
+        return res
+
     def get_price_chance_in_rounds(self, rounds):
         l = len(self.price_history)
         if l < rounds:
