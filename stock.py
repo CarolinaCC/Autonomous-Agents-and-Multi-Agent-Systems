@@ -30,7 +30,7 @@ class Stock:
         self.price = max(price, self.min_price)
 
     def apply_price_modifier(self, modifier):
-        if (self.price >= 0):
+        if self.price >= 0:
             self.price *= modifier
         else:
             # prevent snowball effect

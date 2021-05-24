@@ -71,7 +71,9 @@ class ReinforcementLearning(Agent):
         if random.uniform(0, 1) < self.rand_factor:
             self.do_random_action(self.get_available_actions())
         else:
+
             act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
+
 
     def get_available_actions(self):
         owned_stocks = set(self.stocks_owned.keys())
@@ -112,6 +114,8 @@ class ReinforcementLearning(Agent):
             self.buy(stock_id, to_buy)
 
     def reward(self, original_state, original_action):
+        # usar a diferança de valor da stock - ver função do report
+        # usar modifier
         return 0
 
     def get_q(self, original_state, original_action):

@@ -26,7 +26,7 @@ class GameManager:
         self.setup_agents()
         self.current_step = 0
         # todo game mode
-        self.game_mode = 'GAME_MODE_TO_DO'
+        self.game_mode = 'DEFAULT'
         self.end_flag = False
 
     def setup_world(self):
