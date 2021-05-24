@@ -5,7 +5,7 @@ class GoldStandard(Agent):
     type = "GoldStandard"
 
     def __init__(self, central_bank, initial_cash=1000):
-        super().__init__(central_bank)
+        super().__init__(central_bank, initial_cash)
         self.current_step = 0
 
     def _decide(self):
