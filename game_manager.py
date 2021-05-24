@@ -23,6 +23,7 @@ class GameManager:
         self.agents_array = []
         self.setup_agents()
         self.current_step = 0
+        # todo game mode
         self.game_mode = 'GAME_MODE_TO_DO'
         self.end_flag = False
 

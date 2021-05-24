@@ -1,3 +1,6 @@
+import random
+
+
 from agent.agent import Agent
 
 
@@ -19,8 +22,11 @@ class SimpleReactive(Agent):
         # buy stock that has gone up
         all_stock = self.central_bank.get_all_stock()
         for s in all_stock:
-            # fixme
             if s.get_latest_price_modifier() > 1.0:
-                self.buy(s.id, self.buy_qtd)
+                amount_to_buy = self.how_many_can_i_buy(s.id)
+
+                if amount_to_buy > 0:
+                    amount_to_buy = random.randint(1, amount_to_buy)
+                    self.buy(s.id, amount_to_buy)
 
         return

@@ -60,27 +60,27 @@ class Agent:
         value = self.central_bank.sell_stock(stock_id, qtd)
         self.cash += value
 
-    def __how_many_can_i_buy(self, stock_id):
+    def how_many_can_i_buy(self, stock_id):
         cost = self.central_bank.stock_price(stock_id, 1)
         if cost <= 0:
             return 0
         return self.cash // cost
 
-    def __buy_random_stock(self):
+    def buy_random_stock(self):
         all_stock = self.central_bank.get_all_stock()
 
         # get random stock
         s = random.choice(all_stock)
 
         # compute random amount to buy
-        amount_to_buy = self.__how_many_can_i_buy(s.id) - 1
+        amount_to_buy = self.how_many_can_i_buy(s.id) - 1
         if amount_to_buy <= 0:
             return
         amount_to_buy = random.randrange(amount_to_buy)
         self.buy(s.id, amount_to_buy)
         return 0
 
-    def __sell_random_stock(self):
+    def sell_random_stock(self):
         # get random stock
         s_id = random.choice(list(self.stocks_owned.keys()))
 
@@ -107,8 +107,8 @@ class RandomAgent(Agent):
     type = "Random"
 
     def _decide(self):
-        self._Agent__buy_random_stock()
-        self._Agent__sell_random_stock()
+        self.buy_random_stock()
+        self.sell_random_stock()
 
     def _update_history(self):
         return
@@ -116,8 +116,6 @@ class RandomAgent(Agent):
 
 class Careful(Agent):
     type = "Careful"
-    # FIXME this number can be super different
-    buy_qtd = 5
     # number of round it sees an increase in order for it qualify as a trend
     rounds_before_trend = 4
 
@@ -130,7 +128,12 @@ class Careful(Agent):
 
         # buy stock that has gone up across rounds
         all_stock = self.central_bank.get_all_stock()
+
         for s in all_stock:
             if s.get_price_chance_in_rounds(self.rounds_before_trend) > 1.0:
-                self.buy(s.id, self.buy_qtd)
+                amount_to_buy = self.how_many_can_i_buy(s.id)
+
+                if amount_to_buy > 0:
+                    amount_to_buy = random.randint(1, amount_to_buy)
+                    self.buy(s.id, amount_to_buy)
         return
