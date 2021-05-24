@@ -2,30 +2,30 @@
 
 
 class Event:
-    def __init__(self, name, modifier, num_steps):
+    def __init__(self, name, modifier, num_steps, stocks=None):
+        if stocks is None:
+            stocks = []
         self.name = name
         self.modifier = modifier
         self.num_steps = num_steps
-
-    # returns True if the event applies to the stock, False otherwise
-    def applies_to_stock(self, stock):
-        pass
+        self.stocks = stocks
 
     # updates the value of the stock passed relating to the event.
     def update_stock(self, stock):
-        if self.applies_to_stock(stock):
-            stock.update_price(self.modifier * stock.price)
+        stock.update_price(self.modifier * stock.price)
 
-    def update(self, stocks):
-        for stock in stocks:
+    def update(self):
+        for stock in self.stocks:
             self.update_stock(stock)
         self.num_steps -= 1
 
-class NoneEvent:
-    def applies_to_stock(self):
-        return False
 
-<<<<<<< HEAD
+class NoneEvent(Event):
+
+    def __init__(self, num_steps=0):
+        super().__init__("None", 0, num_steps, [])
+
+
 class ElonMuskPositiveTweetEvent(Event): #Uma companhia sobe bastante. Se calhar volta a descer rapidamente
     def __init__(self, name, modifier):
         super().__init__(name,modifier)
@@ -52,11 +52,12 @@ class WarrenBuffetListEvent(Event): #Warren Buffet invests in a list of stocks a
         super().__init__(name,modifier)
         
 class IlegalMonopolyFineEvent(Event): #2+ companies are fined for having illegal monopoly (ou entao concorrencia desleal) and their shares drop somewhat
-
+    def __init__(self, name, modifier):
+        super().__init__(name,modifier)
 
     
     
-=======
+
 class EventIterator:
     def __init__(self, events):
         self.events = events
@@ -77,4 +78,3 @@ class EventIterator:
             return self.next()
         return self.events[self.i]
 
->>>>>>> 2474476a0a438c4f95e869dc9220b0ff695e6366

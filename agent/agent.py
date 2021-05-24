@@ -23,7 +23,7 @@ class Agent:
 
     def get_stock_value(self):
         stock_value = 0
-        for stock_id in self.stocks_owned:
+        for stock_id in self.stocks_owned.keys():
             stock_value += self.central_bank.get_stock(stock_id).price * self.stocks_owned[stock_id]
         return stock_value
 
@@ -50,8 +50,6 @@ class Agent:
         if not self.__can_buy(cost):
             return
         if not self.central_bank.buy_stock(stock_id, qtd):
-            sys.stdout.write("failed to buy")
-            sys.stdout.flush()
             return
         self.stocks_owned[stock_id] += qtd
         self.cash -= cost
@@ -79,11 +77,19 @@ class Agent:
         if amount_to_buy <= 0:
             return
         amount_to_buy = random.randrange(amount_to_buy)
-        sys.stdout.write("\nbought " + str(s.name) + " amount: " + str(amount_to_buy))
-        sys.stdout.flush()
         self.buy(s.id, amount_to_buy)
-        sys.stdout.write("done")
-        sys.stdout.flush()
+        return 0
+
+    def __sell_random_stock(self):
+        # get random stock
+        s_id = random.choice(list(self.stocks_owned.keys()))
+
+        # compute random amount to buy
+        amount_to_sell = self.stocks_owned[s_id]
+        if amount_to_sell <= 0:
+            return
+        amount_to_sell = random.randrange(amount_to_sell)
+        self.sell(s_id, amount_to_sell)
         return 0
 
     def __can_buy(self, c):
@@ -102,6 +108,7 @@ class RandomAgent(Agent):
 
     def _decide(self):
         self._Agent__buy_random_stock()
+        self._Agent__sell_random_stock()
 
     def _update_history(self):
         return
@@ -115,6 +122,15 @@ class Careful(Agent):
     rounds_before_trend = 4
 
     def _decide(self):
-        print(self.type + " decided!")
+        # sell stock that has gone down
+        all_stock = self.central_bank.get_all_stock()
+        for id, s in self.stocks_owned.items():
+            if all_stock[id].get_latest_price_modifier() < 1.0:
+                self.sell(id, self.stocks_owned[id])
 
+        # buy stock that has gone up across rounds
+        all_stock = self.central_bank.get_all_stock()
+        for s in all_stock:
+            if s.get_price_chance_in_rounds(self.rounds_before_trend) > 1.0:
+                self.buy(s.id, self.buy_qtd)
         return

@@ -1,9 +1,10 @@
 class Stock:
-    def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001):
+    def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001, min_price=0.01):
         self.name = name
         self.id = stock_id
         self.price = price
-        self.price_history = [price, price] #start with two entries so that get_current_step_value_change always works
+        self.min_price = min_price
+        self.price_history = [price, price]  # start with two entries so that get_current_step_value_change always works
         self.supply_change_history = [0]
         self.supply_change = 0
         self.normal_modifier = normal_modifier
@@ -26,25 +27,40 @@ class Stock:
         return " ".join([str(self.id), self.name, *(str(price) for price in self.price_history)])
 
     def update_price(self, price):
-        self.price = price
+        self.price = max(price, self.min_price)
 
     def apply_price_modifier(self, modifier):
-        self.price *= modifier
+        if (self.price >= 0):
+            self.price *= modifier
+        else:
+            # prevent snowball effect
+            self.price /= modifier
+        self.update_price(self.price)
 
     def apply_price_add(self, value):
         self.price += value
+        self.update_price(self.price)
 
     def get_current_step_supply_change(self):
         return self.supply_change_history[-1]
 
-    def get_current_step_price_change(self, current_step):
-        return self.supply_change_history[-1] - self.supply_change_history[-2]
+    def get_current_step_price_change(self):
+        return self.price_history[-1] - self.price_history[-2]
 
     def get_latest_price_modifier(self):
         l = len(self.price_history)
         if self.price_history[l - 2] <= 0:
             return 0
-        res = self.price_history[l-1]/self.price_history[l-2]
+        res = self.price_history[l - 1] / self.price_history[l - 2]
+        return res
+
+    def get_price_chance_in_rounds(self, rounds):
+        l = len(self.price_history)
+        if l < rounds:
+            return 0
+        if self.price_history[l - 1 - rounds] <= 0:
+            return 0
+        res = self.price_history[l - rounds] / self.price_history[l - 1 - rounds]
         return res
 
     def recalculate_price(self):
@@ -55,7 +71,6 @@ class Stock:
         self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
 
 
-
 '''
 Represents a relation between stocks.
 The value of the source_stock increased by 
@@ -64,6 +79,8 @@ every step and vice versa
 Modifier should be negative for competitive stocks
 and positive for complementary stocks
 '''
+
+
 class StockRelation:
     def __init__(self, source_stock, destination_stock, modifier):
         self.source_stock = source_stock
@@ -71,7 +88,5 @@ class StockRelation:
         self.modifier = modifier
 
     def update(self):
-        self.source_stock.apply_price_add(self.destination_stock.get_current_step_supply_change() * self.modifier)
-        self.destination_stock.apply_price_add(self.source_stock.get_current_step_supply_change() * self.modifier)
-
-
+        self.source_stock.apply_price_add(self.destination_stock.get_current_step_price_change() * self.modifier)
+        self.destination_stock.apply_price_add(self.source_stock.get_current_step_price_change() * self.modifier)

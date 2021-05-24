@@ -7,7 +7,8 @@ import sys
 
 import json
 
-from event.event import EventIterator
+from event.event import EventIterator, Event, NoneEvent
+from stock import Stock, StockRelation
 
 
 class GameManager:
@@ -18,13 +19,36 @@ class GameManager:
         self.simple_react_agents_num = simple_react_agents_num
         self.careful_react_agents_num = careful_react_agents_num
         self.steps_num = steps_num
-        self.central_bank = CentralBank()
+        self.central_bank, self.events = self.setup_world()
         self.agents_array = []
         self.setup_agents()
         self.current_step = 0
         self.game_mode = 'GAME_MODE_TO_DO'
         self.end_flag = False
-        self.events = EventIterator([])  # iterator of events, returns current event when calling next
+
+    def setup_world(self):
+        enron = Stock("Enron", 0, 2.6, 1.03, 0.005)
+        galp = Stock("Galp", 1, 2.9, 1.03, 0.004)
+        primark = Stock("Primark", 2, 2.2, 1.025, 0.006)
+        tesla = Stock("Tesla", 3, 3.1, 1.05, 0.001)
+        modena = Stock("Modena", 4, 3.3, 1.01, 0.002)
+        microsoft = Stock("Microsoft", 5, 2.2, 1.02, 0.003)
+        aldi = Stock("Aldi", 6, 4.1, 1.025, 0.006)
+        intel = Stock("Intel", 7, 3.1, 1.05, 0.001)
+        stocks = [enron, galp, primark, tesla, modena, microsoft, aldi, intel]
+
+        stock_relations = [StockRelation(enron, galp, -0.00003),
+                           StockRelation(primark, aldi, -0.00002),
+                           StockRelation(tesla, intel, 0.00005),
+                           StockRelation(microsoft, intel, 0.00003)
+                           ]
+
+        bank = CentralBank(stocks, stock_relations)
+        covid_event = Event("Covid-19", 1.1, 4, [modena])
+        tech_boom_event = Event("Tech Boom", 1.2, 4, [microsoft, tesla, intel])
+        oil_crisis = Event("Oil Crisis", 0.85, 3, [enron, galp])
+        event_list = [NoneEvent(2), covid_event, NoneEvent(3), tech_boom_event, oil_crisis]
+        return bank, EventIterator(event_list)
 
     def get_random_agents(self):
         return self.random_agents_num
@@ -46,10 +70,10 @@ class GameManager:
                 self.end_flag = True
                 return
             self.decide_event()
-            # TODO criar os eventos e passa-los para o decide para se poder usar no reecalculate
             for a in self.agents_array:
                 a.decide()
-            self.central_bank.decide(self.events.next())
+            self.central_bank.decide()
+            self.events.next().update()
             self.current_step += 1
 
     def enable_event(self):
@@ -61,7 +85,7 @@ class GameManager:
 
     def get_current_event(self):
         # TODO
-        return 'CURRENT_EVENT'
+        return self.events.next().name
 
     def has_ended(self):
         return self.end_flag

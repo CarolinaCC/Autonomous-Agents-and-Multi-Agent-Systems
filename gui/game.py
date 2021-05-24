@@ -13,7 +13,7 @@ class Game:
         self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H)))
         # self.font_name = '8-BIT WONDER.TTF'
         self.font_name = pygame.font.get_default_font()
-        self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
+        self.BLACK, self.WHITE, self.GREEN, self.RED = (0, 0, 0), (255, 255, 255), (3, 252, 40), (252, 3, 3)
         self.main_menu = MainMenu(self)
 
         self.agents = [['random_agents', 2], ['simple_react_agents', 2], ['careful_react_agents', 2]]
@@ -24,6 +24,11 @@ class Game:
         self.setup = True
         self.array_agents_gui = []
         self.game_manager = 0
+        self.bg = pygame.image.load("gui/assets/background-game.png")
+
+        self.x_breaking, self.y_breaking = -100,580
+        self.players_pos_array = [[230, 320], [360, 320], [500, 320], [155, 400], [560, 400], [230, 490], [360, 490],
+                                  [500, 490]]
 
     def game_loop(self):
         while self.playing:
@@ -35,7 +40,7 @@ class Game:
                 c = 0
                 for x in self.game_manager.agents_array:
                     self.array_agents_gui.append(
-                        Agent_gui(x.type, (600, 200 + (c * 30)), self.display, pygame.font.Font(self.font_name, 20)))
+                        Agent_gui(x.type, (self.players_pos_array[c][0], self.players_pos_array[c][1]), self.display, pygame.font.Font(self.font_name, 20), c))
                     c += 1
 
             self.check_events()
@@ -56,20 +61,24 @@ class Game:
                 self.game_manager.step(10)
 
             self.display.fill(self.BLACK)
+            self.display.blit(self.bg, (0, 0))
+
+
+
 
             for x in range(len(self.array_agents_gui)):
                 if self.array_agents_gui[x].rect.collidepoint(pygame.mouse.get_pos()):
                     self.array_agents_gui[x].hovered = True
 
-                    self.draw_text('CASH AVAILABLE - ' + str(self.game_manager.agents_array[x].get_cash_value()), 15,
-                                   600, 5, self.WHITE)
-                    self.draw_text('EQUITY - ' + str(self.game_manager.agents_array[x].get_value()), 15, 600, 25,
-                                   self.WHITE)
-                    self.draw_text('STOCKS VALUE - ' + str(self.game_manager.agents_array[x].get_stock_value()), 15,
-                                   600, 45, self.WHITE)
-                    self.draw_text('Stock 1 test', 12, 600, 65, self.WHITE)
-                    self.draw_text('Stock 2 test', 12, 600, 85, self.WHITE)
-                    self.draw_text('Stock 3 test', 12, 600, 105, self.WHITE)
+                    self.draw_text('CASH AVAILABLE - ' + f'{self.game_manager.agents_array[x].get_cash_value():.2f}', 15, 55, 70, self.WHITE)
+                    self.draw_text('EQUITY - ' + f'{self.game_manager.agents_array[x].get_value():.2f}', 15, 55, 90, self.WHITE)
+                    self.draw_text('STOCKS VALUE - ' + f'{self.game_manager.agents_array[x].get_stock_value():2f}', 15, 55, 110, self.WHITE)
+                    self.draw_text('Stock 1 test', 12, 55, 130, self.WHITE)
+                    self.draw_text('Stock 2 test', 12, 55, 150, self.WHITE)
+                    self.draw_text('Stock 3 test', 12, 55, 170, self.WHITE)
+
+                    self.display.blit(self.array_agents_gui[x].player_avatar, (290,50))
+                    self.draw_text(self.game_manager.agents_array[x].type, 15, 290, 115, self.WHITE)
 
                     c = 20
 
@@ -83,17 +92,26 @@ class Game:
                 self.array_agents_gui[x].draw()
 
             self.draw_text(
-                'Current Step - ' + str(self.game_manager.current_step) + '/' + str(self.game_manager.steps_num), 20, 5,
-                20, self.WHITE)
-            self.draw_text('Available Stocks', 15, 7, 50, self.WHITE)
+                'Current Step - ' + str(self.game_manager.current_step) + '/' + str(self.game_manager.steps_num), 20, 55,
+                35, self.BLACK)
+            self.draw_text('Stocks', 15, 470, 6, self.WHITE)
+            self.draw_text('Price', 15, 547, 6, self.WHITE)
+            self.draw_text('Variation', 15, 608, 6, self.WHITE)
 
-            c = 70
+            c = 31
+
             for stock in self.game_manager.central_bank.stocks:
-                self.draw_text(stock.name + ' - ' + str(stock.price) + '€', 12, 8, c, self.WHITE)
-                c += 20
+                self.draw_text(stock.name, 12, 470, c, self.WHITE)
+                self.draw_text(f'{stock.price:.2f}' + ' €', 12, 553, c, self.WHITE)
+                self.draw_text(f'{stock.price:.2f}' + ' %', 12, 620, c, self.GREEN)
+                c += 25
 
-            self.draw_text('Mode - ' + self.game_manager.game_mode, 15, 7, c + 20, self.WHITE)
-            self.draw_text('Breaking News - ' + self.game_manager.get_current_event(), 15, 7, c + 40, self.WHITE)
+
+            self.draw_text('Breaking News - ' + self.game_manager.get_current_event(), 15, self.x_breaking, self.y_breaking, self.WHITE)
+            self.x_breaking +=2
+            if self.x_breaking > self.DISPLAY_W:
+                self.x_breaking = - 200
+            self.draw_text('Mode - ' + self.game_manager.game_mode, 15, 320, 440, self.WHITE)
 
             self.window.blit(self.display, (0, 0))
             pygame.display.update()
