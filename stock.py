@@ -1,5 +1,5 @@
 class Stock:
-    def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001, min_price=0.01):
+    def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001, min_price=0.01, mode="DEFAULT"):
         self.name = name
         self.id = stock_id
         self.price = price
@@ -9,6 +9,7 @@ class Stock:
         self.supply_change = 0
         self.normal_modifier = normal_modifier
         self.supply_modifier = supply_modifier
+        self.game_mode = mode
 
     def buy(self, quantity):
         self.supply_change += quantity
@@ -64,13 +65,31 @@ class Stock:
         return res
 
     def recalculate_price(self):
-        # 1 - stock.modifier
-        self.apply_price_modifier(self.normal_modifier)
+        if self.game_mode == "DEPRESSION":
+            if self.normal_modifier < 1:
+                self.apply_price_modifier(self.normal_modifier)
+                return
+            else:
+                self.normal_modifier -= 1
+                self.apply_price_modifier(self.normal_modifier)
+                return
 
-        # 2 - law of supply and demand
-        self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
-        
-        # 3 - Apply effects
+        elif self.game_mode == "DEPRESSION":
+            if self.normal_modifier > 1:
+                self.apply_price_modifier(self.normal_modifier)
+                return
+            else:
+                self.normal_modifier += 1
+                self.apply_price_modifier(self.normal_modifier)
+                return
+
+        else:
+
+            # 1 - stock.modifier
+            self.apply_price_modifier(self.normal_modifier)
+
+            # 2 - law of supply and demand
+            self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
 
 
 '''
