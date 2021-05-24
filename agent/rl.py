@@ -124,13 +124,6 @@ class ReinforcementLearning(Agent):
     def get_q(self, original_state, original_action):
         return 0
 
-        '''
-        ABC
-        000   - 0
-        001   - 1  
-        010   - 2
-        '''
-
     def get_max_q(self, param):
         return 0
 
