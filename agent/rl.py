@@ -1,4 +1,5 @@
 import random
+import math
 
 from agent.agent import Agent
 
@@ -76,12 +77,31 @@ class ReinforcementLearning(Agent):
         else:
             act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
 
+
     def e_greedy(self):
         valid_actions = self.avaliable_action()
         if random.uniform(0, 1) < self.rand_factor:
             return self.random.choice(valid_actions)
         state = 0 # todo
         return self.get_max_action_q(state, valid_actions)
+
+    def random_action(self):
+        action = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
+        self.do_action(action)
+
+    def do_action(self, action):
+        stock_id = int(math.log(action, 2))
+        if action % 2:
+            #  odd, means sell
+            max_sell = self.how_many_can_i_sell(stock_id)
+            to_sell = random.randint(0, max_sell)
+            self.sell(stock_id, to_sell)
+        else:
+            # even, means buy
+            max_buy = self.how_many_can_i_buy(stock_id) - 1
+            to_buy = random.randint(0, max_buy)
+            self.buy(stock_id, to_buy)
+
 
     def reward(self, original_state, original_action):
         return 0
@@ -106,6 +126,7 @@ class ReinforcementLearning(Agent):
         max = - float("inf")
         line = self.q[state]
         for action in valid_actions:
-            max = line[action] if line[action] > max
+            print()
+            # max = line[action] if line[action] > max
         return max(line)
 
