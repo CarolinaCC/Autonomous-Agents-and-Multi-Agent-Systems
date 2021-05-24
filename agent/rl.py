@@ -1,4 +1,5 @@
 import random
+import math
 
 from agent.agent import Agent
 
@@ -75,6 +76,23 @@ class ReinforcementLearning(Agent):
             self.random_action()
         else:
             act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
+
+    def random_action(self):
+        action = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
+        self.do_action(action)
+
+    def do_action(self, action):
+        stock_id = int(math.log(action, 2))
+        if action % 2:
+            #  odd, means sell
+            max_sell = self.how_many_can_i_sell(stock_id)
+            to_sell = random.randint(0, max_sell)
+            self.sell(stock_id, to_sell)
+        else:
+            # even, means buy
+            max_buy = self.how_many_can_i_buy(stock_id) - 1
+            to_buy = random.randint(0, max_buy)
+            self.buy(stock_id, to_buy)
 
     def reward(self, original_state, original_action):
         return 0

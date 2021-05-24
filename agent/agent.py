@@ -66,6 +66,8 @@ class Agent:
             return 0
         return self.cash // cost
 
+    def how_many_can_i_sell(self, stock_id):
+        return self.stocks_owned[stock_id]
     def buy_random_stock(self):
         all_stock = self.central_bank.get_all_stock()
 
