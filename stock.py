@@ -1,9 +1,5 @@
-import json
-from collections import defaultdict
-
-
 class Stock:
-    def __init__(self, name, stock_id, price, normal_modifier=0.1, supply_modifier=0.1):
+    def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001):
         self.name = name
         self.id = stock_id
         self.price = price
@@ -44,20 +40,38 @@ class Stock:
     def get_current_step_price_change(self, current_step):
         return self.supply_change_history[-1] - self.supply_change_history[-2]
 
-    def recalculate_price(self): #should receive Event if one exists and apply event
-        # 3 - global news events
-        # 4 - complementary industries
-        # 5 - competitor industries
+    def get_latest_price_modifier(self):
+        l = len(self.price_history)
+        if self.price_history[l - 2] <= 0:
+            return 0
+        res = self.price_history[l-1]/self.price_history[l-2]
+        return res
 
+    def recalculate_price(self):
         # 1 - stock.modifier
         self.apply_price_modifier(self.normal_modifier)
 
         # 2 - law of supply and demand
-
         self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
 
-        #TODO complementary and competitor industries
 
 
+'''
+Represents a relation between stocks.
+The value of the source_stock increased by 
+value modifier* delta of value of destination_stock
+every step and vice versa
+Modifier should be negative for competitive stocks
+and positive for complementary stocks
+'''
+class StockRelation:
+    def __init__(self, source_stock, destination_stock, modifier):
+        self.source_stock = source_stock
+        self.destination_stock = destination_stock
+        self.modifier = modifier
+
+    def update(self):
+        self.source_stock.apply_price_add(self.destination_stock.get_current_step_supply_change() * self.modifier)
+        self.destination_stock.apply_price_add(self.source_stock.get_current_step_supply_change() * self.modifier)
 
 

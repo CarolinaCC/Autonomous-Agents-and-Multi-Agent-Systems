@@ -2,7 +2,6 @@ import pygame
 
 
 class Agent_gui:
-
     hovered = False
 
     def __init__(self, text, pos, display, font):
@@ -12,7 +11,6 @@ class Agent_gui:
         self.font = font
         self.set_rect()
         self.draw()
-
 
     def draw(self):
         self.set_rend()
