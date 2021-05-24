@@ -4,6 +4,7 @@ from agent.gold_standard import *
 from agent.simple_reactive import *
 import os
 import sys
+import random as rd
 
 import json
 
@@ -45,10 +46,11 @@ class GameManager:
                            ]
 
         bank = CentralBank(stocks, stock_relations)
-        covid_event = Event("Covid-19", 1.1, 4, [modena])
-        tech_boom_event = Event("Tech Boom", 1.2, 4, [microsoft, tesla, intel])
-        oil_crisis = Event("Oil Crisis", 0.85, 3, [enron, galp])
-        event_list = [NoneEvent(2), covid_event, NoneEvent(3), tech_boom_event, oil_crisis]
+        covid_event = Event("Covid-19", [1.1], 4, [modena])
+        tech_boom_event = Event("Tech Boom", [1.2,1.2,1.2], 4, [microsoft, tesla, intel])
+        oil_crisis_event = Event("Oil Crisis", [0.85,0.85], 3, [enron, galp])
+        tech_breakthrough_event = Event("TechBreakthrough", [1.3,0.9,0.9], 2, rd.sample([microsoft, tesla, intel],3))
+        event_list = [NoneEvent(2), covid_event, NoneEvent(3), tech_breakthrough_event, tech_boom_event, oil_crisis_event]
         return bank, EventIterator(event_list)
 
     def get_random_agents(self):
