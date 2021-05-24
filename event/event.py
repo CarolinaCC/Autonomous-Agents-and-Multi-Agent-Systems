@@ -13,9 +13,10 @@ class Event:
     # updates the value of the stock passed relating to the event.
     def update_stock(self, stock, index):
         stock.update_price(self.modifiers[index] * stock.price)
+
     def update(self):
-        for index,stock in enumerate(self.stocks):
-            self.update_stock(stock,index)
+        for index, stock in enumerate(self.stocks):
+            self.update_stock(stock, index)
         self.num_steps -= 1
 
 
