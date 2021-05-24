@@ -15,14 +15,14 @@ class Event:
         stock.update_price(self.modifiers[index] * stock.price)
     def update(self):
         for index,stock in enumerate(self.stocks):
-            self.update_stock(stock)
+            self.update_stock(stock,index)
         self.num_steps -= 1
 
 
 class NoneEvent(Event):
 
     def __init__(self, num_steps=0):
-        super().__init__("None", 0, num_steps, [])
+        super().__init__("None", [0], num_steps, [])
 
 
 class ElonMuskPositiveTweetEvent(Event):  # Uma companhia sobe bastante. Se calhar volta a descer rapidamente
