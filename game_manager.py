@@ -8,7 +8,7 @@ import random as rd
 
 import json
 
-from event.event import EventIterator, Event, NoneEvent
+from event.event import Event, NoneEvent
 from stock import Stock, StockRelation
 
 
@@ -27,17 +27,18 @@ class GameManager:
         # todo game mode
         self.game_mode = 'GAME_MODE_TO_DO'
         self.end_flag = False
+        self.current_event = NoneEvent(1)
 
     def setup_world(self):
         enron = Stock("Enron", 0, 2.6, 1.03, 0.005)
         galp = Stock("Galp", 1, 2.9, 1.03, 0.004)
         primark = Stock("Primark", 2, 2.2, 1.025, 0.006)
         tesla = Stock("Tesla", 3, 3.1, 1.05, 0.001)
-        modena = Stock("Modena", 4, 3.3, 1.01, 0.002)
+        moderna = Stock("Moderna", 4, 3.3, 1.01, 0.002)
         microsoft = Stock("Microsoft", 5, 2.2, 1.02, 0.003)
         aldi = Stock("Aldi", 6, 4.1, 1.025, 0.006)
         intel = Stock("Intel", 7, 3.1, 1.05, 0.001)
-        stocks = [enron, galp, primark, tesla, modena, microsoft, aldi, intel]
+        stocks = [enron, galp, primark, tesla, moderna, microsoft, aldi, intel]
 
         stock_relations = [StockRelation(enron, galp, -0.00003),
                            StockRelation(primark, aldi, -0.00002),
@@ -46,12 +47,13 @@ class GameManager:
                            ]
 
         bank = CentralBank(stocks, stock_relations)
-        covid_event = Event("Covid-19", [1.1], 4, [modena])
-        tech_boom_event = Event("Tech Boom", [1.2,1.2,1.2], 4, [microsoft, tesla, intel])
-        oil_crisis_event = Event("Oil Crisis", [0.85,0.85], 3, [enron, galp])
-        tech_breakthrough_event = Event("TechBreakthrough", [1.3,0.9,0.9], 2, rd.sample([microsoft, tesla, intel],3))
-        event_list = [NoneEvent(2), covid_event, NoneEvent(3), tech_breakthrough_event, tech_boom_event, oil_crisis_event]
-        return bank, EventIterator(event_list)
+        covid_event = Event("Covid-19", [[1.1],[1.3],[1.4],[1.4]], 4, [moderna])
+        tech_boom_event = Event("Tech Boom", [[1.2,1.2,1.2],[1.2,1.2,1.2],[1.1,1.1,1.1],[1.05,1.05,1.05]], 4, [microsoft, tesla, intel])
+        oil_crisis_event = Event("Oil Crisis", [[0.85,0.85],[0.85,0.85],[0.95,0.95]], 3, [enron, galp])
+        tech_breakthrough_event = Event("Tech Breakthrough", [[1.3,0.9,0.9],[1.2,1,1]], 2, rd.sample([microsoft, tesla, intel],3))
+        positive_elon_tweet = Event("Positive Crazy Elon Musk Tweet",[[1.5,0,0,0,0,0,0,0],[0.8,0,0,0,0,0,0,0],[0.9,0,0,0,0,0,0,0]],3,rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel],8))
+        event_list = [covid_event, tech_breakthrough_event, tech_boom_event, oil_crisis_event,positive_elon_tweet]
+        return(bank, event_list)
 
     def get_random_agents(self):
         return self.random_agents_num
@@ -72,23 +74,34 @@ class GameManager:
             if self.current_step >= self.steps_num:
                 self.end_flag = True
                 return
-            self.decide_event()
+            self.update_event()
             for a in self.agents_array:
                 a.decide()
             self.central_bank.decide()
-            self.events.next().update()
+            #self.events.next().update()
             self.current_step += 1
 
     def enable_event(self):
         self.event = True
 
-    def decide_event(self):
-        # TODO
+    def update_event(self):
+        if not self.current_event.is_over:
+            self.current_event.update()
+        else:
+            self.current_event = self.current_event.reset()
+            self.current_event = self.choose_next_event()
+            self.current_event.update()
         return
+    
+    def choose_next_event(self):
+        if rd.random() < 0.75:
+            return(NoneEvent(1))
+        else:
+            return(rd.choice(self.events))
+        
 
     def get_current_event(self):
-        # TODO
-        return self.events.next().name
+        return self.current_event.name
 
     def has_ended(self):
         return self.end_flag
