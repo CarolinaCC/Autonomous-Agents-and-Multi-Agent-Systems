@@ -1,5 +1,4 @@
 import random
-import math
 
 from agent.agent import Agent
 
@@ -54,13 +53,15 @@ class ReinforcementLearning(Agent):
         return int(s, 2)
 
     def learn(self):
-        u = self.reward(self.original_state, self.original_action)
+        u = self.reward()
         prev_q = self.get_q(self.original_state, self.original_action)
         pred_error = 0
 
         self.epsilon = max(self.epsilon - self.dec, 0.05)
-        # ahead = aheadPosition(); // percept
 
+        '''
+        Q-function update
+        '''
         pred_error = u + self.discount * self.get_max_q(self.get_state()) - prev_q
 
         new_q = prev_q + (self.learningRate * pred_error)
@@ -76,8 +77,6 @@ class ReinforcementLearning(Agent):
         else:
             act = self.do_e_greedy()
         self.original_action = act
-
-            # act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
 
     def get_available_actions(self):
         owned_stocks = set(self.stocks_owned.keys())
@@ -121,8 +120,7 @@ class ReinforcementLearning(Agent):
             to_buy = random.randint(0, max_buy)
             self.buy(stock_id, to_buy)
 
-    def reward(self, original_state, original_action):
-        # usar a diff de valor da stock - ver function do report
+    def reward(self):
         l = len(self.stock_history)
         current_value = self.stock_history[l - 1] + self.cash_history[l - 1]
         pre_value = self.stock_history[l - 2] + self.cash_history[l - 2]
