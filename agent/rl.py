@@ -27,7 +27,6 @@ class ReinforcementLearning(Agent):
     def __init__(self, central_bank, initial_cash=1000):
         super().__init__(central_bank, initial_cash)
         self.current_step = 0
-        self.dec = (self.epsilon - 0.1) / self.total
         self.q = []
         self.discount = 0.9
         self.total = 1000000
@@ -38,10 +37,11 @@ class ReinforcementLearning(Agent):
         self.init_q_values()
         self.original_state = 0
         self.original_action = 0
+        self.dec = (self.epsilon - 0.1) / self.total
 
     def init_q_values(self):
-        num_lines = 2 * len(self.central_bank.get_all_stock())
-        num_col = 2 ** len(self.central_bank.get_all_stock())
+        num_col = 2 * len(self.central_bank.get_all_stock())
+        num_lines = 2 ** len(self.central_bank.get_all_stock())
 
         for i in range(num_lines):
             tmp = [0 for _ in range(num_col)]
@@ -63,7 +63,7 @@ class ReinforcementLearning(Agent):
 
         pred_error = u + self.discount * self.get_max_q(self.get_state()) - prev_q
 
-        new_q = (self.original_state, self.original_action, prev_q + (self.learningRate * pred_error))
+        new_q = prev_q + (self.learningRate * pred_error)
         self.q[self.original_state][self.original_action] = new_q
         return
 
@@ -83,8 +83,8 @@ class ReinforcementLearning(Agent):
         owned_stocks = set(self.stocks_owned.keys())
         l = len(self.central_bank.get_all_stock())
 
-        buy_actions = [2 ** i for i in range(l) if self.central_bank.stocks[i].price <= self.cash]
-        sell_actions = [2 ** i + 1 for i in range(l) if i in owned_stocks]
+        buy_actions = [2 * i for i in range(l) if self.central_bank.stocks[i].price <= self.cash]
+        sell_actions = [2 * i + 1 for i in range(l) if i in owned_stocks]
 
         return [*buy_actions, *sell_actions]
 
@@ -108,7 +108,8 @@ class ReinforcementLearning(Agent):
         return action
 
     def do_action(self, action):
-        stock_id = int(math.log(action, 2))
+
+        stock_id = action//2
         if action % 2:
             #  odd, means sell
             max_sell = self.how_many_can_i_sell(stock_id)
@@ -126,7 +127,7 @@ class ReinforcementLearning(Agent):
         current_value = self.stock_history[l - 1] + self.cash_history[l - 1]
         pre_value = self.stock_history[l - 2] + self.cash_history[l - 2]
 
-        r = abs(current_value) - abs(pre_value)
+        r = current_value - pre_value
         r *= self.reward_modifier
 
         return r
@@ -138,12 +139,12 @@ class ReinforcementLearning(Agent):
         return max(self.q[state])
 
     def get_max_action_q(self, state, valid_actions):
-        max = - float("inf")
+        max = float("-inf")
         max_i = -1
         line = self.q[state]
         for i in range(len(valid_actions)):
-            q_action = line[i]
+            q_action = line[valid_actions[i]]
             if q_action > max:
                 max = q_action
-                max_i = i
+                max_i = valid_actions[i]
         return max_i

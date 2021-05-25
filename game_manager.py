@@ -19,11 +19,13 @@ class GameManager:
 
     def __init__(self,
                  random_agents_num, simple_react_agents_num,
-                 careful_react_agents_num, steps_num,
+                 careful_react_agents_num, rl_agents_num,
+                 steps_num,
                  mode="DEFAULT"):
         self.random_agents_num = random_agents_num
         self.simple_react_agents_num = simple_react_agents_num
         self.careful_react_agents_num = careful_react_agents_num
+        self.rl_agents_num = rl_agents_num
         self.steps_num = steps_num
         self.game_mode = mode
         self.central_bank, self.events = self.setup_world()
@@ -75,7 +77,9 @@ class GameManager:
             self.agents_array.append(SimpleReactive(self.central_bank))
         for _ in range(self.careful_react_agents_num):
             self.agents_array.append(Careful(self.central_bank))
-        # TODO add new agents
+        for _ in range(self.rl_agents_num):
+            self.agents_array.append(ReinforcementLearning(self.central_bank))
+
 
     def step(self, num_steps):
         if self.has_ended():
