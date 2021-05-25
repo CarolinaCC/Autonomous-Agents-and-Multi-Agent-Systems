@@ -17,7 +17,7 @@ class Game:
         self.main_menu = MainMenu(self)
 
         self.agents = [['random_agents', 2], ['simple_react_agents', 2], ['careful_react_agents', 2], ['rl_agent', 1]]
-        self.modes = ["DEFAULT", "INFLATION", "RECESSION", "RANDOM"]
+        self.modes = ["DEFAULT", "INFLATION", "RECESSION"]
         self.steps = 400
         self.options = OptionsMenu(self, self.agents, self.steps, self.modes)
         self.credits = CreditsMenu(self)

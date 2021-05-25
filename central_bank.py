@@ -2,12 +2,12 @@ from stock import Stock, StockRelation
 
 
 class CentralBank:
-    def __init__(self, stocks=None, stock_relations=None):
+    def __init__(self, stocks=None, stock_relations=None, mode="DEFAULT"):
         if stock_relations is None:
             stock_relations = []
         if stocks is None:
             stocks = []
-
+        self.mode = mode
         self.current_step = 0
         self.stocks = stocks
         self.stock_relations = stock_relations
@@ -31,8 +31,9 @@ class CentralBank:
             stock.recalculate_price()
         for stock in self.stocks:
             stock.update_history()
-        for relation in self.stock_relations:
-            relation.update()
+        if self.mode == "DEFAULT":
+            for relation in self.stock_relations:
+                relation.update()
         return 0
 
     def get_stock(self, stock_id):

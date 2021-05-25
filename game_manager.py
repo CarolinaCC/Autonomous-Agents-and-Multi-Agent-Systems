@@ -49,7 +49,7 @@ class GameManager:
                            StockRelation(microsoft, intel, 0.00003)
                            ]
         event_list = []
-        bank = CentralBank(stocks, stock_relations)
+        bank = CentralBank(stocks, stock_relations, self.game_mode)
         
         if self.game_mode == "DEFAULT":
             covid_event = Event("Covid-19", [[1.1], [1.3], [1.4], [1.4]], 4, [moderna])

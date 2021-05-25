@@ -53,7 +53,7 @@ class Stock:
         l = len(self.price_history)
         if self.price_history[l - 2] <= 0:
             return 0
-        res = self.price_history[l - 1] / abs(self.price_history[l - 2])
+        res = self.price_history[l - 1] / self.price_history[l - 2]
 
         return res
 
@@ -75,7 +75,7 @@ class Stock:
 
     def recalculate_price(self):
         if self.game_mode == "DEPRESSION":
-            if self.normal_modifier < 1:
+            if self.normal_modifier <= 1:
                 self.apply_price_modifier(self.normal_modifier)
                 return
             else:
@@ -83,7 +83,7 @@ class Stock:
                 self.apply_price_modifier(self.normal_modifier)
                 return
 
-        elif self.game_mode == "DEPRESSION":
+        elif self.game_mode == "INFLATION":
             # fixme
             if self.normal_modifier > 1:
                 self.apply_price_modifier(self.normal_modifier)
@@ -92,7 +92,7 @@ class Stock:
                 self.normal_modifier += 1
                 self.apply_price_modifier(self.normal_modifier)
                 return
-        # todo random
+
         else:
 
             # 1 - stock.modifier
