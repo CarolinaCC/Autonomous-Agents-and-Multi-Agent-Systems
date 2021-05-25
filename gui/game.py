@@ -27,7 +27,7 @@ class Game:
         self.game_manager = 0
         self.bg = pygame.image.load("gui/assets/background-game.png")
 
-        self.x_breaking, self.y_breaking = -100,580
+        self.x_breaking, self.y_breaking = -100, 580
         self.players_pos_array = [[230, 320], [360, 320], [500, 320], [155, 400], [560, 400], [230, 490], [360, 490],
                                   [500, 490]]
 
@@ -35,17 +35,18 @@ class Game:
         while self.playing:
             if self.setup:
                 self.game_manager = GameManager(self.options.states[0][1], self.options.states[1][1],
-                                                self.options.states[2][1], self.options.states[-2][1], self.options.states[-1][1])
+                                                self.options.states[2][1], self.options.states[-2][1],
+                                                self.modes[self.options.states[-1][1]])
                 self.setup = False
 
                 c = 0
                 for x in self.game_manager.agents_array:
                     self.array_agents_gui.append(
-                        Agent_gui(x.type, (self.players_pos_array[c][0], self.players_pos_array[c][1]), self.display, pygame.font.Font(self.font_name, 20), c))
+                        Agent_gui(x.type, (self.players_pos_array[c][0], self.players_pos_array[c][1]), self.display,
+                                  pygame.font.Font(self.font_name, 20), c))
                     c += 1
 
             self.check_events()
-
 
             if self.ESCAPE_KEY:
                 self.playing = False
@@ -65,18 +66,22 @@ class Game:
                 if self.array_agents_gui[x].rect.collidepoint(pygame.mouse.get_pos()):
                     self.array_agents_gui[x].hovered = True
 
-                    self.draw_text('CASH AVAILABLE - ' + f'{self.game_manager.agents_array[x].get_cash_value():.2f}', 15, 55, 70, self.WHITE)
-                    self.draw_text('EQUITY - ' + f'{self.game_manager.agents_array[x].get_value():.2f}', 15, 55, 90, self.WHITE)
-                    self.draw_text('STOCKS VALUE - ' + f'{self.game_manager.agents_array[x].get_stock_value():.2f}', 15, 55, 110, self.WHITE)
+                    self.draw_text('CASH AVAILABLE - ' + f'{self.game_manager.agents_array[x].get_cash_value():.2f}',
+                                   15, 55, 70, self.WHITE)
+                    self.draw_text('EQUITY - ' + f'{self.game_manager.agents_array[x].get_value():.2f}', 15, 55, 90,
+                                   self.WHITE)
+                    self.draw_text('STOCKS VALUE - ' + f'{self.game_manager.agents_array[x].get_stock_value():.2f}', 15,
+                                   55, 110, self.WHITE)
 
-                    self.display.blit(self.array_agents_gui[x].player_avatar, (290,50))
+                    self.display.blit(self.array_agents_gui[x].player_avatar, (290, 50))
                     self.draw_text(self.game_manager.agents_array[x].type, 15, 290, 115, self.WHITE)
 
                     cx = 0
                     cy = 0
                     for y in self.game_manager.agents_array[x].get_stocks_owned():
                         self.draw_text(self.game_manager.central_bank.get_stock(y).name + ' - ' +
-                                       f'{self.game_manager.agents_array[x].get_stocks_owned_by_id_price(y):.2f}' + '€', 12, 55 + cx, 130 + cy, self.WHITE)
+                                       f'{self.game_manager.agents_array[x].get_stocks_owned_by_id_price(y):.2f}' + '€',
+                                       12, 55 + cx, 130 + cy, self.WHITE)
                         cy += 20
                         if cy > 100:
                             cy = 0
@@ -87,12 +92,12 @@ class Game:
                     self.array_agents_gui[x].hovered = False
                 self.array_agents_gui[x].draw()
 
-
             has_ended = ''
             if self.game_manager.has_ended():
                 has_ended += ' - GAME IS OVER'
             self.draw_text(
-                'Current Step - ' + str(self.game_manager.current_step) + '/' + str(self.game_manager.steps_num) + has_ended, 18, 55,
+                'Current Step - ' + str(self.game_manager.current_step) + '/' + str(
+                    self.game_manager.steps_num) + has_ended, 18, 55,
                 35, self.BLACK)
             self.draw_text('Stocks', 15, 470, 6, self.WHITE)
             self.draw_text('Price', 15, 547, 6, self.WHITE)
@@ -110,12 +115,12 @@ class Game:
                 self.draw_text(f'{stock.get_percentage_variation():.2f}' + ' %', 12, 620, c, color_chart)
                 c += 25
 
-
-            self.draw_text('Breaking News - ' + self.game_manager.get_current_event(), 15, self.x_breaking, self.y_breaking, self.WHITE)
-            self.x_breaking +=2
+            self.draw_text('Breaking News - ' + self.game_manager.get_current_event(), 15, self.x_breaking,
+                           self.y_breaking, self.WHITE)
+            self.x_breaking += 2
             if self.x_breaking > self.DISPLAY_W:
                 self.x_breaking = - 200
-            self.draw_text('Mode - ' + self.modes[self.game_manager.game_mode], 15, 320, 440, self.WHITE)
+            self.draw_text('Mode - ' + self.game_manager.game_mode, 15, 320, 440, self.WHITE)
 
             self.window.blit(self.display, (0, 0))
             pygame.display.update()

@@ -34,7 +34,10 @@ class ReinforcementLearning(Agent):
         self.learningRate = 0.8
         self.epsilon = 0.9
         self.rand_factor = 0.05
+        self.reward_modifier = 100
         self.init_q_values()
+        self.original_state = 0
+        self.original_action = 0
 
     def init_q_values(self):
         num_lines = 2 * len(self.central_bank.get_all_stock())
@@ -51,10 +54,8 @@ class ReinforcementLearning(Agent):
         return int(s, 2)
 
     def learn(self):
-        original_state = 0
-        original_action = 0
-        u = self.reward(original_state, original_action)
-        prev_q = self.get_q(original_state, original_action)
+        u = self.reward(self.original_state, self.original_action)
+        prev_q = self.get_q(self.original_state, self.original_action)
         pred_error = 0
 
         self.epsilon = max(self.epsilon - self.dec, 0.05)
@@ -62,18 +63,21 @@ class ReinforcementLearning(Agent):
 
         pred_error = u + self.discount * self.get_max_q(self.get_state()) - prev_q
 
-        new_q = (original_state, original_action, prev_q + (self.learningRate * pred_error))
-        self.q[original_state][original_action] = new_q
+        new_q = (self.original_state, self.original_action, prev_q + (self.learningRate * pred_error))
+        self.q[self.original_state][self.original_action] = new_q
         return
 
     def _decide(self):
+        self.original_state = self.get_state()
         self.epsilon -= self.dec
+        act = 0
         if random.uniform(0, 1) < self.rand_factor:
-            self.do_random_action(self.get_available_actions())
+            act = self.do_random_action(self.get_available_actions())
         else:
+            act = self.do_e_greedy()
+        self.original_action = act
 
-            act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
-
+            # act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
 
     def get_available_actions(self):
         owned_stocks = set(self.stocks_owned.keys())
@@ -89,7 +93,9 @@ class ReinforcementLearning(Agent):
         if random.uniform(0, 1) < self.rand_factor:
             return self.do_random_action(valid_actions)
         state = self.get_state()
-        return self.do_action(self.get_max_action_q(state, valid_actions))
+        act = self.get_max_action_q(state, valid_actions)
+        self.do_action(act)
+        return act
 
     def get_random_available_action(self):
         valid_actions = self.get_available_actions()
@@ -99,6 +105,7 @@ class ReinforcementLearning(Agent):
     def do_random_action(self, valid_actions):
         action = valid_actions[random.randint(0, len(valid_actions) - 1)]
         self.do_action(action)
+        return action
 
     def do_action(self, action):
         stock_id = int(math.log(action, 2))
@@ -114,9 +121,15 @@ class ReinforcementLearning(Agent):
             self.buy(stock_id, to_buy)
 
     def reward(self, original_state, original_action):
-        # usar a diferança de valor da stock - ver função do report
-        # usar modifier
-        return 0
+        # usar a diff de valor da stock - ver function do report
+        l = len(self.stock_history)
+        current_value = self.stock_history[l - 1] + self.cash_history[l - 1]
+        pre_value = self.stock_history[l - 2] + self.cash_history[l - 2]
+
+        r = abs(current_value) - abs(pre_value)
+        r *= self.reward_modifier
+
+        return r
 
     def get_q(self, original_state, original_action):
         return self.q[original_state][original_action]
