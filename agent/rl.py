@@ -54,10 +54,8 @@ class ReinforcementLearning(Agent):
         return int(s, 2)
 
     def learn(self):
-        original_state = 0
-        original_action = 0
-        u = self.reward(original_state, original_action)
-        prev_q = self.get_q(original_state, original_action)
+        u = self.reward(self.original_state, self.original_action)
+        prev_q = self.get_q(self.original_state, self.original_action)
         pred_error = 0
 
         self.epsilon = max(self.epsilon - self.dec, 0.05)
@@ -65,16 +63,20 @@ class ReinforcementLearning(Agent):
 
         pred_error = u + self.discount * self.get_max_q(self.get_state()) - prev_q
 
-        new_q = (original_state, original_action, prev_q + (self.learningRate * pred_error))
-        self.q[original_state][original_action] = new_q
+        new_q = (self.original_state, self.original_action, prev_q + (self.learningRate * pred_error))
+        self.q[self.original_state][self.original_action] = new_q
         return
 
     def _decide(self):
+        self.original_state = self.get_state()
         self.epsilon -= self.dec
+        act = 0
         if random.uniform(0, 1) < self.rand_factor:
-            self.do_random_action(self.get_available_actions())
+            act = self.do_random_action(self.get_available_actions())
         else:
             act = self.do_e_greedy()
+        self.original_action = act
+
             # act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
 
     def get_available_actions(self):
@@ -103,6 +105,7 @@ class ReinforcementLearning(Agent):
     def do_random_action(self, valid_actions):
         action = valid_actions[random.randint(0, len(valid_actions) - 1)]
         self.do_action(action)
+        return action
 
     def do_action(self, action):
         stock_id = int(math.log(action, 2))

@@ -97,7 +97,6 @@ class Stock:
 
             # 1 - stock.modifier
             self.apply_price_modifier(self.normal_modifier)
-
             # 2 - law of supply and demand
             self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
 

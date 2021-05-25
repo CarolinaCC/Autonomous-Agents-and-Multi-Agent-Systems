@@ -17,7 +17,10 @@ class GameManager:
     event = False
 
 
-    def __init__(self, random_agents_num, simple_react_agents_num, careful_react_agents_num, steps_num, mode="DEFAULT"):
+    def __init__(self,
+                 random_agents_num, simple_react_agents_num,
+                 careful_react_agents_num, steps_num,
+                 mode="DEFAULT"):
         self.random_agents_num = random_agents_num
         self.simple_react_agents_num = simple_react_agents_num
         self.careful_react_agents_num = careful_react_agents_num
