@@ -46,9 +46,6 @@ class Game:
 
             self.check_events()
 
-            if self.game_manager.has_ended():
-                # TODO
-                self.draw_text('Game is Over', 15, 700, 500, self.WHITE)
 
             if self.ESCAPE_KEY:
                 self.playing = False
