@@ -77,7 +77,7 @@ class MainMenu(Menu):
 
 class OptionsMenu(Menu):
 
-    def __init__(self, game, agents, steps):
+    def __init__(self, game, agents, steps, modes):
         Menu.__init__(self, game)
         self.state = 0
 
@@ -90,6 +90,7 @@ class OptionsMenu(Menu):
         self.stepx, self.stepy = self.mid_w, self.mid_h + mid_h_offset
         self.states = agents
         self.states.append(['steps',steps, self.stepx, self.stepy])
+        self.states.append(['mode', 0, self.stepx, self.stepy + 20])
         self.cursor_rect.midtop = (self.states[0][2] + self.offset, self.states[0][3])
 
     def display_menu(self):
@@ -100,7 +101,10 @@ class OptionsMenu(Menu):
             self.game.display.blit(self.bg, (0, 0))
             self.game.draw_text('Options', 20, self.game.DISPLAY_W / 2 + 55, self.game.DISPLAY_H / 2 - 60, self.game.WHITE)
             for x in self.states:
-                self.game.draw_text(str(x[0]) + " - " + str(x[1]), 15, x[2], x[3], self.game.WHITE)
+                if x[0] == 'mode':
+                    self.game.draw_text(str(x[0]) + " - " + str(self.game.modes[x[1]]), 15, x[2], x[3], self.game.WHITE)
+                else:
+                    self.game.draw_text(str(x[0]) + " - " + str(x[1]), 15, x[2], x[3], self.game.WHITE)
             self.draw_cursor()
             self.blit_screen()
 
@@ -125,7 +129,11 @@ class OptionsMenu(Menu):
 
 
         elif self.game.RIGHT_KEY:
-           self.states[self.state][1] +=1
+            if self.states[self.state][0] == 'mode':
+                if self.states[self.state][1] < len(self.game.modes) - 1:
+                    self.states[self.state][1] += 1
+            else:
+                self.states[self.state][1] +=1
         elif self.game.LEFT_KEY:
             if self.states[self.state][1] > 0:
                 self.states[self.state][1] -= 1
