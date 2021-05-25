@@ -16,9 +16,9 @@ class Game:
         self.BLACK, self.WHITE, self.GREEN, self.RED = (0, 0, 0), (255, 255, 255), (3, 252, 40), (252, 3, 3)
         self.main_menu = MainMenu(self)
 
-        self.agents = [['random_agents', 2], ['simple_react_agents', 2], ['careful_react_agents', 2]]
+        self.agents = [['random_agents', 2], ['simple_react_agents', 2], ['careful_react_agents', 2], ['rl_agent', 1]]
         self.modes = ["DEFAULT", "INFLATION", "RECESSION", "RANDOM"]
-        self.steps = 40
+        self.steps = 400
         self.options = OptionsMenu(self, self.agents, self.steps, self.modes)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
@@ -35,7 +35,8 @@ class Game:
         while self.playing:
             if self.setup:
                 self.game_manager = GameManager(self.options.states[0][1], self.options.states[1][1],
-                                                self.options.states[2][1], self.options.states[-2][1],
+                                                self.options.states[2][1], self.options.states[3][1],
+                                                self.options.states[-2][1],
                                                 self.modes[self.options.states[-1][1]])
                 self.setup = False
 

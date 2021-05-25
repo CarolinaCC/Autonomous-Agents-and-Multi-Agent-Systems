@@ -1,29 +1,26 @@
 from agent.rl import ReinforcementLearning
 from central_bank import CentralBank
 from agent.agent import *
-from agent.gold_standard import *
 from agent.simple_reactive import *
 import os
-import sys
 import random as rd
 
-import json
-
-from event.event import Event, NoneEvent
+from event import Event, NoneEvent
 from stock import Stock, StockRelation
 
 
 class GameManager:
     event = False
 
-
     def __init__(self,
                  random_agents_num, simple_react_agents_num,
-                 careful_react_agents_num, steps_num,
+                 careful_react_agents_num, rl_agents_num,
+                 steps_num,
                  mode="DEFAULT"):
         self.random_agents_num = random_agents_num
         self.simple_react_agents_num = simple_react_agents_num
         self.careful_react_agents_num = careful_react_agents_num
+        self.rl_agents_num = rl_agents_num
         self.steps_num = steps_num
         self.game_mode = mode
         self.central_bank, self.events = self.setup_world()
@@ -55,15 +52,24 @@ class GameManager:
         bank = CentralBank(stocks, stock_relations)
         
         if self.game_mode == "DEFAULT":
-            print("ENTREI NESTE IF") #Não está a entrar aqui
-            covid_event = Event("Covid-19", [[1.1],[1.3],[1.4],[1.4]], 4, [moderna])
-            tech_boom_event = Event("Tech Boom", [[1.2,1.2,1.2],[1.2,1.2,1.2],[1.1,1.1,1.1],[1.05,1.05,1.05]], 4, [microsoft, tesla, intel])
-            oil_crisis_event = Event("Oil Crisis", [[0.85,0.85],[0.85,0.85],[0.95,0.95]], 3, [enron, galp])
-            tech_breakthrough_event = Event("Tech Breakthrough", [[1.3,0.9,0.9],[1.2,1,1]], 2, rd.sample([microsoft, tesla, intel],3))
-            positive_elon_tweet = Event("Positive Crazy Elon Musk Tweet",[[1.5,0,0,0,0,0,0,0],[0.8,0,0,0,0,0,0,0],[0.9,0,0,0,0,0,0,0]],3,rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel],8))
-            negative_elon_tweet = Event("Negative Crazy Elon Musk Tweet",[[0.7,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1.1,0,0,0,0,0,0,0]],3,rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel],8))
-            event_list = [covid_event, tech_breakthrough_event, tech_boom_event, oil_crisis_event,positive_elon_tweet,negative_elon_tweet]
-        return(bank,event_list)
+            covid_event = Event("Covid-19", [[1.1], [1.3], [1.4], [1.4]], 4, [moderna])
+            tech_boom_event = Event("Tech Boom",
+                                    [[1.2, 1.2, 1.2], [1.2, 1.2, 1.2], [1.1, 1.1, 1.1], [1.05, 1.05, 1.05]], 4,
+                                    [microsoft, tesla, intel])
+            oil_crisis_event = Event("Oil Crisis", [[0.85, 0.85], [0.85, 0.85], [0.95, 0.95]], 3, [enron, galp])
+            tech_breakthrough_event = Event("Tech Breakthrough", [[1.3, 0.9, 0.9], [1.2, 1, 1]], 2,
+                                            rd.sample([microsoft, tesla, intel], 3))
+            positive_elon_tweet = Event("Positive Crazy Elon Musk Tweet",
+                                        [[1.5, 0, 0, 0, 0, 0, 0, 0], [0.8, 0, 0, 0, 0, 0, 0, 0],
+                                         [0.9, 0, 0, 0, 0, 0, 0, 0]], 3,
+                                        rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel], 8))
+            negative_elon_tweet = Event("Negative Crazy Elon Musk Tweet",
+                                        [[0.7, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0],
+                                         [1.1, 0, 0, 0, 0, 0, 0, 0]], 3,
+                                        rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel], 8))
+            event_list = [covid_event, tech_breakthrough_event, tech_boom_event, oil_crisis_event, positive_elon_tweet,
+                          negative_elon_tweet]
+        return bank, event_list
 
     def get_random_agents(self):
         return self.random_agents_num
@@ -75,7 +81,8 @@ class GameManager:
             self.agents_array.append(SimpleReactive(self.central_bank))
         for _ in range(self.careful_react_agents_num):
             self.agents_array.append(Careful(self.central_bank))
-        # TODO add new agents
+        for _ in range(self.rl_agents_num):
+            self.agents_array.append(ReinforcementLearning(self.central_bank))
 
     def step(self, num_steps):
         if self.has_ended():
@@ -89,7 +96,7 @@ class GameManager:
             for a in self.agents_array:
                 a.decide()
             self.central_bank.decide()
-            #self.events.next().update()
+            # self.events.next().update()
             self.current_step += 1
             for agent in self.agents_array:
                 if isinstance(agent, ReinforcementLearning):
@@ -106,13 +113,12 @@ class GameManager:
             self.current_event = self.choose_next_event()
             self.current_event.update()
         return
-    
+
     def choose_next_event(self):
         if rd.random() < 0.75:
-            return(NoneEvent(1))
+            return (NoneEvent(1))
         else:
-            return(rd.choice(self.events))
-        
+            return (rd.choice(self.events))
 
     def get_current_event(self):
         return self.current_event.name
