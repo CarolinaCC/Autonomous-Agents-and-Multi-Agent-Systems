@@ -1,3 +1,5 @@
+import pygame
+
 from gui.agent_gui import *
 from gui.menu import *
 from game_manager import *
@@ -7,7 +9,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.running, self.playing = True, False
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY, self.RIGHT_KEY, self.LEFT_KEY = False, False, False, False, False, False, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY, self.RIGHT_KEY, self.LEFT_KEY, self.F_KEY = False, False, False, False, False, False, False, False
         self.DISPLAY_W, self.DISPLAY_H = 800, 600
         self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
         self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H)))
@@ -59,6 +61,9 @@ class Game:
 
             if self.UP_KEY:
                 self.game_manager.step(10)
+
+            if self.F_KEY:
+                self.game_manager.step(self.steps)
 
             self.display.fill(self.BLACK)
             self.display.blit(self.bg, (0, 0))
@@ -150,9 +155,11 @@ class Game:
                     self.RIGHT_KEY = True
                 if event.key == pygame.K_LEFT:
                     self.LEFT_KEY = True
+                if event.key == pygame.K_f:
+                    self.F_KEY = True
 
     def reset_keys(self):
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY, self.RIGHT_KEY, self.LEFT_KEY = False, False, False, False, False, False, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY, self.RIGHT_KEY, self.LEFT_KEY, self.F_KEY = False, False, False, False, False, False, False, False
 
     def draw_text(self, text, size, x, y, color):
         font = pygame.font.Font(self.font_name, size)
