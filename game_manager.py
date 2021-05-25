@@ -57,6 +57,7 @@ class GameManager:
             oil_crisis_event = Event("Oil Crisis", [[0.85,0.85],[0.85,0.85],[0.95,0.95]], 3, [enron, galp])
             tech_breakthrough_event = Event("Tech Breakthrough", [[1.3,0.9,0.9],[1.2,1,1]], 2, rd.sample([microsoft, tesla, intel],3))
             positive_elon_tweet = Event("Positive Crazy Elon Musk Tweet",[[1.5,0,0,0,0,0,0,0],[0.8,0,0,0,0,0,0,0],[0.9,0,0,0,0,0,0,0]],3,rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel],8))
+            negative_elon_tweet = Event("Negative Crazy Elon Musk Tweet",[[0.7,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1.1,0,0,0,0,0,0,0]],3,rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel],8))
             event_list = [covid_event, tech_breakthrough_event, tech_boom_event, oil_crisis_event,positive_elon_tweet]
         return bank, event_list
 
