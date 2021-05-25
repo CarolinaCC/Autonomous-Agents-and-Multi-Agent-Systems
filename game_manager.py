@@ -1,3 +1,4 @@
+from agent.rl import ReinforcementLearning
 from central_bank import CentralBank
 from agent.agent import *
 from agent.gold_standard import *
@@ -15,29 +16,31 @@ from stock import Stock, StockRelation
 class GameManager:
     event = False
 
-    def __init__(self, random_agents_num, simple_react_agents_num, careful_react_agents_num, steps_num):
+
+    def __init__(self, random_agents_num, simple_react_agents_num, careful_react_agents_num, steps_num, mode="DEFAULT"):
         self.random_agents_num = random_agents_num
         self.simple_react_agents_num = simple_react_agents_num
         self.careful_react_agents_num = careful_react_agents_num
         self.steps_num = steps_num
+        self.game_mode = mode
         self.central_bank, self.events = self.setup_world()
         self.agents_array = []
         self.setup_agents()
         self.current_step = 0
-        # todo game mode
-        self.game_mode = 'GAME_MODE_TO_DO'
         self.end_flag = False
         self.current_event = NoneEvent(1)
 
     def setup_world(self):
-        enron = Stock("Enron", 0, 2.6, 1.03, 0.005)
-        galp = Stock("Galp", 1, 2.9, 1.03, 0.004)
-        primark = Stock("Primark", 2, 2.2, 1.025, 0.006)
-        tesla = Stock("Tesla", 3, 3.1, 1.05, 0.001)
-        moderna = Stock("Moderna", 4, 3.3, 1.01, 0.002)
-        microsoft = Stock("Microsoft", 5, 2.2, 1.02, 0.003)
-        aldi = Stock("Aldi", 6, 4.1, 1.025, 0.006)
-        intel = Stock("Intel", 7, 3.1, 1.05, 0.001)
+
+        min_price = 0.0001
+        enron = Stock("Enron", 0, 2.6, 1.03, 0.005, min_price, self.game_mode)
+        galp = Stock("Galp", 1, 2.9, 1.03, 0.004, min_price, self.game_mode)
+        primark = Stock("Primark", 2, 2.2, 1.025, 0.006, min_price, self.game_mode)
+        tesla = Stock("Tesla", 3, 3.1, 1.05, 0.001, min_price, self.game_mode)
+        moderna = Stock("Moderna", 4, 3.3, 1.01, 0.002, min_price, self.game_mode)
+        microsoft = Stock("Microsoft", 5, 2.2, 1.02, 0.003, min_price, self.game_mode)
+        aldi = Stock("Aldi", 6, 4.1, 1.025, 0.006, min_price, self.game_mode)
+        intel = Stock("Intel", 7, 3.1, 1.05, 0.001, min_price, self.game_mode)
         stocks = [enron, galp, primark, tesla, moderna, microsoft, aldi, intel]
 
         stock_relations = [StockRelation(enron, galp, -0.00003),
@@ -45,15 +48,17 @@ class GameManager:
                            StockRelation(tesla, intel, 0.00005),
                            StockRelation(microsoft, intel, 0.00003)
                            ]
-
+        event_list = []
         bank = CentralBank(stocks, stock_relations)
-        covid_event = Event("Covid-19", [[1.1],[1.3],[1.4],[1.4]], 4, [moderna])
-        tech_boom_event = Event("Tech Boom", [[1.2,1.2,1.2],[1.2,1.2,1.2],[1.1,1.1,1.1],[1.05,1.05,1.05]], 4, [microsoft, tesla, intel])
-        oil_crisis_event = Event("Oil Crisis", [[0.85,0.85],[0.85,0.85],[0.95,0.95]], 3, [enron, galp])
-        tech_breakthrough_event = Event("Tech Breakthrough", [[1.3,0.9,0.9],[1.2,1,1]], 2, rd.sample([microsoft, tesla, intel],3))
-        positive_elon_tweet = Event("Positive Crazy Elon Musk Tweet",[[1.5,0,0,0,0,0,0,0],[0.8,0,0,0,0,0,0,0],[0.9,0,0,0,0,0,0,0]],3,rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel],8))
-        event_list = [covid_event, tech_breakthrough_event, tech_boom_event, oil_crisis_event,positive_elon_tweet]
-        return(bank, event_list)
+
+        if self.game_mode == "DEFAULT":
+            covid_event = Event("Covid-19", [[1.1],[1.3],[1.4],[1.4]], 4, [moderna])
+            tech_boom_event = Event("Tech Boom", [[1.2,1.2,1.2],[1.2,1.2,1.2],[1.1,1.1,1.1],[1.05,1.05,1.05]], 4, [microsoft, tesla, intel])
+            oil_crisis_event = Event("Oil Crisis", [[0.85,0.85],[0.85,0.85],[0.95,0.95]], 3, [enron, galp])
+            tech_breakthrough_event = Event("Tech Breakthrough", [[1.3,0.9,0.9],[1.2,1,1]], 2, rd.sample([microsoft, tesla, intel],3))
+            positive_elon_tweet = Event("Positive Crazy Elon Musk Tweet",[[1.5,0,0,0,0,0,0,0],[0.8,0,0,0,0,0,0,0],[0.9,0,0,0,0,0,0,0]],3,rd.sample([enron, galp, primark, tesla, moderna, microsoft, aldi, intel],8))
+            event_list = [covid_event, tech_breakthrough_event, tech_boom_event, oil_crisis_event,positive_elon_tweet]
+        return bank, event_list
 
     def get_random_agents(self):
         return self.random_agents_num
@@ -80,6 +85,9 @@ class GameManager:
             self.central_bank.decide()
             #self.events.next().update()
             self.current_step += 1
+            for agent in self.agents_array:
+                if isinstance(agent, ReinforcementLearning):
+                    agent.learn()
 
     def enable_event(self):
         self.event = True

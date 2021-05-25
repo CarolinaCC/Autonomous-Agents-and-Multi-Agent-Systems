@@ -33,6 +33,12 @@ class Agent:
     def get_stocks_owned(self):
         return self.stocks_owned
 
+    def get_stocks_owned_by_id(self, id):
+        return self.stocks_owned[id]
+
+    def get_stocks_owned_by_id_price(self, id):
+        return self.central_bank.stock_price(id, self.get_stocks_owned_by_id(id))
+
     # agents will be able to use the following to make decisions
     # TO BUY
     # 1 - global news events
@@ -66,6 +72,8 @@ class Agent:
             return 0
         return self.cash // cost
 
+    def how_many_can_i_sell(self, stock_id):
+        return self.stocks_owned[stock_id]
     def buy_random_stock(self):
         all_stock = self.central_bank.get_all_stock()
 

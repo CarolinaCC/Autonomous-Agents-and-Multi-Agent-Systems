@@ -14,12 +14,6 @@ class Event:
 
     # updates the value of the stock passed relating to the event.
     def update_stock(self, stock, index):
-        print(self.name)
-        print(self.modifiers)
-        print("curr_step = "+str(self.curr_step))
-        print("num_steps = "+str(self.num_steps))
-        print(index)
-        print(stock)
         stock.update_price(self.modifiers[self.curr_step][index] * stock.price)
     def update(self):
         for index,stock in enumerate(self.stocks):
@@ -27,13 +21,11 @@ class Event:
         self.curr_step += 1
         if self.curr_step >= self.num_steps:
             self.is_over = True
-        print("Is Event Over? "+str(self.is_over))
         
     def reset(self):
         self.curr_step = 0
         self.is_over = False
         self.stocks = rd.sample(self.stocks,len(self.stocks))
-
 
 class NoneEvent(Event):
 
