@@ -70,7 +70,7 @@ class Agent:
         cost = self.central_bank.stock_price(stock_id, 1)
         if cost <= 0:
             return 0
-        return self.cash // cost
+        return min(100, self.cash // cost)
 
     def how_many_can_i_sell(self, stock_id):
         return self.stocks_owned[stock_id]

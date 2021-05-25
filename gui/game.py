@@ -19,8 +19,8 @@ class Game:
         self.main_menu = MainMenu(self)
 
         self.agents = [['random_agents', 2], ['simple_react_agents', 2], ['careful_react_agents', 2], ['rl_agent', 1]]
-        self.modes = ["DEFAULT", "INFLATION", "RECESSION"]
-        self.steps = 400
+        self.modes = ["DEFAULT", "INFLATION", "RECESSION", "DEFAULT_NO_EVENTS"]
+        self.steps = 40
         self.options = OptionsMenu(self, self.agents, self.steps, self.modes)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
@@ -63,7 +63,7 @@ class Game:
                 self.game_manager.step(10)
 
             if self.F_KEY:
-                self.game_manager.step(self.steps)
+                self.game_manager.step(self.options.states[-2][1])
 
             self.display.fill(self.BLACK)
             self.display.blit(self.bg, (0, 0))

@@ -1,6 +1,6 @@
 class Stock:
     def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001, min_price=0.01,
-                 mode="DEFAULT"):
+                 mode="DEFAULT", max_price=50000):
         self.name = name
         self.id = stock_id
         self.price = price
@@ -11,6 +11,7 @@ class Stock:
         self.normal_modifier = normal_modifier
         self.supply_modifier = supply_modifier
         self.game_mode = mode
+        self.max_price = max_price
 
     def buy(self, quantity):
         self.supply_change += quantity
@@ -29,7 +30,7 @@ class Stock:
         return " ".join([str(self.id), self.name, *(str(price) for price in self.price_history)])
 
     def update_price(self, price):
-        self.price = max(price, self.min_price)
+        self.price = min(max(price, self.min_price), self.max_price)
 
     def apply_price_modifier(self, modifier):
         if self.price >= 0:
@@ -55,7 +56,6 @@ class Stock:
         if self.price_history[l - 2] <= 0:
             return 0
         res = self.price_history[l - 1] / self.price_history[l - 2]
-
         return res
 
     # Returns variation in percentage (0-100%)

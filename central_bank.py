@@ -31,7 +31,7 @@ class CentralBank:
             stock.recalculate_price()
         for stock in self.stocks:
             stock.update_history()
-        if self.mode == "DEFAULT":
+        if "DEFAULT" in self.mode:
             for relation in self.stock_relations:
                 relation.update()
         return 0
