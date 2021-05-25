@@ -53,8 +53,6 @@ class Stock:
         if self.price_history[l - 2] <= 0:
             return 0
         res = self.price_history[l - 1] / self.price_history[l - 2]
-        print(res)
-        print("jere")
         return res
 
     def get_percentage_variation(self):
