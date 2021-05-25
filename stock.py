@@ -49,6 +49,7 @@ class Stock:
     def get_current_step_price_change(self):
         return self.price_history[-1] - self.price_history[-2]
 
+    # Returns variation in percentage (0-1)
     def get_latest_price_modifier(self):
         l = len(self.price_history)
         if self.price_history[l - 2] <= 0:
@@ -57,6 +58,7 @@ class Stock:
 
         return res
 
+    # Returns variation in percentage (0-100%)
     def get_percentage_variation(self):
         l = len(self.price_history)
         if self.price_history[l - 2] == 0:
@@ -70,21 +72,24 @@ class Stock:
             return 0
         if self.price_history[l - 1 - rounds] <= 0:
             return 0
-        res = self.price_history[l - rounds] / self.price_history[l - 1 - rounds]
-        return res
+        value = float("-inf")
+        for i in range(l-rounds, l):
+            if self.price_history[i] < value:
+                return 0
+            value = self.price_history[i]
+        return 2
 
     def recalculate_price(self):
-        if self.game_mode == "DEPRESSION":
+        if self.game_mode == "RECESSION":
             if self.normal_modifier <= 1:
                 self.apply_price_modifier(self.normal_modifier)
                 return
             else:
-                self.normal_modifier -= 1
+                self.normal_modifier = 1/self.normal_modifier
                 self.apply_price_modifier(self.normal_modifier)
                 return
 
         elif self.game_mode == "INFLATION":
-            # fixme
             if self.normal_modifier > 1:
                 self.apply_price_modifier(self.normal_modifier)
                 return
@@ -99,7 +104,6 @@ class Stock:
             self.apply_price_modifier(self.normal_modifier)
             # 2 - law of supply and demand
             self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
-
 
 
 '''

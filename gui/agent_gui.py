@@ -29,9 +29,9 @@ class Agent_gui:
 
     def get_color(self):
         if self.hovered:
-            return (252, 119, 3)
+            return 252, 119, 3
         else:
-            return (255, 255, 255)
+            return 255, 255, 255
 
     def set_rect(self):
         self.set_rend()
