@@ -50,7 +50,7 @@ class GameManager:
                            ]
         event_list = []
         bank = CentralBank(stocks, stock_relations)
-
+        
         if self.game_mode == "DEFAULT":
             print("ENTREI NESTE IF") #Não está a entrar aqui
             covid_event = Event("Covid-19", [[1.1],[1.3],[1.4],[1.4]], 4, [moderna])
