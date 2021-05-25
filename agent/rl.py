@@ -34,7 +34,10 @@ class ReinforcementLearning(Agent):
         self.learningRate = 0.8
         self.epsilon = 0.9
         self.rand_factor = 0.05
+        self.reward_modifier = 100
         self.init_q_values()
+        self.original_state = 0
+        self.original_action = 0
 
     def init_q_values(self):
         num_lines = 2 * len(self.central_bank.get_all_stock())
@@ -71,9 +74,8 @@ class ReinforcementLearning(Agent):
         if random.uniform(0, 1) < self.rand_factor:
             self.do_random_action(self.get_available_actions())
         else:
-
-            act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
-
+            act = self.do_e_greedy()
+            # act = random.randint(0, 2 * len(self.central_bank.get_all_stock()))
 
     def get_available_actions(self):
         owned_stocks = set(self.stocks_owned.keys())
@@ -89,7 +91,9 @@ class ReinforcementLearning(Agent):
         if random.uniform(0, 1) < self.rand_factor:
             return self.do_random_action(valid_actions)
         state = self.get_state()
-        return self.do_action(self.get_max_action_q(state, valid_actions))
+        act = self.get_max_action_q(state, valid_actions)
+        self.do_action(act)
+        return act
 
     def get_random_available_action(self):
         valid_actions = self.get_available_actions()
@@ -114,9 +118,15 @@ class ReinforcementLearning(Agent):
             self.buy(stock_id, to_buy)
 
     def reward(self, original_state, original_action):
-        # usar a diferança de valor da stock - ver função do report
-        # usar modifier
-        return 0
+        # usar a diff de valor da stock - ver function do report
+        l = len(self.stock_history)
+        current_value = self.stock_history[l - 1] + self.cash_history[l - 1]
+        pre_value = self.stock_history[l - 2] + self.cash_history[l - 2]
+
+        r = abs(current_value) - abs(pre_value)
+        r *= self.reward_modifier
+
+        return r
 
     def get_q(self, original_state, original_action):
         return self.q[original_state][original_action]
