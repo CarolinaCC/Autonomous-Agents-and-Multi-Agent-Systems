@@ -146,14 +146,41 @@ class Game:
 
             if (self.show_plot):
                 ## PLOT DOS PREÇOS DO MERCADO
+                plt.figure(1)
                 for stock in self.game_manager.stocks:
                     x = np.arange(len(stock.price_history))
                     y = stock.price_history
                     plt.plot(x, y, label=stock.name)
 
-                plt.title("Price of Market")
+                plt.title("Stock Price per Step")
                 plt.xlabel("steps")
                 plt.ylabel("price €")
+                plt.legend()
+
+                #
+
+                plt.figure(2)
+                ## PLOT AGENT CASH BY STEP
+                for agent in self.game_manager.agents_array:
+                    x = np.arange(len(agent.cash_history))
+                    y = agent.cash_history
+                    plt.plot(x, y, label=agent.type)
+
+                plt.title("Agent Cash per Step")
+                plt.xlabel("steps")
+                plt.ylabel("Cash €")
+                plt.legend()
+
+                plt.figure(3)
+                ## PLOT AGENT EQUITY BY SETP
+                for agent in self.game_manager.agents_array:
+                    x = np.arange(len(agent.stock_history))
+                    y = agent.stock_history
+                    plt.plot(x, y, label=agent.type)
+
+                plt.title("Agent Equity per Step")
+                plt.xlabel("steps")
+                plt.ylabel("equity €")
                 plt.legend()
 
                 #
