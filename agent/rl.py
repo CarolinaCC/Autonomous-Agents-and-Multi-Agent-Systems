@@ -1,4 +1,5 @@
 import random
+from math import exp
 
 from agent.agent import Agent
 
@@ -23,7 +24,7 @@ class ReinforcementLearning(Agent):
         s3  0  0  0  0  0  0  0  0 
     '''
 
-    def __init__(self, central_bank, initial_cash=1000):
+    def __init__(self, central_bank, initial_cash=1000, soft_max=False):
         super().__init__(central_bank, initial_cash)
         self.current_step = 0
         self.q = []
@@ -37,6 +38,7 @@ class ReinforcementLearning(Agent):
         self.original_state = 0
         self.original_action = 0
         self.dec = (self.epsilon - 0.1) / self.total
+        self.soft_max = soft_max
 
     def init_q_values(self):
         num_col = 2 * len(self.central_bank.get_all_stock())
@@ -54,9 +56,9 @@ class ReinforcementLearning(Agent):
 
     def learn(self):
         u = self.reward()
+        if self.original_action == -1:
+            return
         prev_q = self.get_q(self.original_state, self.original_action)
-        pred_error = 0
-
         self.epsilon = max(self.epsilon - self.dec, 0.05)
 
         '''
@@ -75,8 +77,12 @@ class ReinforcementLearning(Agent):
         if random.uniform(0, 1) < self.rand_factor:
             act = self.do_random_action(self.get_available_actions())
         else:
-            act = self.do_e_greedy()
+            if self.soft_max:
+                act = self.do_soft_max()
+            else:
+                act = self.do_e_greedy()
         self.original_action = act
+
 
     def get_available_actions(self):
         owned_stocks = set(self.stocks_owned.keys())
@@ -94,6 +100,28 @@ class ReinforcementLearning(Agent):
         state = self.get_state()
         act = self.get_max_action_q(state, valid_actions)
         self.do_action(act)
+        return act
+
+    def do_soft_max(self):
+        valid_actions = self.get_available_actions()
+        act = -1
+        l = len(valid_actions)
+        tmp = self.get_q(self.get_state(), 0)/(self.epsilon*100.0)
+        if tmp != 0:
+            cumulative = [exp(tmp)]
+        else:
+            cumulative = [0.0]
+        for i in range(1, l):
+            tmp = self.get_q(self.get_state(), 0)/(self.epsilon*100.0)
+            cumulative.append(exp(tmp) + cumulative[i-1])
+        total = cumulative[l-1]
+        cut = random.random()*total
+        for i in range(l):
+            if cut <= cumulative[i]:
+                act = valid_actions[i]
+                break
+        if act >= 0:
+            self.do_action(act)
         return act
 
     def get_random_available_action(self):
