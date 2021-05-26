@@ -4,6 +4,7 @@ from gui.agent_gui import *
 from gui.menu import *
 from game_manager import *
 import matplotlib.pyplot as plt
+import numpy as np
 
 class Game:
     def __init__(self):
@@ -144,22 +145,18 @@ class Game:
             self.reset_keys()
 
             if (self.show_plot):
-                x = [1, 2, 3, 4, 5]
-                y = [1, 2, 3, 4, 5]
+                ## PLOT DOS PREÇOS DO MERCADO
+                for stock in self.game_manager.stocks:
+                    x = np.arange(len(stock.price_history))
+                    y = stock.price_history
+                    plt.plot(x, y, label=stock.name)
 
-                x1 = [1, 2, 3, 4, 5]
-                y1 = [1, 1, 2, 2, 3]
-
-
-
-                plt.plot(x, y, label='Stock 1')
-                plt.plot(x1, y1, label='Stock 2')
-
-                plt.title("Title")
-                plt.xlabel("x")
-                plt.ylabel("y")
+                plt.title("Price of Market")
+                plt.xlabel("steps")
+                plt.ylabel("price €")
                 plt.legend()
 
+                #
                 plt.show()
                 self.show_plot = False
 

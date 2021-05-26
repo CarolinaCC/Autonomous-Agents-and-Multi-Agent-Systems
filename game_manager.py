@@ -41,7 +41,7 @@ class GameManager:
         microsoft = Stock("Microsoft", 5, 2.2, 1.02, 0.0003, min_price, self.game_mode, 12357)
         aldi = Stock("Aldi", 6, 4.1, 1.025, 0.0006, min_price, self.game_mode, 84651)
         intel = Stock("Intel", 7, 3.1, 1.05, 0.0001, min_price, self.game_mode, 351278)
-        stocks = [bp, galp, primark, tesla, moderna, microsoft, aldi, intel]
+        self.stocks = [bp, galp, primark, tesla, moderna, microsoft, aldi, intel]
 
         stock_relations = [StockRelation(bp, galp, -0.00000003),
                            StockRelation(primark, aldi, -0.00000002),
@@ -49,7 +49,7 @@ class GameManager:
                            StockRelation(microsoft, intel, 0.000000003)
                            ]
         event_list = []
-        bank = CentralBank(stocks, stock_relations, self.game_mode)
+        bank = CentralBank(self.stocks, stock_relations, self.game_mode)
         
         if self.game_mode == "DEFAULT":
             covid_event = Event("Covid-19", [[1.1], [1.3], [1.4], [1.4]], 4, [moderna])
