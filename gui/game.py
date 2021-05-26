@@ -20,7 +20,7 @@ class Game:
 
         self.agents = [['random_agents', 2], ['simple_react_agents', 2], ['careful_react_agents', 2], ['rl_agent', 1]]
         self.modes = ["DEFAULT", "INFLATION", "RECESSION", "DEFAULT_NO_EVENTS"]
-        self.steps = 40000
+        self.steps = 40
         self.options = OptionsMenu(self, self.agents, self.steps, self.modes)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
@@ -147,7 +147,19 @@ class Game:
                 x = [1, 2, 3, 4, 5]
                 y = [1, 2, 3, 4, 5]
 
-                plt.plot(x, y)
+                x1 = [1, 2, 3, 4, 5]
+                y1 = [1, 1, 2, 2, 3]
+
+
+
+                plt.plot(x, y, label='Stock 1')
+                plt.plot(x1, y1, label='Stock 2')
+
+                plt.title("Title")
+                plt.xlabel("x")
+                plt.ylabel("y")
+                plt.legend()
+
                 plt.show()
                 self.show_plot = False
 
