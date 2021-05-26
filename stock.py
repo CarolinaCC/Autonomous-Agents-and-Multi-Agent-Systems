@@ -1,5 +1,6 @@
 class Stock:
-    def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001, min_price=0.01, mode="DEFAULT"):
+    def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001, min_price=0.01,
+                 mode="DEFAULT", max_price=50000):
         self.name = name
         self.id = stock_id
         self.price = price
@@ -10,6 +11,7 @@ class Stock:
         self.normal_modifier = normal_modifier
         self.supply_modifier = supply_modifier
         self.game_mode = mode
+        self.max_price = max_price
 
     def buy(self, quantity):
         self.supply_change += quantity
@@ -28,7 +30,7 @@ class Stock:
         return " ".join([str(self.id), self.name, *(str(price) for price in self.price_history)])
 
     def update_price(self, price):
-        self.price = max(price, self.min_price)
+        self.price = min(max(price, self.min_price), self.max_price)
 
     def apply_price_modifier(self, modifier):
         if self.price >= 0:
@@ -48,6 +50,7 @@ class Stock:
     def get_current_step_price_change(self):
         return self.price_history[-1] - self.price_history[-2]
 
+    # Returns variation in percentage (0-1)
     def get_latest_price_modifier(self):
         l = len(self.price_history)
         if self.price_history[l - 2] <= 0:
@@ -55,6 +58,7 @@ class Stock:
         res = self.price_history[l - 1] / self.price_history[l - 2]
         return res
 
+    # Returns variation in percentage (0-100%)
     def get_percentage_variation(self):
         l = len(self.price_history)
         if self.price_history[l - 2] == 0:
@@ -68,20 +72,24 @@ class Stock:
             return 0
         if self.price_history[l - 1 - rounds] <= 0:
             return 0
-        res = self.price_history[l - rounds] / self.price_history[l - 1 - rounds]
-        return res
+        value = float("-inf")
+        for i in range(l-rounds, l):
+            if self.price_history[i] < value:
+                return 0
+            value = self.price_history[i]
+        return 2
 
     def recalculate_price(self):
-        if self.game_mode == "DEPRESSION":
-            if self.normal_modifier < 1:
+        if self.game_mode == "RECESSION":
+            if self.normal_modifier <= 1:
                 self.apply_price_modifier(self.normal_modifier)
                 return
             else:
-                self.normal_modifier -= 1
+                self.normal_modifier = 1/self.normal_modifier
                 self.apply_price_modifier(self.normal_modifier)
                 return
 
-        elif self.game_mode == "DEPRESSION":
+        elif self.game_mode == "INFLATION":
             if self.normal_modifier > 1:
                 self.apply_price_modifier(self.normal_modifier)
                 return
@@ -94,7 +102,6 @@ class Stock:
 
             # 1 - stock.modifier
             self.apply_price_modifier(self.normal_modifier)
-
             # 2 - law of supply and demand
             self.apply_price_add(self.get_current_step_supply_change() * self.supply_modifier)
 
