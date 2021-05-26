@@ -1,4 +1,5 @@
 from gui.game import Game
+import matplotlib as plt
 
 g = Game()
 

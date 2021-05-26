@@ -1,7 +1,7 @@
 from gui.agent_gui import *
 from gui.menu import *
 from game_manager import *
-
+import matplotlib.pyplot as plt
 
 class Game:
     def __init__(self):
@@ -30,6 +30,9 @@ class Game:
         self.x_breaking, self.y_breaking = -100,580
         self.players_pos_array = [[230, 320], [360, 320], [500, 320], [155, 400], [560, 400], [230, 490], [360, 490],
                                   [500, 490]]
+
+        self.show_plot = False
+        self.c_game_over = 0
 
     def game_loop(self):
         while self.playing:
@@ -89,8 +92,16 @@ class Game:
 
 
             has_ended = ''
+
+
             if self.game_manager.has_ended():
                 has_ended += ' - GAME IS OVER'
+                if self.c_game_over == 0:
+                    self.show_plot = True
+                else:
+                    self.show_plot = False
+                self.c_game_over += 1
+
             self.draw_text(
                 'Current Step - ' + str(self.game_manager.current_step) + '/' + str(self.game_manager.steps_num) + has_ended, 18, 55,
                 35, self.BLACK)
@@ -120,6 +131,14 @@ class Game:
             self.window.blit(self.display, (0, 0))
             pygame.display.update()
             self.reset_keys()
+
+            if (self.show_plot):
+                x = [1, 2, 3, 4, 5]
+                y = [1, 2, 3, 4, 5]
+
+                plt.plot(x, y)
+                plt.show()
+                self.show_plot = False
 
         # print results to file for analysis
         # self.game_manager.print_results()
