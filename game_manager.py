@@ -39,7 +39,7 @@ class GameManager:
         primark = Stock("Primark", 2, 0.98, 1.00025, 0.00006, min_price, self.game_mode, 14437)
         tesla = Stock("Tesla", 3, 3.1, 1.0005, 0.00001, min_price, self.game_mode, 12358)
         moderna = Stock("Moderna", 4, 3.3, 1.0001, 0.00002, min_price, self.game_mode, 84562)
-        microsoft = Stock("Microsoft", 5, 2.2, 1.0002, 0.00003, min_price, self.game_mode, 12357)
+        microsoft = Stock("Microsoft", 5, 2.2, 1.000015, 0.00003, min_price, self.game_mode, 12357)
         aldi = Stock("Aldi", 6, 4.1, 1.00025, 0.00006, min_price, self.game_mode, 84651)
         intel = Stock("Intel", 7, 3.1, 1.0004, 0.00001, min_price, self.game_mode, 51278)
         self.stocks = [bp, galp, primark, tesla, moderna, microsoft, aldi, intel]
@@ -53,16 +53,16 @@ class GameManager:
         bank = CentralBank(self.stocks, stock_relations, self.game_mode)
         
         if self.game_mode == "DEFAULT":
-            covid_event = Event("Covid-19", 1.0003, 500, [moderna])
-            covid_2nd_wave_event = Event("Covid-19 2nd wave", 1.0003, 500, [moderna])
+            covid_event = Event("Covid-19", 1.0003, self.steps_num//10, [moderna])
+            covid_2nd_wave_event = Event("Covid-19 2nd wave", 1.0003, self.steps_num//10, [moderna])
 
-            tech_boom_event = Event("Tech Boom", 1.0004, 500, [microsoft, tesla, intel])
+            tech_boom_event = Event("Tech Boom", 1.0004, self.steps_num//10, [microsoft, tesla, intel])
 
-            oil_crisis_event = Event("Oil Crisis", 0.9993, 700, [bp, galp])
-            tech_breakdown_event = Event("Tech Boom", 0.9994, 300, [microsoft, tesla, intel])
+            oil_crisis_event = Event("Oil Crisis", 0.9993, self.steps_num//8, [bp, galp])
+            tech_breakdown_event = Event("Tech Boom", 0.9994, self.steps_num//12, [microsoft, tesla, intel])
 
-            event_list = [NoneEvent(200), covid_event, tech_boom_event, NoneEvent(100), oil_crisis_event,
-                          NoneEvent(400), covid_2nd_wave_event, tech_breakdown_event]
+            event_list = [NoneEvent(self.steps_num//15), covid_event, tech_boom_event, NoneEvent(self.steps_num//50), oil_crisis_event,
+                          NoneEvent(self.steps_num//10), covid_2nd_wave_event, tech_breakdown_event]
         return bank, event_list
 
     def get_random_agents(self):
