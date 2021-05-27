@@ -18,10 +18,10 @@ class ReinforcementLearning(Agent):
         
     The matrix is going to be 100x30
     
-            c1 v1 c2 v2 c3 v3 c4 v4
-        s1  0  0  0  0  0  0  0  0 
-        s2  0  0  0  0  0  0  0  0 
-        s3  0  0  0  0  0  0  0  0 
+            c1 v1 c2 v2 c3 v3 c4 v4 n
+        s1  0  0  0  0  0  0  0  0  0
+        s2  0  0  0  0  0  0  0  0  0
+        s3  0  0  0  0  0  0  0  0  0
     '''
 
     def __init__(self, central_bank, initial_cash=1000, soft_max=False):
@@ -46,6 +46,7 @@ class ReinforcementLearning(Agent):
 
         for i in range(num_lines):
             tmp = [0 for _ in range(num_col)]
+            # tmp.append(0)
             self.q.append(tmp)
 
     def get_state(self):
@@ -56,8 +57,6 @@ class ReinforcementLearning(Agent):
 
     def learn(self):
         u = self.reward()
-        if self.original_action == -1:
-            return
         prev_q = self.get_q(self.original_state, self.original_action)
         self.epsilon = max(self.epsilon - self.dec, 0.05)
 
@@ -83,7 +82,6 @@ class ReinforcementLearning(Agent):
                 act = self.do_e_greedy()
         self.original_action = act
 
-
     def get_available_actions(self):
         owned_stocks = set(self.stocks_owned.keys())
         l = len(self.central_bank.get_all_stock())
@@ -106,16 +104,16 @@ class ReinforcementLearning(Agent):
         valid_actions = self.get_available_actions()
         act = -1
         l = len(valid_actions)
-        tmp = self.get_q(self.get_state(), 0)/(self.epsilon*100.0)
+        tmp = self.get_q(self.get_state(), 0) / (self.epsilon * 100.0)
         if tmp != 0:
             cumulative = [exp(tmp)]
         else:
             cumulative = [0.0]
         for i in range(1, l):
-            tmp = self.get_q(self.get_state(), 0)/(self.epsilon*100.0)
-            cumulative.append(exp(tmp) + cumulative[i-1])
-        total = cumulative[l-1]
-        cut = random.random()*total
+            tmp = self.get_q(self.get_state(), 0) / (self.epsilon * 100.0)
+            cumulative.append(exp(tmp) + cumulative[i - 1])
+        total = cumulative[l - 1]
+        cut = random.random() * total
         for i in range(l):
             if cut <= cumulative[i]:
                 act = valid_actions[i]
@@ -135,26 +133,29 @@ class ReinforcementLearning(Agent):
         return action
 
     def do_action(self, action):
-
-        stock_id = action//2
+        #if action == len(self.q[0])-1:
+         #   return
+        stock_id = action // 2
         if action % 2:
             #  odd, means sell
             max_sell = self.how_many_can_i_sell(stock_id)
             to_sell = random.randint(0, max_sell)
             self.sell(stock_id, to_sell)
+            # print("sell: " + str(stock_id) + " quantity: " + str(to_sell))
         else:
             # even, means buy
             max_buy = self.how_many_can_i_buy(stock_id) - 1
             to_buy = random.randint(0, max_buy)
             self.buy(stock_id, to_buy)
+            # print("buy: " + str(stock_id) + " quantity: " + str(to_buy) )
 
     def reward(self):
         l = len(self.stock_history)
-        current_value = self.stock_history[l - 1] + self.cash_history[l - 1]
-        pre_value = self.stock_history[l - 2] + self.cash_history[l - 2]
+        current_value = self.value_history[- 1]
+        pre_value = self.value_history[- 2]
 
         r = current_value - pre_value
-        r *= self.reward_modifier
+        #print(str(r))
 
         return r
 

@@ -6,9 +6,6 @@ from agent.agent import Agent
 
 class SimpleReactive(Agent):
     type = "SimpleReactive"
-    # FIXME this number can be super different
-    buy_qtd = 5
-
     def _decide(self):
 
         # react to global event TODO
@@ -22,7 +19,7 @@ class SimpleReactive(Agent):
         # buy stock that has gone up
         all_stock = self.central_bank.get_all_stock()
         for s in all_stock:
-            if s.get_latest_price_modifier() > 1.0:
+            if s.get_latest_price_modifier() > 1.0001:
                 amount_to_buy = self.how_many_can_i_buy(s.id)
 
                 if amount_to_buy > 0:

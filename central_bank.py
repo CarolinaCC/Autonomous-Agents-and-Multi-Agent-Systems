@@ -17,11 +17,11 @@ class CentralBank:
 
     def buy_stock(self, id: int, qtd: int):
         self.stocks[id].buy(qtd)
-        return True
+        return self.stocks[id].price * qtd
 
     def sell_stock(self, id: int, qtd: int):
         self.stocks[id].sell(qtd)
-        return True
+        return self.stocks[id].price * qtd
 
     def stock_price(self, id, qtd):
         return self.stocks[id].price * qtd
@@ -34,7 +34,7 @@ class CentralBank:
         if "DEFAULT" in self.mode:
             for relation in self.stock_relations:
                 relation.update()
-        return 0
+        return
 
     def get_stock(self, stock_id):
         return self.stocks[stock_id]

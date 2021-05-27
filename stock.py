@@ -74,14 +74,14 @@ class Stock:
             return 0
         value = float("-inf")
         for i in range(l-rounds, l):
-            if self.price_history[i] < value:
+            if self.price_history[i] <= (value + 0.01):
                 return 0
             value = self.price_history[i]
         return 2
 
     def recalculate_price(self):
         if self.game_mode == "RECESSION":
-            if self.normal_modifier <= 1:
+            if self.normal_modifier < 1:
                 self.apply_price_modifier(self.normal_modifier)
                 return
             else:

@@ -65,6 +65,7 @@ class Agent:
         if not self.__can_sell(stock_id, qtd):
             return
         value = self.central_bank.sell_stock(stock_id, qtd)
+        self.stocks_owned[stock_id] -= qtd
         self.cash += value
 
     def how_many_can_i_buy(self, stock_id):
@@ -75,6 +76,7 @@ class Agent:
 
     def how_many_can_i_sell(self, stock_id):
         return self.stocks_owned[stock_id]
+
     def buy_random_stock(self):
         all_stock = self.central_bank.get_all_stock()
 
@@ -90,6 +92,8 @@ class Agent:
         return 0
 
     def sell_random_stock(self):
+        if len(self.stocks_owned):
+            return
         # get random stock
         s_id = random.choice(list(self.stocks_owned.keys()))
 
@@ -117,8 +121,9 @@ class RandomAgent(Agent):
     type = "Random"
 
     def _decide(self):
-        self.buy_random_stock()
-        self.sell_random_stock()
+        if random.random() < 0.08:
+            self.buy_random_stock()
+            self.sell_random_stock()
 
     def _update_history(self):
         return
@@ -140,7 +145,7 @@ class Careful(Agent):
         all_stock = self.central_bank.get_all_stock()
 
         for s in all_stock:
-            if s.get_price_chance_in_rounds(self.rounds_before_trend) > 1.0:
+            if s.get_price_chance_in_rounds(self.rounds_before_trend) > 1.0001:
                 amount_to_buy = self.how_many_can_i_buy(s.id)
 
                 if amount_to_buy > 0:
