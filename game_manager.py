@@ -5,7 +5,7 @@ from agent.simple_reactive import *
 import os
 import random as rd
 
-from event import Event, NoneEvent
+from event import Event, NoneEvent, EventIterator
 from stock import Stock, StockRelation
 
 
@@ -24,6 +24,7 @@ class GameManager:
         self.steps_num = steps_num
         self.game_mode = mode
         self.central_bank, self.events = self.setup_world()
+        self.events = EventIterator(self.events)
         self.agents_array = []
         self.setup_agents()
         self.current_step = 0
@@ -52,23 +53,16 @@ class GameManager:
         bank = CentralBank(self.stocks, stock_relations, self.game_mode)
         
         if self.game_mode == "DEFAULT":
-            covid_event = Event("Covid-19", [[1.001], [1.003], [1.004], [1.004]], 4, [moderna])
-            tech_boom_event = Event("Tech Boom",
-                                    [[1.002, 1.002, 1.002], [1.002, 1.002, 1.002], [1.1, 1.1, 1.1], [1.0005, 1.0005, 1.0005]], 4,
-                                    [microsoft, tesla, intel])
-            oil_crisis_event = Event("Oil Crisis", [[0.9, 0.9], [0.9, 0.9], [0.99, 0.99]], 3, [bp, galp])
-            tech_breakthrough_event = Event("Tech Breakthrough", [[1.003, 0.9, 0.9], [1.002, 1, 1]], 2,
-                                            rd.sample([microsoft, tesla, intel], 3))
-            positive_elon_tweet = Event("Positive Crazy Elon Musk Tweet",
-                                        [[1.005, 1, 1, 1, 1, 1, 1, 1], [0.8, 1, 1, 1, 1, 1, 1, 1],
-                                         [0.99, 1, 1, 1, 1, 1, 1, 1]], 3,
-                                        rd.sample([bp, galp, primark, tesla, moderna, microsoft, aldi, intel], 8))
-            negative_elon_tweet = Event("Negative Crazy Elon Musk Tweet",
-                                        [[0.8, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1],
-                                         [1.001, 1, 1, 1, 1, 1, 1, 1]], 3,
-                                        rd.sample([bp, galp, primark, tesla, moderna, microsoft, aldi, intel], 8))
-            event_list = [covid_event, tech_breakthrough_event, tech_boom_event, oil_crisis_event, positive_elon_tweet,
-                          negative_elon_tweet]
+            covid_event = Event("Covid-19", 1.0003, 500, [moderna])
+            covid_2nd_wave_event = Event("Covid-19 2nd wave", 1.0003, 500, [moderna])
+
+            tech_boom_event = Event("Tech Boom", 1.0004, 500, [microsoft, tesla, intel])
+
+            oil_crisis_event = Event("Oil Crisis", 0.9993, 700, [bp, galp])
+            tech_breakdown_event = Event("Tech Boom", 0.9994, 300, [microsoft, tesla, intel])
+
+            event_list = [NoneEvent(200), covid_event, tech_boom_event, NoneEvent(100), oil_crisis_event,
+                          NoneEvent(400), covid_2nd_wave_event, tech_breakdown_event]
         return bank, event_list
 
     def get_random_agents(self):
@@ -91,8 +85,6 @@ class GameManager:
             if self.current_step >= self.steps_num:
                 self.end_flag = True
                 return
-            if self.game_mode == "DEFAULT":
-                self.update_event()
             for a in self.agents_array:
                 a.decide()
             self.central_bank.decide()
@@ -101,27 +93,13 @@ class GameManager:
             for agent in self.agents_array:
                 if isinstance(agent, ReinforcementLearning):
                     agent.learn()
+            if self.game_mode == "DEFAULT":
+                self.events.next().update()
 
-    def enable_event(self):
-        self.event = True
 
-    def update_event(self):
-        if not self.current_event.is_over:
-            self.current_event.update()
-        else:
-            self.current_event = self.current_event.reset()
-            self.current_event = self.choose_next_event()
-            self.current_event.update()
-        return
-
-    def choose_next_event(self):
-        if rd.random() < 0.75:
-            return (NoneEvent(1))
-        else:
-            return (rd.choice(self.events))
 
     def get_current_event(self):
-        return self.current_event.name
+        return self.events.next().name
 
     def has_ended(self):
         return self.end_flag
