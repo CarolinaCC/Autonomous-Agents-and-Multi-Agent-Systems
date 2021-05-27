@@ -1,3 +1,6 @@
+from random import random, uniform
+
+
 class Stock:
     def __init__(self, name, stock_id, price, normal_modifier=0.00001, supply_modifier=0.00001, min_price=0.01,
                  mode="DEFAULT", max_price=50000):
@@ -38,6 +41,8 @@ class Stock:
         else:
             # prevent snowball effect
             self.price /= modifier
+        e = uniform(-0.00002, 0.00002)
+        self.normal_modifier += e
         self.update_price(self.price)
 
     def apply_price_add(self, value):
