@@ -92,7 +92,7 @@ class Agent:
         return 0
 
     def sell_random_stock(self):
-        if len(self.stocks_owned):
+        if len(self.stocks_owned) == 0:
             return
         # get random stock
         s_id = random.choice(list(self.stocks_owned.keys()))

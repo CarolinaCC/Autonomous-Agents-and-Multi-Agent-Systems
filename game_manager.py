@@ -34,7 +34,7 @@ class GameManager:
     def setup_world(self):
 
         min_price = 0.0001
-        bp = Stock("BP", 0, 2.6, 0.99, 0.00005, min_price, self.game_mode, 95452)
+        bp = Stock("BP", 0, 2.6, 0.9997, 0.00005, min_price, self.game_mode, 95452)
         galp = Stock("Galp", 1, 2.9, 1.0003, 0.00004, min_price, self.game_mode, 48324)
         primark = Stock("Primark", 2, 0.98, 1.00025, 0.00006, min_price, self.game_mode, 14437)
         tesla = Stock("Tesla", 3, 3.1, 1.0005, 0.00001, min_price, self.game_mode, 12358)
@@ -103,17 +103,3 @@ class GameManager:
 
     def has_ended(self):
         return self.end_flag
-
-    def print_results(self):
-        i = 0
-        # FIXME
-        while os.path.exists("outputs/stock_history" + str(i) + ".json"):
-            i += 1
-        with open("outputs/stock_history" + str(i) + ".txt", 'w', encoding='utf-8') as f:
-            for stock in self.central_bank.stocks:
-                f.write(repr(stock))
-            #     json.dump(stock.toJSON(), f, ensure_ascii=False, indent=4)
-
-        # with open("agent_history" + str(i) + ".txt", 'w', encoding='utf-8') as f:
-        #     for a in self.agents_array:
-        #         json.dump(a, f, ensure_ascii=False, indent=4)

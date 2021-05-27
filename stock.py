@@ -41,8 +41,9 @@ class Stock:
         else:
             # prevent snowball effect
             self.price /= modifier
-        e = uniform(-0.00002, 0.00002)
-        self.normal_modifier += e
+
+        #e = uniform(-0.00002, 0.00002)
+        #self.normal_modifier += e
         self.update_price(self.price)
 
     def apply_price_add(self, value):
@@ -86,7 +87,7 @@ class Stock:
 
     def recalculate_price(self):
         if self.game_mode == "RECESSION":
-            if self.normal_modifier < 1:
+            if self.normal_modifier < 1.0:
                 self.apply_price_modifier(self.normal_modifier)
                 return
             else:
@@ -95,11 +96,11 @@ class Stock:
                 return
 
         elif self.game_mode == "INFLATION":
-            if self.normal_modifier > 1:
+            if self.normal_modifier > 1.0:
                 self.apply_price_modifier(self.normal_modifier)
                 return
             else:
-                self.normal_modifier += 1
+                self.normal_modifier = 1/self.normal_modifier
                 self.apply_price_modifier(self.normal_modifier)
                 return
 

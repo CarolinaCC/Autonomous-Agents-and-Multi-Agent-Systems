@@ -38,7 +38,7 @@ class ReinforcementLearning(Agent):
         self.original_state = 0
         self.original_action = 0
         self.dec = (self.epsilon - 0.1) / self.total
-        self.soft_max = soft_max
+        self.soft_max = False
 
     def init_q_values(self):
         num_col = 2 * len(self.central_bank.get_all_stock())
@@ -104,13 +104,11 @@ class ReinforcementLearning(Agent):
         valid_actions = self.get_available_actions()
         act = -1
         l = len(valid_actions)
-        tmp = self.get_q(self.get_state(), 0) / (self.epsilon * 100.0)
-        if tmp != 0:
-            cumulative = [exp(tmp)]
-        else:
-            cumulative = [0.0]
+        tmp = self.get_q(self.get_state(), valid_actions[0]) / (self.epsilon * 100.0)
+
+        cumulative = [exp(tmp)]
         for i in range(1, l):
-            tmp = self.get_q(self.get_state(), 0) / (self.epsilon * 100.0)
+            tmp = self.get_q(self.get_state(), valid_actions[i]) / (self.epsilon * 100.0)
             cumulative.append(exp(tmp) + cumulative[i - 1])
         total = cumulative[l - 1]
         cut = random.random() * total
