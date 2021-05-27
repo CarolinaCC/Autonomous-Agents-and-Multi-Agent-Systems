@@ -80,7 +80,7 @@ class Stock:
             return 0
         value = float("-inf")
         for i in range(l-rounds, l):
-            if self.price_history[i] <= (value + 0.01):
+            if self.price_history[i] <= (value + 0.0000001):
                 return 0
             value = self.price_history[i]
         return 2
