@@ -75,9 +75,12 @@ class GameManager:
             self.agents_array.append(SimpleReactive(self.central_bank))
         for _ in range(self.careful_react_agents_num):
             self.agents_array.append(Careful(self.central_bank))
+        #c = 0
         for _ in range(self.rl_agents_num):
+            #if c == 0:
             self.agents_array.append(ReinforcementLearning(self.central_bank))
-
+            #else:
+               # self.agents_array.append(ReinforcementLearning(self.central_bank, 1000, True))
     def step(self, num_steps):
         if self.has_ended():
             return

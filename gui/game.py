@@ -64,7 +64,7 @@ class Game:
                 self.game_manager.step(1)
 
             if self.UP_KEY:
-                self.game_manager.step(10)
+                self.game_manager.step(1000)
 
             if self.F_KEY:
                 self.game_manager.step(self.options.states[-2][1])
@@ -172,26 +172,26 @@ class Game:
                 plt.legend()
 
                 plt.figure(3)
-                ## PLOT AGENT EQUITY BY SETP
+                ## PLOT AGENT Invested BY SETP
                 for agent in self.game_manager.agents_array:
                     x = np.arange(len(agent.stock_history))
                     y = agent.stock_history
                     plt.plot(x, y, label=agent.type)
 
-                plt.title("Agent Equity per Step")
+                plt.title("Agent Invested Money per Step")
                 plt.xlabel("steps")
-                plt.ylabel("equity €")
+                plt.ylabel("€")
                 plt.legend()
 
                 plt.figure(4)
-                ## PLOT AGENT VALUE BY STEP
+                ## PLOT AGENT Cash + Stock BY STEP
                 for agent in self.game_manager.agents_array:
                     l = len(agent.value_history)
                     x = np.arange(l)
                     y = agent.value_history
                     plt.plot(x, y, label=agent.type)
 
-                plt.title("Agent Value per Step")
+                plt.title("Agent Cash + Stock per Step")
                 plt.xlabel("steps")
                 plt.ylabel("value €")
                 plt.legend()
