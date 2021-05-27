@@ -183,6 +183,18 @@ class Game:
                 plt.ylabel("equity €")
                 plt.legend()
 
+                plt.figure(4)
+                ## PLOT AGENT VALUE BY STEP
+                for agent in self.game_manager.agents_array:
+                    l = len(agent.stock_history)
+                    x = np.arange(l)
+                    y = agent.value_history
+                    plt.plot(x, y, label=agent.type)
+
+                plt.title("Agent Value per Step")
+                plt.xlabel("steps")
+                plt.ylabel("value €")
+                plt.legend()
                 #
                 plt.show()
                 self.show_plot = False

@@ -9,6 +9,7 @@ class Agent:
         self.cash_history = [initial_cash]
         self.stock_history = [0]
         self.central_bank = central_bank
+        self.value_history = [initial_cash]
         # id stock : qtd owned
         self.stocks_owned = defaultdict(lambda: 0)  # when accessing a key not present adds that key with value 0
 
@@ -109,6 +110,7 @@ class Agent:
     def __update_history(self):
         self.stock_history.append(self.get_stock_value())
         self.cash_history.append(self.cash)
+        self.value_history.append(self.cash + self.get_stock_value())
 
 
 class RandomAgent(Agent):
