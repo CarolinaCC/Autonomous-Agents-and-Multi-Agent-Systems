@@ -3,7 +3,7 @@
 #### Autonomous Agents and Multi-Agent Systems Course 2020/2021
 ##### A Competitive Multi-Agent Approach
 
-
+Group 56
 
 | Name               | Number |
 | -----------------  | ------ |
@@ -11,7 +11,7 @@
 | João Olival        | 94111  |
 | Sebastião Almeida  | 97115  |
 
-Group 56
+---
 
 ## Project Description
 
@@ -27,7 +27,7 @@ This has inspired us to implement this fun game to educate users to learn more a
 - There are some realistic events that can happen throughout the simulation and influence the price of the stocks, though the option to disable them will also be present. 
 - There is a variety of stocks with diferent relations between them, for example, complementary and competitive companies.
 
-
+---
 ## How to run
 
 ### Requirements:
@@ -59,7 +59,7 @@ In the menu "Options" you can change all the settings of the app regarding:
 - Steps per game
 - Game mode (Default, Inflation and Recession)
 
-
+---
 
 
 This code is written according to [PEP 8 -- Style](https://www.python.org/dev/peps/pep-0008/).
