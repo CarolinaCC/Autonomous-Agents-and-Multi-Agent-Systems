@@ -56,13 +56,13 @@ class GameManager:
         bank = CentralBank(self.stocks, stock_relations, self.game_mode)
 
         if self.game_mode == "DEFAULT":
-            covid_event = Event("Covid-19", 1.003, self.steps_num // 10, [moderna])
-            covid_2nd_wave_event = Event("Covid-19 2nd wave", 1.003, self.steps_num // 10, [moderna])
+            covid_event = Event("Covid-19", 1.03, self.steps_num // 10, [moderna])
+            covid_2nd_wave_event = Event("Covid-19 2nd wave", 1.03, self.steps_num // 10, [moderna])
 
-            tech_boom_event = Event("Tech Boom", 1.004, self.steps_num // 10, [microsoft, tesla, intel])
+            tech_boom_event = Event("Tech Boom", 1.04, self.steps_num // 10, [microsoft, tesla, intel])
 
-            oil_crisis_event = Event("Oil Crisis", 0.9993, self.steps_num // 8, [bp, galp])
-            tech_breakdown_event = Event("Tech Boom", 0.9994, self.steps_num // 12, [microsoft, tesla, intel])
+            oil_crisis_event = Event("Oil Crisis", 0.993, self.steps_num // 8, [bp, galp])
+            tech_breakdown_event = Event("Tech Boom", 0.994, self.steps_num // 12, [microsoft, tesla, intel])
             tmp = [covid_event, covid_2nd_wave_event, tech_breakdown_event, tech_boom_event]
             event_list = [NoneEvent(self.steps_num // 15), random.choice(tmp), random.choice(tmp),
                           NoneEvent(self.steps_num // 50), random.choice(tmp),
