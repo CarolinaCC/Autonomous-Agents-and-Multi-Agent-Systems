@@ -42,10 +42,16 @@ This has inspired us to implement this fun game to educate users to learn more a
 python3 main.py
 ` 
 
+### Navigate:
+
+To **navigate** the interface you can use the arrow keys. 
+To **select an optio**n press enter. 
+To **return** to the previous menu press return. 
+To **advance a step** press the right arrow key. 
+To **know information** about each agent hover above their name.
 
 ### Settings:
 
-To navigate the interface you can use the arrow keys. To select an option press enter. To return to the previous menu press return. To advance a step press the right arrow key. To know information abou each agent hover above their name.
 
 In the menu "Options" you can change all the settings of the app regarding:
 - Agents' type
