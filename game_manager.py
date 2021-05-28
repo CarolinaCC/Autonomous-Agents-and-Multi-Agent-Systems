@@ -1,5 +1,6 @@
 import random
 
+from agent.careful import Careful
 from agent.rl import ReinforcementLearning
 from central_bank import CentralBank
 from agent.agent import *
