@@ -44,11 +44,11 @@ python3 main.py
 
 ### Navigate:
 
-To **navigate** the interface you can use the arrow keys. 
-To **select an optio**n press enter. 
-To **return** to the previous menu press return. 
-To **advance a step** press the right arrow key. 
-To **know information** about each agent hover above their name.
+- To **navigate** the interface you can use the arrow keys. 
+- To **select an optio**n press enter. 
+- To **return** to the previous menu press return. 
+- To **advance a step** press the right arrow key. 
+- To **know information** about each agent hover above their name.
 
 ### Settings:
 
