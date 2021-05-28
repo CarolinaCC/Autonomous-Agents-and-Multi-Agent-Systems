@@ -45,9 +45,11 @@ python3 main.py
 
 ### Settings:
 
+To navigate the interface you can use the arrow keys. To select an option press enter. To return to the previous menu press return. To advance a step press the right arrow key. To know information abou each agent hover above their name.
+
 In the menu "Options" you can change all the settings of the app regarding:
 - Agents' type
-- Number of agents
+- Number of agents (maximum is 8 in total)
 - Steps per game
 - Game mode (Default, Inflation and Recession)
 
