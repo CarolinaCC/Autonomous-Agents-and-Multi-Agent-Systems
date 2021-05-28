@@ -42,7 +42,7 @@ python3 main.py
 ` 
 
 
-### Setting:
+### Settings:
 
 In the menu "Options" you can change all the settings of the app regarding:
 - Agents' type
