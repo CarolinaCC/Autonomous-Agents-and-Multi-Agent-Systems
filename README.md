@@ -11,7 +11,7 @@ Group 56
 | João Olival        | 94111  |
 | Sebastião Almeida  | 97115  |
 
----
+
 
 ## Project Description
 
@@ -27,7 +27,7 @@ This has inspired us to implement this fun game to educate users to learn more a
 - There are some realistic events that can happen throughout the simulation and influence the price of the stocks, though the option to disable them will also be present. 
 - There is a variety of stocks with diferent relations between them, for example, complementary and competitive companies.
 
----
+
 ## How to run
 
 ### Requirements:
