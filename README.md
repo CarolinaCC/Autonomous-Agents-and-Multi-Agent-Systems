@@ -1,17 +1,17 @@
 # AASMA Project: Wall Street Bets: The Game
 
-#### Autonomous Agents and Multi-Agent Systems Course
+#### Autonomous Agents and Multi-Agent Systems Course 2020/2021
 ##### A Competitive Multi-Agent Approach
 
-2020/2021
 
-Group 56
 
 | Name               | Number |
 | -----------------  | ------ |
 | Carolina Carreira  | 87641  |
 | João Olival        | 94111  |
 | Sebastião Almeida  | 97115  |
+
+Group 56
 
 ## Project Description
 
