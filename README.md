@@ -1,11 +1,11 @@
 # AASMA Project: Wall Street Bets: The Game
 
 #### Autonomous Agents and Multi-Agent Systems Course
-#### A Competitive Multi-Agent Approach
+##### A Competitive Multi-Agent Approach
 
 2020/2021
 
-Group number
+Group 56
 
 | Name               | Number |
 | -----------------  | ------ |
