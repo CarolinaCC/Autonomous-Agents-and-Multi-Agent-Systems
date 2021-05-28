@@ -19,9 +19,9 @@ class Game:
         self.BLACK, self.WHITE, self.GREEN, self.RED = (0, 0, 0), (255, 255, 255), (3, 252, 40), (252, 3, 3)
         self.main_menu = MainMenu(self)
 
-        self.agents = [['random_agents', 2], ['simple_react_agents', 1], ['careful_react_agents', 1], ['rl_agent', 1]]
+        self.agents = [['random_agents', 1], ['simple_react_agents', 1], ['careful_react_agents', 1], ['rl_agent', 1]]
         self.modes = ["DEFAULT", "INFLATION", "RECESSION"]
-        self.steps = 5000
+        self.steps = 40
         self.options = OptionsMenu(self, self.agents, self.steps, self.modes)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
@@ -78,7 +78,7 @@ class Game:
 
                     self.draw_text('CASH AVAILABLE - ' + f'{self.game_manager.agents_array[x].get_cash_value():.2f}',
                                    15, 55, 70, self.WHITE)
-                    self.draw_text('EQUITY - ' + f'{self.game_manager.agents_array[x].get_value():.2f}', 15, 55, 90,
+                    self.draw_text('VALUE - ' + f'{self.game_manager.agents_array[x].get_value():.2f}', 15, 55, 90,
                                    self.WHITE)
                     self.draw_text('STOCKS VALUE - ' + f'{self.game_manager.agents_array[x].get_stock_value():.2f}', 15,
                                    55, 110, self.WHITE)
