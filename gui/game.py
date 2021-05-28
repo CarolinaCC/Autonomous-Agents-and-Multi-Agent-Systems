@@ -107,7 +107,7 @@ class Game:
             if self.game_manager.has_ended():
                 has_ended += ' - GAME IS OVER'
                 if self.c_game_over == 0:
-                    self.show_plot = True
+                    self.show_plot = False
                 else:
                     self.show_plot = False
                 self.c_game_over += 1
