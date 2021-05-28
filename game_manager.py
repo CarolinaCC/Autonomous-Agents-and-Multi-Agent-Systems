@@ -73,6 +73,8 @@ class GameManager:
         return self.random_agents_num
 
     def setup_agents(self):
+        if self.random_agents_num + self.simple_react_agents_num + self.careful_react_agents_num + self.rl_agents_num > 8:
+            return
         for _ in range(self.random_agents_num):
             self.agents_array.append(RandomAgent(self.central_bank))
         for _ in range(self.simple_react_agents_num):

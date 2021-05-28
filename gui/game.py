@@ -6,6 +6,7 @@ from game_manager import *
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -103,7 +104,6 @@ class Game:
 
             has_ended = ''
 
-
             if self.game_manager.has_ended():
                 has_ended += ' - GAME IS OVER'
                 if self.c_game_over == 0:
@@ -138,7 +138,7 @@ class Game:
             if self.x_breaking > self.DISPLAY_W:
                 self.x_breaking = - 200
             self.draw_text('Mode - ' + self.game_manager.game_mode, 15, 320, 440, self.WHITE)
-
+            self.draw_text('To go to the next step press right arrow key', 12, 480, 280, self.WHITE)
             self.window.blit(self.display, (0, 0))
             pygame.display.update()
             self.reset_keys()
