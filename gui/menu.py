@@ -73,7 +73,7 @@ class MainMenu(Menu):
             elif self.state == 'Credits':
                 self.game.curr_menu = self.game.credits
             self.run_display = False
-#ARRAY STATES => AGENTES (NOME, NUMERO, COORDENADAS NO MENU X, COORDENADAS MENU Y) + STEP (NOME,NOME, NUMERO, COORDENADAS NO MENU X, COORDENADAS MENU Y)
+
 
 class OptionsMenu(Menu):
 

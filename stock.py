@@ -119,7 +119,6 @@ Modifier should be negative for competitive stocks
 and positive for complementary stocks
 '''
 
-
 class StockRelation:
     def __init__(self, source_stock, destination_stock, modifier):
         self.source_stock = source_stock

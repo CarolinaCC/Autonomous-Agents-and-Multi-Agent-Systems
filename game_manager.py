@@ -53,18 +53,19 @@ class GameManager:
                            ]
         event_list = []
         bank = CentralBank(self.stocks, stock_relations, self.game_mode)
-        
+
         if self.game_mode == "DEFAULT":
-            covid_event = Event("Covid-19", 1.003, self.steps_num//10, [moderna])
-            covid_2nd_wave_event = Event("Covid-19 2nd wave", 1.003, self.steps_num//10, [moderna])
+            covid_event = Event("Covid-19", 1.003, self.steps_num // 10, [moderna])
+            covid_2nd_wave_event = Event("Covid-19 2nd wave", 1.003, self.steps_num // 10, [moderna])
 
-            tech_boom_event = Event("Tech Boom", 1.004, self.steps_num//10, [microsoft, tesla, intel])
+            tech_boom_event = Event("Tech Boom", 1.004, self.steps_num // 10, [microsoft, tesla, intel])
 
-            oil_crisis_event = Event("Oil Crisis", 0.9993, self.steps_num//8, [bp, galp])
-            tech_breakdown_event = Event("Tech Boom", 0.9994, self.steps_num//12, [microsoft, tesla, intel])
+            oil_crisis_event = Event("Oil Crisis", 0.9993, self.steps_num // 8, [bp, galp])
+            tech_breakdown_event = Event("Tech Boom", 0.9994, self.steps_num // 12, [microsoft, tesla, intel])
             tmp = [covid_event, covid_2nd_wave_event, tech_breakdown_event, tech_boom_event]
-            event_list = [NoneEvent(self.steps_num//15), random.choice(tmp), random.choice(tmp), NoneEvent(self.steps_num//50), random.choice(tmp),
-                          NoneEvent(self.steps_num//10), random.choice(tmp), random.choice(tmp)]
+            event_list = [NoneEvent(self.steps_num // 15), random.choice(tmp), random.choice(tmp),
+                          NoneEvent(self.steps_num // 50), random.choice(tmp),
+                          NoneEvent(self.steps_num // 10), random.choice(tmp), random.choice(tmp)]
         return bank, event_list
 
     def get_random_agents(self):
@@ -77,12 +78,10 @@ class GameManager:
             self.agents_array.append(SimpleReactive(self.central_bank))
         for _ in range(self.careful_react_agents_num):
             self.agents_array.append(Careful(self.central_bank))
-        #c = 0
+
         for _ in range(self.rl_agents_num):
-            #if c == 0:
             self.agents_array.append(ReinforcementLearning(self.central_bank))
-            #else:
-               # self.agents_array.append(ReinforcementLearning(self.central_bank, 1000, True))
+
     def step(self, num_steps):
         if self.has_ended():
             return
@@ -93,15 +92,12 @@ class GameManager:
             for a in self.agents_array:
                 a.decide()
             self.central_bank.decide()
-            # self.events.next().update()
             self.current_step += 1
             for agent in self.agents_array:
                 if isinstance(agent, ReinforcementLearning):
                     agent.learn()
             if self.game_mode == "DEFAULT":
                 self.events.next().update()
-
-
 
     def get_current_event(self):
         return self.events.next().name

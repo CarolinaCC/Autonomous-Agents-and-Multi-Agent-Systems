@@ -26,6 +26,7 @@ class NoneEvent(Event):
     def __init__(self, num_steps=0):
         super().__init__("None", [0], num_steps, [])
 
+
 class EventIterator:
 
     def __init__(self, events):
@@ -43,4 +44,3 @@ class EventIterator:
             return self.next()
 
         return ret
-

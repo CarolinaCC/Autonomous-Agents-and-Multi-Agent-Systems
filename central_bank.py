@@ -39,6 +39,3 @@ class CentralBank:
     def get_stock(self, stock_id):
         return self.stocks[stock_id]
 
-    def get_dividends(self, id):
-        # https://corporatefinanceinstitute.com/resources/knowledge/trading-investing/stock-price/
-        return self.stocks[id]
