@@ -1,6 +1,7 @@
-# AASMA Project: Monetary Simulation
+# AASMA Project: Wall Street Bets: The Game
 
-Autonomous Agents and Multi-Agent Systems Course
+#### Autonomous Agents and Multi-Agent Systems Course
+#### A Competitive Multi-Agent Approach
 
 2020/2021
 
