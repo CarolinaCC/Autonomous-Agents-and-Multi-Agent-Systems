@@ -1,3 +1,5 @@
+import random
+
 from agent.rl import ReinforcementLearning
 from central_bank import CentralBank
 from agent.agent import *
@@ -60,9 +62,9 @@ class GameManager:
 
             oil_crisis_event = Event("Oil Crisis", 0.9993, self.steps_num//8, [bp, galp])
             tech_breakdown_event = Event("Tech Boom", 0.9994, self.steps_num//12, [microsoft, tesla, intel])
-
-            event_list = [NoneEvent(self.steps_num//15), covid_event, tech_boom_event, NoneEvent(self.steps_num//50), oil_crisis_event,
-                          NoneEvent(self.steps_num//10), covid_2nd_wave_event, tech_breakdown_event]
+            tmp = [covid_event, covid_2nd_wave_event, tech_breakdown_event, tech_boom_event]
+            event_list = [NoneEvent(self.steps_num//15), random.choice(tmp), random.choice(tmp), NoneEvent(self.steps_num//50), random.choice(tmp),
+                          NoneEvent(self.steps_num//10), random.choice(tmp), random.choice(tmp)]
         return bank, event_list
 
     def get_random_agents(self):

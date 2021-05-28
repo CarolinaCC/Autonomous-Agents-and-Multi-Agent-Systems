@@ -145,7 +145,6 @@ class Careful(Agent):
         all_stock = self.central_bank.get_all_stock()
 
         for s in all_stock:
-            print(str(s.get_price_chance_in_rounds(self.rounds_before_trend)))
             if s.get_price_chance_in_rounds(self.rounds_before_trend) > 1.000001:
                 amount_to_buy = self.how_many_can_i_buy(s.id)
 

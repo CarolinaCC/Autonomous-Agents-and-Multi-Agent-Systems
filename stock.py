@@ -42,8 +42,6 @@ class Stock:
             # prevent snowball effect
             self.price /= modifier
 
-        #e = uniform(-0.00002, 0.00002)
-        #self.normal_modifier += e
         self.update_price(self.price)
 
     def apply_price_add(self, value):
