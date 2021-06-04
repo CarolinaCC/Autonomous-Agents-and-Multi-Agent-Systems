@@ -1,17 +1,17 @@
 # AASMA Project: Wall Street Bets: The Game
 
-#### Autonomous Agents and Multi-Agent Systems Course
-#### A Competitive Multi-Agent Approach
+#### Autonomous Agents and Multi-Agent Systems Course 2020/2021
+##### A Competitive Multi-Agent Approach
 
-2020/2021
-
-Group number
+Group 56
 
 | Name               | Number |
 | -----------------  | ------ |
 | Carolina Carreira  | 87641  |
 | João Olival        | 94111  |
 | Sebastião Almeida  | 97115  |
+
+
 
 ## Project Description
 
@@ -42,16 +42,24 @@ This has inspired us to implement this fun game to educate users to learn more a
 python3 main.py
 ` 
 
+### Navigate:
+
+- To **navigate** the interface you can use the arrow keys. 
+- To **select an optio**n press enter. 
+- To **return** to the previous menu press return. 
+- To **advance a step** press the right arrow key. 
+- To **know information** about each agent hover above their name.
 
 ### Settings:
 
+
 In the menu "Options" you can change all the settings of the app regarding:
 - Agents' type
-- Number of agents
+- Number of agents (maximum is 8 in total)
 - Steps per game
 - Game mode (Default, Inflation and Recession)
 
-
+---
 
 
 This code is written according to [PEP 8 -- Style](https://www.python.org/dev/peps/pep-0008/).
